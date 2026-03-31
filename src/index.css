@@ -1,0 +1,66 @@
+@import "tailwindcss";
+
+@theme {
+  --color-pearl: #F8FAFC;
+  --color-pearl-dark: #F1F5F9;
+  --color-church-blue: #0F172A;
+  --color-church-blue-light: #1E293B;
+  --color-church-vibrant: #D4AF37;
+  --color-church-silver: #E2E8F0;
+  --color-church-text: #1E293B;
+  --color-church-muted: #64748B;
+  --font-serif: "Cormorant Garamond", serif;
+  --font-sans: "Inter", sans-serif;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap');
+
+body {
+  @apply bg-pearl text-church-text font-sans antialiased;
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(15, 23, 42, 0.03) 0, transparent 50%), 
+    radial-gradient(at 50% 0%, rgba(15, 23, 42, 0.02) 0, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(15, 23, 42, 0.03) 0, transparent 50%);
+}
+
+h1, h2, h3, h4 {
+  @apply font-serif tracking-normal;
+}
+
+.bento-card {
+  @apply bg-white border border-church-blue/5 rounded-[1.5rem] p-6 md:p-8 transition-all duration-700 hover:shadow-[0_20px_50px_rgba(15,23,42,0.08)] hover:border-church-blue/10 hover:-translate-y-2 overflow-hidden relative;
+}
+
+.bento-card-blue {
+  @apply bg-church-blue text-pearl rounded-[1.5rem] p-6 md:p-8 transition-all duration-700 hover:shadow-[0_20px_50px_rgba(0,0,0,0.2)] hover:-translate-y-2 overflow-hidden relative;
+}
+
+.section-padding {
+  @apply py-16 px-6 md:px-12 lg:px-20;
+}
+
+.btn-minimal {
+  @apply border border-church-vibrant/40 px-10 py-4 text-[10px] font-semibold tracking-[0.3em] uppercase hover:bg-church-vibrant hover:text-church-blue hover:border-church-vibrant transition-all duration-300 rounded-full;
+}
+
+.btn-ghost {
+  @apply text-church-muted hover:text-church-vibrant transition-all duration-500 text-[10px] font-semibold tracking-[0.3em] uppercase;
+}
+
+.accent-vibrant {
+  @apply text-church-vibrant;
+}
+
+.oval-mask {
+  mask-image: radial-gradient(ellipse at center, black 60%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse at center, black 60%, transparent 100%);
+}
+
+.vertical-text {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+}
+
+.bg-wave {
+  background: radial-gradient(circle at 50% 50%, rgba(197, 160, 89, 0.05) 0%, transparent 70%);
+}

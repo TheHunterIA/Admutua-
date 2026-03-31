@@ -1,0 +1,213 @@
+{
+  "entities": {
+    "SiteConfig": {
+      "title": "Site Configuration",
+      "description": "General site settings including hero section and live stream ID",
+      "type": "object",
+      "properties": {
+        "heroTitle": { "type": "string" },
+        "heroSubtitle": { "type": "string" },
+        "heroBackgroundImage": { "type": "string" },
+        "liveVideoId": { "type": "string" },
+        "logoUrl": { "type": "string" },
+        "footerBannerUrl": { "type": "string" }
+      },
+      "required": ["heroTitle", "heroSubtitle", "liveVideoId"]
+    },
+    "Leadership": {
+      "title": "Leadership",
+      "description": "Church leadership information (e.g., Pastor)",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "role": { "type": "string" },
+        "message": { "type": "string" },
+        "imageUrl": { "type": "string" }
+      },
+      "required": ["name", "role", "message", "imageUrl"]
+    },
+    "SpecialEvent": {
+      "title": "Special Event",
+      "description": "An event displayed in the home page carousel",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "theme": { "type": "string" },
+        "date": { "type": "string" },
+        "imageUrl": { "type": "string" },
+        "link": { "type": "string" },
+        "details": { "type": "string" },
+        "location": { "type": "string" },
+        "contactPhone": { "type": "string" },
+        "isRegistrationOpen": { "type": "boolean" },
+        "registrationLink": { "type": "string" },
+        "additionalImages": { 
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "order": { "type": "integer" }
+      },
+      "required": ["title", "theme", "date", "imageUrl", "order"]
+    },
+    "Service": {
+      "title": "Church Service",
+      "description": "A scheduled service or activity",
+      "type": "object",
+      "properties": {
+        "day": { "type": "string" },
+        "time": { "type": "string" },
+        "name": { "type": "string" },
+        "order": { "type": "integer" }
+      },
+      "required": ["day", "time", "name", "order"]
+    },
+    "Department": {
+      "title": "Department",
+      "description": "A church department (e.g., Youth, Ladies)",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "pastor": { "type": "string" },
+        "phone": { "type": "string" },
+        "imageUrl": { "type": "string" },
+        "order": { "type": "integer" }
+      },
+      "required": ["name", "description", "order"]
+    },
+    "Congregation": {
+      "title": "Congregation",
+      "description": "A church congregation branch",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "address": { "type": "string" },
+        "pastor": { "type": "string" },
+        "phone": { "type": "string" },
+        "imageUrl": { "type": "string" },
+        "order": { "type": "integer" }
+      },
+      "required": ["name", "address", "pastor", "order"]
+    },
+    "ContactInfo": {
+      "title": "Contact Information",
+      "description": "General contact details for the main church",
+      "type": "object",
+      "properties": {
+        "address": { "type": "string" },
+        "phone": { "type": "string" },
+        "email": { "type": "string" },
+        "whatsapp": { "type": "string" }
+      },
+      "required": ["address", "phone", "email"]
+    },
+    "ContactSubmission": {
+      "title": "Contact Submission",
+      "description": "A message submitted via the contact form",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "email": { "type": "string" },
+        "subject": { "type": "string" },
+        "message": { "type": "string" },
+        "createdAt": { "type": "timestamp" }
+      },
+      "required": ["name", "email", "subject", "message", "createdAt"]
+    },
+    "Update": {
+      "title": "Recent Update",
+      "description": "A news item or update displayed on the home page",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "date": { "type": "string" },
+        "imageUrl": { "type": "string" },
+        "secondaryImageUrl": { "type": "string" },
+        "author": { "type": "string" },
+        "link": { "type": "string" },
+        "createdAt": { "type": "timestamp" }
+      },
+      "required": ["title", "description", "date", "createdAt"]
+    },
+    "EbdLesson": {
+      "title": "EBD Lesson",
+      "description": "A lesson for the Sunday School",
+      "type": "object",
+      "properties": {
+        "quarterNumber": { "type": "string" },
+        "lessonNumber": { "type": "string" },
+        "magazineTitle": { "type": "string" },
+        "lessonTitle": { "type": "string" },
+        "authorName": { "type": "string" },
+        "authorPhotoUrl": { "type": "string" },
+        "content": { "type": "string" },
+        "createdAt": { "type": "timestamp" },
+        "updatedAt": { "type": "timestamp" }
+      },
+      "required": ["quarterNumber", "lessonNumber", "magazineTitle", "lessonTitle", "authorName", "content", "createdAt"]
+    },
+    "EbdClass": {
+      "title": "EBD Class",
+      "description": "A class for the Sunday School",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "teacher": { "type": "string" },
+        "location": { "type": "string" },
+        "schedule": { "type": "string" },
+        "description": { "type": "string" },
+        "imageUrl": { "type": "string" },
+        "createdAt": { "type": "timestamp" },
+        "updatedAt": { "type": "timestamp" }
+      },
+      "required": ["name", "teacher", "location", "schedule", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/config/site": {
+      "schema": "SiteConfig",
+      "description": "Main site configuration"
+    },
+    "/config/leadership": {
+      "schema": "Leadership",
+      "description": "Church leadership information"
+    },
+    "/events/{eventId}": {
+      "schema": "SpecialEvent",
+      "description": "Collection of special events for the carousel"
+    },
+    "/services/{serviceId}": {
+      "schema": "Service",
+      "description": "Collection of church services"
+    },
+    "/departments/{deptId}": {
+      "schema": "Department",
+      "description": "Collection of church departments"
+    },
+    "/congregations/{congId}": {
+      "schema": "Congregation",
+      "description": "Collection of church congregations"
+    },
+    "/config/contact": {
+      "schema": "ContactInfo",
+      "description": "Main church contact information"
+    },
+    "/contactSubmissions/{subId}": {
+      "schema": "ContactSubmission",
+      "description": "Messages from the contact form"
+    },
+    "/updates/{updateId}": {
+      "schema": "Update",
+      "description": "Collection of recent updates and news"
+    },
+    "/ebdLessons/{lessonId}": {
+      "schema": "EbdLesson",
+      "description": "Collection of EBD lessons"
+    },
+    "/ebdClasses/{classId}": {
+      "schema": "EbdClass",
+      "description": "Collection of EBD classes"
+    }
+  }
+}
