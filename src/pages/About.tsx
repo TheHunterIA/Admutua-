@@ -9,7 +9,7 @@ export default function About() {
       <div className="absolute bottom-0 left-0 w-64 h-64 bg-church-blue/[0.03] rounded-full blur-3xl -translate-x-1/2 translate-y-1/2"></div>
       
       <div className="max-w-7xl mx-auto relative z-10">
-        <div className="grid lg:grid-cols-2 gap-20 items-center">
+        <div className="grid lg:grid-cols-2 gap-12 items-center">
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -17,10 +17,10 @@ export default function About() {
             transition={{ duration: 1 }}
           >
             <span className="text-church-vibrant text-[10px] font-semibold tracking-[0.4em] uppercase mb-6 block">Nossa História</span>
-            <h2 className="text-4xl md:text-7xl text-church-blue mb-10 leading-[0.9] font-serif italic">
+            <h2 className="text-4xl md:text-7xl text-church-blue mb-6 leading-[0.9] font-serif italic">
               Nossa Casa, <br />Sua Família
             </h2>
-            <div className="w-20 h-px bg-church-blue/20 mb-10"></div>
+            <div className="w-20 h-px bg-church-blue/20 mb-6"></div>
             <div className="space-y-8 text-lg text-church-text/80 font-light leading-relaxed">
               <p>
                 A Assembleia de Deus Mutuá é uma comunidade cristã firmada na Palavra de Deus. 

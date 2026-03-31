@@ -164,9 +164,9 @@ export default function Admin() {
   }
 
   return (
-    <div className="flex-1 flex flex-col md:flex-row font-sans text-church-text overflow-hidden">
+    <div className="flex-1 flex flex-col md:flex-row font-sans text-church-text overflow-hidden min-h-0">
       {/* Sidebar */}
-      <aside className="w-full md:w-80 flex-shrink-0 h-full overflow-y-auto bg-church-blue text-pearl border-r border-church-vibrant/10 flex flex-col shadow-[0_0_50px_rgba(0,0,0,0.2)] relative">
+      <aside className="w-full md:w-80 flex-shrink-0 h-full bg-church-blue text-pearl border-r border-church-vibrant/10 shadow-[0_0_50px_rgba(0,0,0,0.2)] relative overflow-y-auto custom-scrollbar">
         <div className="p-10 border-b border-church-vibrant/5 relative overflow-hidden group">
           <div className="absolute inset-0 bg-pearl/5 translate-y-full group-hover:translate-y-0 transition-transform duration-700"></div>
           <h2 className="text-2xl font-serif italic text-pearl flex items-center gap-3 relative z-10">
@@ -177,7 +177,7 @@ export default function Admin() {
           </h2>
         </div>
         
-        <nav className="flex-1 p-8 space-y-4 overflow-y-auto custom-scrollbar">
+        <nav className="p-8 space-y-4">
           <TabButton active={activeTab === 'home'} onClick={() => setActiveTab('home')} icon={<HomeIcon size={20} strokeWidth={1.5} />} label="Início" />
           <TabButton active={activeTab === 'leadership'} onClick={() => setActiveTab('leadership')} icon={<Users size={20} strokeWidth={1.5} />} label="Liderança" />
           <TabButton active={activeTab === 'events'} onClick={() => setActiveTab('events')} icon={<Calendar size={20} strokeWidth={1.5} />} label="Eventos" />
@@ -237,7 +237,7 @@ export default function Admin() {
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 p-6 md:p-10 overflow-y-auto relative">
+      <main className="flex-1 p-6 md:p-10 overflow-y-auto relative min-h-0">
         {/* Subtle background texture */}
         <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
         
@@ -981,7 +981,6 @@ function ContactEditor({ setModal }: { setModal: (m: any) => void }) {
           <Field label="Telefone Sede" value={formData.phone} onChange={v => setFormData({...formData, phone: v})} />
           <Field label="Email Oficial" value={formData.email} onChange={v => setFormData({...formData, email: v})} />
           <Field label="WhatsApp" value={formData.whatsapp} onChange={v => setFormData({...formData, whatsapp: v})} />
-          <Field label="URL do Instagram" value={formData.instagramUrl} onChange={v => setFormData({...formData, instagramUrl: v})} placeholder="Ex: https://instagram.com/suapagina" />
           <Field label="URL do Canal YouTube" value={formData.youtubeChannelUrl} onChange={v => setFormData({...formData, youtubeChannelUrl: v})} placeholder="Ex: https://youtube.com/@seucanal" />
         </div>
         <div className="pt-6">

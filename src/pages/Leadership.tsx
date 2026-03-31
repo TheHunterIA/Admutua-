@@ -38,14 +38,14 @@ export default function Leadership() {
             />
             <div className="absolute inset-0 bg-gradient-to-t from-church-blue/40 to-transparent"></div>
           </div>
-          <div className="lg:w-3/5 p-12 md:p-20 flex flex-col justify-center relative">
+          <div className="lg:w-3/5 p-12 md:p-16 flex flex-col justify-center relative">
             {/* Decorative quote mark */}
             <div className="absolute top-10 right-10 text-church-vibrant/10 text-9xl font-serif select-none">"</div>
             
             <span className="text-church-vibrant text-[10px] font-semibold tracking-[0.4em] uppercase mb-4 block">{role}</span>
-            <h3 className="text-4xl md:text-6xl text-church-blue mb-10 font-serif italic leading-tight">{name}</h3>
-            <div className="w-20 h-px bg-church-vibrant mb-10"></div>
-            <p className="text-xl text-church-text/80 leading-relaxed mb-10 font-light italic">
+            <h3 className="text-4xl md:text-6xl text-church-blue mb-6 font-serif italic leading-tight">{name}</h3>
+            <div className="w-20 h-px bg-church-vibrant mb-6"></div>
+            <p className="text-xl text-church-text/80 leading-relaxed mb-6 font-light italic">
               "{message}"
             </p>
             <div className="flex items-center gap-4">

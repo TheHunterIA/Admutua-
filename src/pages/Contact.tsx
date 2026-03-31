@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { MapPin, Phone, Instagram, Youtube, Send, CheckCircle, Mail } from 'lucide-react';
+import { MapPin, Phone, Youtube, Send, CheckCircle, Mail } from 'lucide-react';
 import { useFirestoreDoc, firestoreService } from '../hooks/useFirestore';
 import { serverTimestamp } from 'firebase/firestore';
 import { motion } from 'motion/react';
@@ -47,7 +47,7 @@ export default function Contact() {
       <div className="absolute -bottom-20 -left-20 w-96 h-96 bg-church-blue/[0.03] rounded-full blur-3xl"></div>
 
       <div className="max-w-7xl mx-auto relative z-10">
-        <div className="text-center mb-24">
+        <div className="text-center mb-16">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -56,22 +56,22 @@ export default function Contact() {
           >
             <span className="text-church-vibrant text-[10px] font-semibold tracking-[0.4em] uppercase mb-4 block">Conecte-se</span>
             <h2 className="text-4xl md:text-7xl text-church-blue leading-tight font-serif italic">Fale Conosco</h2>
-            <p className="text-church-muted font-light mt-6 text-lg max-w-xl mx-auto">
+            <p className="text-church-muted font-light mt-4 text-lg max-w-xl mx-auto">
               Estamos aqui para ouvir, orar e caminhar ao seu lado.
             </p>
           </motion.div>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-20 max-w-6xl mx-auto">
+        <div className="grid lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
           {/* Formulário de Contato */}
           <motion.div 
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 1 }}
-            className="bg-white p-12 rounded-[3.5rem] shadow-2xl border border-church-blue/5"
+            className="bg-white p-10 rounded-[3.5rem] shadow-2xl border border-church-blue/5"
           >
-            <h3 className="text-2xl text-church-blue mb-10 font-serif italic">Envie sua Mensagem</h3>
+            <h3 className="text-2xl text-church-blue mb-8 font-serif italic">Envie sua Mensagem</h3>
             
             {submitted ? (
               <div className="bg-church-blue/5 border border-church-blue/10 p-12 rounded-[2.5rem] text-center animate-in fade-in zoom-in duration-500">
@@ -164,11 +164,11 @@ export default function Contact() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 1 }}
-            className="space-y-12"
+            className="space-y-8"
           >
-            <div className="bg-white p-12 rounded-[3.5rem] shadow-2xl border border-church-blue/5">
-              <h3 className="text-2xl text-church-blue mb-10 font-serif italic">Informações de Contato</h3>
-              <ul className="space-y-10">
+            <div className="bg-white p-10 rounded-[3.5rem] shadow-2xl border border-church-blue/5">
+              <h3 className="text-2xl text-church-blue mb-8 font-serif italic">Informações de Contato</h3>
+              <ul className="space-y-8">
                 <li className="flex items-start gap-6 text-church-muted group">
                   <div className="w-14 h-14 bg-church-blue text-pearl rounded-2xl flex items-center justify-center shadow-lg shadow-church-blue/20 group-hover:scale-110 transition-transform duration-500">
                     <MapPin size={24} strokeWidth={1.5} />
@@ -198,14 +198,9 @@ export default function Contact() {
                 </li>
               </ul>
 
-              <div className="mt-12 pt-12 border-t border-church-blue/5">
+              <div className="mt-8 pt-8 border-t border-church-blue/5">
                 <h4 className="text-[10px] font-semibold tracking-[0.2em] uppercase text-church-muted mb-6">Redes Sociais</h4>
                 <div className="flex gap-6">
-                  {contactConfig?.instagramUrl && (
-                    <a href={contactConfig.instagramUrl} target="_blank" rel="noopener noreferrer" className="w-16 h-16 rounded-[1.5rem] bg-church-blue text-pearl flex items-center justify-center hover:bg-church-vibrant transition-all duration-500 shadow-xl shadow-church-blue/10">
-                      <Instagram size={28} strokeWidth={1.5} />
-                    </a>
-                  )}
                   {contactConfig?.youtubeChannelUrl && (
                     <a href={contactConfig.youtubeChannelUrl} target="_blank" rel="noopener noreferrer" className="w-16 h-16 rounded-[1.5rem] bg-church-blue text-pearl flex items-center justify-center hover:bg-church-vibrant transition-all duration-500 shadow-xl shadow-church-blue/10">
                       <Youtube size={28} strokeWidth={1.5} />

@@ -130,7 +130,7 @@ export default function Home() {
   return (
     <div className="flex flex-col bg-pearl">
       {/* Hero Section */}
-      <section id="inicio" className="relative min-h-[60vh] flex items-center overflow-hidden">
+      <section id="inicio" className="relative min-h-[70vh] flex items-center overflow-hidden">
         <div className="absolute inset-0 z-0">
           <img 
             src={heroBackgroundImage} 
@@ -181,23 +181,23 @@ export default function Home() {
 
       {/* Events & Updates Section */}
       {(filteredEvents.length > 0 || combinedUpdates.length > 0) && (
-        <section className="section-padding bg-pearl relative overflow-hidden">
+        <section className="pt-8 pb-12 px-6 md:px-12 lg:px-20 bg-pearl relative overflow-hidden">
           <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-church-vibrant/20 to-transparent"></div>
           
           <div className="max-w-7xl mx-auto">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-16 lg:gap-24">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 lg:gap-16">
               
               {/* Left Side: Special Events */}
               <div className="lg:col-span-2">
-                <div className="mb-16">
+                <div className="mb-6">
                   <span className="text-church-vibrant text-[10px] font-semibold tracking-[0.4em] uppercase mb-4 block">Programação</span>
-                  <h2 className="text-4xl md:text-6xl text-church-blue leading-tight mb-6">Eventos Especiais</h2>
+                  <h2 className="text-4xl md:text-6xl text-church-blue leading-tight mb-4">Eventos Especiais</h2>
                   <p className="text-church-muted font-light max-w-sm leading-relaxed">
                     Momentos únicos de comunhão e adoração. Participe de nossa jornada de fé.
                   </p>
                 </div>
 
-                <div className="relative h-[650px] w-full overflow-hidden flex flex-col items-center justify-center">
+                <div className="relative h-[450px] w-full overflow-hidden flex flex-col items-center justify-center">
                   {/* Stage Container */}
                   <div className="relative w-full h-full flex items-center justify-center perspective-1000">
                     <AnimatePresence initial={false}>
@@ -281,7 +281,7 @@ export default function Home() {
 
                   {/* Navigation Controls */}
                   {specialEvents.length > 1 && (
-                    <div className="flex items-center gap-8 mt-8">
+                    <div className="flex items-center gap-8 mt-4">
                       <button 
                         onClick={() => setCurrentEventIndex((prev) => (prev === 0 ? specialEvents.length - 1 : prev - 1))}
                         className="w-14 h-14 rounded-full border border-church-blue/10 flex items-center justify-center text-church-blue hover:bg-church-blue hover:text-white transition-all group/btn"
@@ -313,12 +313,12 @@ export default function Home() {
               {/* Right Side: Recent Updates Sidebar */}
               <div className="lg:col-span-1">
                 <div className="sticky top-32">
-                  <div className="mb-12">
+                  <div className="mb-8">
                     <span className="text-church-vibrant text-[10px] font-semibold tracking-[0.4em] uppercase mb-4 block">Fique por dentro</span>
                     <h2 className="text-3xl text-church-blue leading-tight">Últimas Novidades</h2>
                   </div>
 
-                  <div className="space-y-8">
+                  <div className="space-y-6">
                     {combinedUpdates.map((update: any, idx: number) => (
                       <motion.div
                         key={update.id}
@@ -342,7 +342,7 @@ export default function Home() {
                           {update.title}
                         </h3>
                         
-                        <p className="text-sm text-church-muted font-light leading-relaxed mb-4 line-clamp-2 italic">
+                        <p className="text-sm text-church-muted font-light leading-relaxed mb-2 line-clamp-2 italic">
                           {update.type === 'pastoral' ? `"${update.description}"` : update.description}
                         </p>
 
@@ -373,7 +373,7 @@ export default function Home() {
                     ))}
                   </div>
 
-                  <div className="mt-12 pt-12 border-t border-church-blue/5">
+                  <div className="mt-4 pt-4 border-t border-church-blue/5">
                     {/* Link removido temporariamente pois a página não existe */}
                   </div>
                 </div>
@@ -388,13 +388,13 @@ export default function Home() {
       {recentUpdates.length > 0 && (
         <section className="section-padding bg-pearl relative overflow-hidden">
           <div className="max-w-7xl mx-auto">
-            <div className="mb-12">
+            <div className="mb-6">
               <h2 className="text-4xl md:text-6xl text-church-blue leading-tight">Notícias</h2>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {recentUpdates.slice(0, 3).map((news: any) => (
                 <Link key={news.id} to={`/noticias/${news.id}`} className="group cursor-pointer">
-                  <div className="aspect-video rounded-2xl overflow-hidden mb-4">
+                  <div className="aspect-video rounded-2xl overflow-hidden mb-2">
                     <img 
                       src={news.imageUrl} 
                       alt={news.title} 
@@ -423,8 +423,8 @@ export default function Home() {
         </div>
 
         <div className="max-w-7xl mx-auto relative z-10">
-          <div className={`flex flex-col ${hasLiveStream ? 'lg:flex-row' : 'items-center text-center'} items-center gap-16 lg:gap-24`}>
-            <div className={`${hasLiveStream ? 'lg:w-1/2' : 'max-w-3xl'} space-y-10`}>
+          <div className={`flex flex-col ${hasLiveStream ? 'lg:flex-row' : 'items-center text-center'} items-center gap-12 lg:gap-16`}>
+            <div className={`${hasLiveStream ? 'lg:w-1/2' : 'max-w-3xl'} space-y-6`}>
               {hasLiveStream && (
                 <motion.div 
                   initial={{ opacity: 0, y: 20 }}
@@ -466,7 +466,7 @@ export default function Home() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.3 }}
-                className={`flex flex-wrap gap-4 pt-4 ${hasLiveStream ? '' : 'justify-center'}`}
+                className={`flex flex-wrap gap-4 pt-2 ${hasLiveStream ? '' : 'justify-center'}`}
               >
                 {hasLiveStream && (
                   <a 

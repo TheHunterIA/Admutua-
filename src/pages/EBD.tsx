@@ -22,12 +22,12 @@ export default function EBD() {
   }, [selectedLessonId]);
 
   return (
-    <div className="min-h-screen bg-pearl pt-28">
+    <div className="min-h-screen bg-pearl pt-20">
       {/* Lesson of the Week Section (Now the Hero/Top Section) */}
       {currentLesson && currentLesson.content ? (
-        <section className="relative pt-12 pb-24 bg-white border-b border-church-blue/5">
+        <section className="relative pt-8 pb-16 bg-white border-b border-church-blue/5">
           <div className="max-w-7xl mx-auto px-6 md:px-12">
-            <div className="mb-12">
+            <div className="mb-8">
               <motion.div 
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -94,9 +94,9 @@ export default function EBD() {
           </div>
         </section>
       ) : (
-        <section className="relative pt-12 pb-24 bg-white border-b border-church-blue/5">
+        <section className="relative pt-8 pb-16 bg-white border-b border-church-blue/5">
           <div className="max-w-7xl mx-auto px-6 md:px-12">
-            <div className="mb-12">
+            <div className="mb-8">
               <motion.div 
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -114,7 +114,7 @@ export default function EBD() {
                 Lição da Semana
               </motion.h1>
             </div>
-            <div className="text-center py-20 bg-pearl/50 rounded-[3rem] border border-church-blue/5">
+            <div className="text-center py-12 bg-pearl/50 rounded-[3rem] border border-church-blue/5">
               <BookOpen size={48} strokeWidth={1} className="mx-auto text-church-blue/20 mb-6" />
               <h3 className="text-2xl font-serif italic text-church-blue mb-2">Nenhuma lição disponível</h3>
               <p className="text-church-muted font-light">A lição desta semana ainda não foi publicada. Volte em breve!</p>
@@ -125,9 +125,9 @@ export default function EBD() {
 
       {/* Past Lessons Section */}
       {pastLessons.length > 0 && (
-        <section className="py-16 bg-pearl relative border-b border-church-blue/5">
+        <section className="py-12 bg-pearl relative border-b border-church-blue/5">
           <div className="max-w-5xl mx-auto px-6 md:px-12">
-            <h3 className="text-2xl font-serif italic text-church-blue mb-8 flex items-center gap-3">
+            <h3 className="text-2xl font-serif italic text-church-blue mb-6 flex items-center gap-3">
               <BookOpen size={24} className="text-church-vibrant" />
               Lições Anteriores
             </h3>
@@ -166,7 +166,7 @@ export default function EBD() {
       {/* Classes Section */}
       <section className="section-padding bg-pearl relative">
         <div className="max-w-7xl mx-auto px-6 md:px-12">
-          <div className="text-center max-w-3xl mx-auto mb-20">
+          <div className="text-center max-w-3xl mx-auto mb-12">
             <h2 className="text-4xl md:text-6xl font-serif italic text-church-blue mb-6">
               Classes para <span className="text-church-vibrant">Todas as Idades</span>
             </h2>
@@ -234,9 +234,9 @@ export default function EBD() {
 
       {/* News Section */}
       {news.length > 0 && (
-        <section className="py-16 bg-white border-t border-church-blue/5">
+        <section className="py-12 bg-white border-t border-church-blue/5">
           <div className="max-w-7xl mx-auto px-6 md:px-12">
-            <h3 className="text-2xl font-serif italic text-church-blue mb-12 flex items-center gap-3">
+            <h3 className="text-2xl font-serif italic text-church-blue mb-8 flex items-center gap-3">
               <Newspaper size={24} className="text-church-vibrant" />
               Notícias da EBD
             </h3>
@@ -256,7 +256,7 @@ export default function EBD() {
       )}
 
       {/* Call to Action */}
-      <section className="py-24 bg-white relative overflow-hidden">
+      <section className="py-16 bg-white relative overflow-hidden">
         <div className="max-w-4xl mx-auto px-6 md:px-12 text-center relative z-10">
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
