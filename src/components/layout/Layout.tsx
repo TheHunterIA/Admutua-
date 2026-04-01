@@ -79,9 +79,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
         // Cria o iframe dentro da janela PiP
         const iframe = document.createElement('iframe');
-        iframe.src = `https://www.youtube.com/embed/${liveVideoId}?autoplay=1&rel=0&enablejsapi=1&origin=${window.location.origin}`;
-        iframe.style.width = '100vw';
-        iframe.style.height = '100vh';
+        iframe.src = `https://www.youtube.com/embed/${liveVideoId}?autoplay=1&rel=0&enablejsapi=1&origin=${encodeURIComponent(window.location.origin)}&modestbranding=1`;
+        iframe.style.width = '100%';
+        iframe.style.height = '100%';
         iframe.style.border = 'none';
         iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
         iframe.allowFullscreen = true;
@@ -393,7 +393,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               <iframe
                 width="100%"
                 height="100%"
-                src={`https://www.youtube.com/embed/${liveVideoId}?autoplay=1&mute=0&rel=0&enablejsapi=1&origin=${window.location.origin}`}
+                src={`https://www.youtube.com/embed/${liveVideoId}?autoplay=1&mute=0&rel=0&enablejsapi=1&origin=${encodeURIComponent(window.location.origin)}&modestbranding=1`}
                 title="YouTube video player"
                 frameBorder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
