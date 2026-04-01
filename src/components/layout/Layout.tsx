@@ -29,8 +29,43 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
   const isAdminPage = location.pathname.startsWith('/admin');
 
-  const openPiP = () => {
+  const openPiP = async () => {
     if (!liveVideoId) return;
+
+    // Tenta usar a nova API Document Picture-in-Picture (suportada no Chrome/Edge recentes)
+    if ('documentPictureInPicture' in window) {
+      try {
+        const pipWindow = await (window as any).documentPictureInPicture.requestWindow({
+          width: 480,
+          height: 270,
+        });
+
+        // Configura o estilo básico da nova janela
+        pipWindow.document.body.style.margin = '0';
+        pipWindow.document.body.style.overflow = 'hidden';
+        pipWindow.document.body.style.backgroundColor = 'black';
+        pipWindow.document.title = 'AD Mutuá - Culto ao Vivo';
+
+        // Cria o iframe dentro da janela PiP
+        const iframe = document.createElement('iframe');
+        iframe.src = `https://www.youtube.com/embed/${liveVideoId}?autoplay=1`;
+        iframe.style.width = '100vw';
+        iframe.style.height = '100vh';
+        iframe.style.border = 'none';
+        iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+        iframe.allowFullscreen = true;
+
+        pipWindow.document.body.appendChild(iframe);
+
+        // Fecha o player do site para economizar recursos, já que está no PiP
+        setIsMiniPlayerOpen(false);
+        return;
+      } catch (err) {
+        console.error("Erro ao abrir Document PiP:", err);
+      }
+    }
+    
+    // Fallback: Se o navegador não suportar a API acima, usa o popup tradicional
     const width = 480;
     const height = 270;
     const left = window.screen.width - width - 20;
