@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Play, Calendar, ArrowRight, X, MapPin, Phone, ExternalLink, Newspaper, Quote, ChevronLeft, ChevronRight, BookOpen, AlertCircle } from 'lucide-react';
+import { Play, Calendar, ArrowRight, X, MapPin, Phone, ExternalLink, Newspaper, Quote, ChevronLeft, ChevronRight, BookOpen, AlertCircle, PictureInPicture2 } from 'lucide-react';
 import { useFirestoreCollection, useFirestoreDoc } from '../hooks/useFirestore';
 import { orderBy, limit } from 'firebase/firestore';
 import { motion, AnimatePresence } from 'motion/react';
@@ -166,6 +166,15 @@ export default function Home() {
   const heroBackgroundImage = siteConfig?.heroBackgroundImage || "/hero-bg.png";
   const liveVideoId = siteConfig?.liveVideoId || "";
   const hasLiveStream = Boolean(liveVideoId && liveVideoId.trim() !== "");
+  const [isLocalVideoPlaying, setIsLocalVideoPlaying] = useState(true);
+
+  React.useEffect(() => {
+    const handleTogglePlayer = () => {
+      setIsLocalVideoPlaying(false);
+    };
+    window.addEventListener('toggle-live-player', handleTogglePlayer);
+    return () => window.removeEventListener('toggle-live-player', handleTogglePlayer);
+  }, []);
 
   return (
     <div className="flex flex-col bg-pearl">
@@ -665,15 +674,23 @@ export default function Home() {
                   
                   <ScrollReveal delay={0.3} className={`flex flex-wrap gap-4 pt-2 ${hasLiveStream ? '' : 'justify-center'}`}>
                     {hasLiveStream && (
-                      <a 
-                        href={`https://www.youtube.com/watch?v=${liveVideoId}`} 
-                        target="_blank" 
-                        rel="noopener noreferrer"
+                      <button 
+                        onClick={() => window.dispatchEvent(new CustomEvent('toggle-live-player'))}
                         className="group relative inline-flex items-center justify-center px-8 py-4 font-bold text-white transition-all duration-300 bg-red-600 rounded-2xl hover:bg-red-700 hover:shadow-[0_0_40px_rgba(239,68,68,0.4)] hover:-translate-y-1"
+                        title="Assista ao culto enquanto navega pelo site"
                       >
-                        <img src="/botao-de-reproducao-do-youtube-com-renderizacao-3d.png" alt="" className="w-6 h-6 mr-3 group-hover:scale-110 transition-transform" />
-                        Assistir no YouTube
-                      </a>
+                        <div className="flex items-center">
+                          <div className="relative mr-3">
+                            <img src="/botao-de-reproducao-do-youtube-com-renderizacao-3d.png" alt="" className="w-6 h-6 group-hover:scale-110 transition-transform" />
+                            <div className="absolute -top-1 -right-1 w-2 h-2 bg-white rounded-full animate-ping"></div>
+                          </div>
+                          <span className="flex flex-col items-start leading-none">
+                            <span className="text-xs font-medium opacity-70 mb-0.5 uppercase tracking-wider">Modo Multitarefa</span>
+                            <span>Assistir e Navegar</span>
+                          </span>
+                          <PictureInPicture2 size={18} className="ml-4 opacity-50 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
+                        </div>
+                      </button>
                     )}
                     <Link 
                       to="/cultos" 
@@ -694,9 +711,10 @@ export default function Home() {
                 <div className="relative p-2 rounded-[2.5rem] bg-white/5 border border-white/10 backdrop-blur-md shadow-[0_50px_100px_-20px_rgba(0,0,0,0.8)]">
                   <div className="aspect-video bg-[#0a0a0a] rounded-[2rem] overflow-hidden relative group">
                     <iframe
+                      key={isLocalVideoPlaying ? 'playing' : 'paused'}
                       width="100%"
                       height="100%"
-                      src={`https://www.youtube.com/embed/${liveVideoId}?autoplay=0&mute=0`}
+                      src={`https://www.youtube.com/embed/${liveVideoId}?autoplay=${isLocalVideoPlaying ? 0 : 0}&mute=0`}
                       title="YouTube video player"
                       frameBorder="0"
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
