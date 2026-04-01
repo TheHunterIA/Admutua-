@@ -41,20 +41,17 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const openPiP = async () => {
     if (!liveVideoId) return;
 
-    // Detecta se estamos em um iframe (como o preview do AI Studio)
     const isInIframe = window.self !== window.top;
 
-    // Tenta usar a nova API Document Picture-in-Picture (suportada no Chrome/Edge recentes)
-    // Só funciona em contextos de navegação de nível superior (não em iframes)
+    // Tentativa com Document Picture-in-Picture (melhor para "sempre por cima")
     if ('documentPictureInPicture' in window && !isInIframe) {
       try {
         const pipWindow = await (window as any).documentPictureInPicture.requestWindow({
-          width: 480,
-          height: 270,
+          width: 520,
+          height: 300,
         });
 
-        // Copia todos os estilos do documento principal para a janela PiP
-        // Isso garante que fontes e cores do Tailwind funcionem lá dentro
+        // Copia estilos (seu código atual já faz isso bem)
         [...document.styleSheets].forEach((styleSheet) => {
           try {
             const cssRules = [...styleSheet.cssRules].map((rule) => rule.cssText).join("");
@@ -62,8 +59,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             style.textContent = cssRules;
             pipWindow.document.head.appendChild(style);
           } catch (e) {
-            const link = document.createElement("link");
             if (styleSheet.href) {
+              const link = document.createElement("link");
               link.rel = "stylesheet";
               link.href = styleSheet.href;
               pipWindow.document.head.appendChild(link);
@@ -71,15 +68,13 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           }
         });
 
-        // Configura o estilo básico da nova janela
         pipWindow.document.body.style.margin = '0';
         pipWindow.document.body.style.overflow = 'hidden';
-        pipWindow.document.body.style.backgroundColor = 'black';
+        pipWindow.document.body.style.backgroundColor = '#000';
         pipWindow.document.title = 'AD Mutuá - Culto ao Vivo';
 
-        // Cria o iframe dentro da janela PiP
         const iframe = document.createElement('iframe');
-        iframe.src = `https://www.youtube.com/embed/${liveVideoId}?autoplay=1&rel=0&enablejsapi=1&origin=${encodeURIComponent(window.location.origin)}&modestbranding=1`;
+        iframe.src = `https://www.youtube-nocookie.com/embed/${liveVideoId}?autoplay=1&rel=0&enablejsapi=1&origin=${encodeURIComponent(window.location.origin)}`;
         iframe.style.width = '100%';
         iframe.style.height = '100%';
         iframe.style.border = 'none';
@@ -89,31 +84,26 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
         pipWindow.document.body.appendChild(iframe);
 
-        // Fecha o player do site para economizar recursos, já que está no PiP
         setIsMiniPlayerOpen(false);
         return;
       } catch (err) {
-        console.warn("Document PiP falhou, usando fallback:", err);
+        console.warn("Document PiP falhou:", err);
       }
     }
-    
-    // Fallback: Se o navegador não suportar a API acima ou estivermos em um iframe, usa o popup tradicional
-    const width = 480;
-    const height = 270;
-    const left = window.screen.width - width - 20;
+
+    // Fallback: popup tradicional (já está bom, mas atualize a URL)
+    const width = 520;
+    const height = 300;
+    const left = window.screen.width - width - 30;
     const top = window.screen.height - height - 100;
-    
-    const popup = window.open(
-      `https://www.youtube.com/embed/${liveVideoId}?autoplay=1&rel=0&enablejsapi=1&origin=${window.location.origin}`, 
-      'YouTubePiP', 
+
+    window.open(
+      `https://www.youtube-nocookie.com/embed/${liveVideoId}?autoplay=1&rel=0&enablejsapi=1&origin=${encodeURIComponent(window.location.origin)}`,
+      'YouTubePiP',
       `width=${width},height=${height},left=${left},top=${top},menubar=no,toolbar=no,location=no,status=no,resizable=yes,scrollbars=no`
     );
 
-    if (popup) {
-      setIsMiniPlayerOpen(false);
-    } else if (isInIframe) {
-      alert("Para usar a janela flutuante real (PiP), abra o site em uma nova aba clicando no botão de expandir no canto superior direito do preview.");
-    }
+    setIsMiniPlayerOpen(false);
   };
 
   React.useEffect(() => {
@@ -393,7 +383,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               <iframe
                 width="100%"
                 height="100%"
-                src={`https://www.youtube.com/embed/${liveVideoId}?autoplay=1&mute=0&rel=0&enablejsapi=1&origin=${encodeURIComponent(window.location.origin)}&modestbranding=1`}
+                src={`https://www.youtube-nocookie.com/embed/${liveVideoId}?autoplay=1&rel=0&enablejsapi=1&origin=${encodeURIComponent(window.location.origin)}`}
                 title="YouTube video player"
                 frameBorder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
