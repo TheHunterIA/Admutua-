@@ -9,7 +9,7 @@ import ScrollReveal from '../components/ui/ScrollReveal';
 
 const extractYoutubeId = (urlOrId: string) => {
   if (!urlOrId) return "";
-  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|live\/)([^#\&\?]*).*/;
+  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|live\/|shorts\/)([^#\&\?]*).*/;
   const match = urlOrId.match(regExp);
   return (match && match[2].length === 11) ? match[2] : urlOrId;
 };
@@ -722,11 +722,12 @@ export default function Home() {
                       key={isLocalVideoPlaying ? 'playing' : 'paused'}
                       width="100%"
                       height="100%"
-                      src={`https://www.youtube.com/embed/${liveVideoId}?autoplay=0&mute=0&rel=0`}
+                      src={`https://www.youtube.com/embed/${liveVideoId}?autoplay=0&mute=0&rel=0&enablejsapi=1&origin=${window.location.origin}`}
                       title="YouTube video player"
                       frameBorder="0"
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                       allowFullScreen
+                      referrerPolicy="no-referrer-when-downgrade"
                       className="w-full h-full opacity-80 group-hover/player:opacity-100 transition-opacity duration-700 relative z-10"
                     ></iframe>
                     

@@ -771,14 +771,17 @@ function HomeEditor({ setModal }: { setModal: (m: any) => void }) {
                 value={formData.liveVideoId} 
                 onChange={e => {
                   const val = e.target.value;
-                  const regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
+                  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|live\/|shorts\/)([^#\&\?]*).*/;
                   const match = val.match(regExp);
-                  const id = (match && match[7].length === 11) ? match[7] : val;
+                  const id = (match && match[2].length === 11) ? match[2] : val;
                   setFormData({...formData, liveVideoId: id});
                 }}
                 className="w-full px-6 py-4 rounded-2xl border border-church-vibrant/10 focus:ring-2 focus:ring-church-vibrant outline-none bg-pearl/30 text-church-blue font-light"
                 placeholder="Cole a URL do vídeo ou apenas o ID (Ex: ABC123XYZ)"
               />
+              <p className="mt-2 text-[10px] text-church-muted uppercase tracking-wider">
+                Certifique-se de que a incorporação está ativada nas configurações do vídeo no YouTube Studio. (Evita o Erro 153)
+              </p>
             </div>
             <div>
               <label className="block text-sm font-semibold text-church-blue tracking-wide uppercase text-[10px] mb-4">Imagem de Fundo da Seção Live</label>
