@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, MapPin, Phone, LayoutDashboard, Maximize2, Minimize2, PictureInPicture2 } from 'lucide-react';
+import { Menu, X, MapPin, Phone, LayoutDashboard, Maximize2, Minimize2, PictureInPicture2, ExternalLink } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
 import { useFirestoreDoc } from '../../hooks/useFirestore';
@@ -17,6 +17,13 @@ const navLinks = [
   { name: 'Contato', href: '/contato' },
 ];
 
+const extractYoutubeId = (urlOrId: string) => {
+  if (!urlOrId) return "";
+  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|live\/)([^#\&\?]*).*/;
+  const match = urlOrId.match(regExp);
+  return (match && match[2].length === 11) ? match[2] : urlOrId;
+};
+
 export default function Layout({ children }: { children: React.ReactNode }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isMiniPlayerOpen, setIsMiniPlayerOpen] = useState(false);
@@ -25,15 +32,21 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const { data: contactConfig } = useFirestoreDoc<any>('config', 'contact');
   const { data: siteConfig } = useFirestoreDoc<any>('config', 'site');
 
-  const liveVideoId = siteConfig?.liveVideoId || "";
+  const rawLiveVideoId = siteConfig?.liveVideoId || "";
+  const liveVideoId = extractYoutubeId(rawLiveVideoId);
+  const hasLiveStream = Boolean(liveVideoId && liveVideoId.length === 11);
 
   const isAdminPage = location.pathname.startsWith('/admin');
 
   const openPiP = async () => {
     if (!liveVideoId) return;
 
+    // Detecta se estamos em um iframe (como o preview do AI Studio)
+    const isInIframe = window.self !== window.top;
+
     // Tenta usar a nova API Document Picture-in-Picture (suportada no Chrome/Edge recentes)
-    if ('documentPictureInPicture' in window) {
+    // Só funciona em contextos de navegação de nível superior (não em iframes)
+    if ('documentPictureInPicture' in window && !isInIframe) {
       try {
         const pipWindow = await (window as any).documentPictureInPicture.requestWindow({
           width: 480,
@@ -48,7 +61,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
         // Cria o iframe dentro da janela PiP
         const iframe = document.createElement('iframe');
-        iframe.src = `https://www.youtube.com/embed/${liveVideoId}?autoplay=1`;
+        iframe.src = `https://www.youtube.com/embed/${liveVideoId}?autoplay=1&rel=0`;
         iframe.style.width = '100vw';
         iframe.style.height = '100vh';
         iframe.style.border = 'none';
@@ -61,21 +74,27 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         setIsMiniPlayerOpen(false);
         return;
       } catch (err) {
-        console.error("Erro ao abrir Document PiP:", err);
+        console.warn("Document PiP falhou, usando fallback:", err);
       }
     }
     
-    // Fallback: Se o navegador não suportar a API acima, usa o popup tradicional
+    // Fallback: Se o navegador não suportar a API acima ou estivermos em um iframe, usa o popup tradicional
     const width = 480;
     const height = 270;
     const left = window.screen.width - width - 20;
     const top = window.screen.height - height - 100;
     
-    window.open(
-      `https://www.youtube.com/embed/${liveVideoId}?autoplay=1`, 
+    const popup = window.open(
+      `https://www.youtube.com/embed/${liveVideoId}?autoplay=1&rel=0`, 
       'YouTubePiP', 
       `width=${width},height=${height},left=${left},top=${top},menubar=no,toolbar=no,location=no,status=no,resizable=yes,scrollbars=no`
     );
+
+    if (popup) {
+      setIsMiniPlayerOpen(false);
+    } else if (isInIframe) {
+      alert("Para usar a janela flutuante real (PiP), abra o site em uma nova aba clicando no botão de expandir no canto superior direito do preview.");
+    }
   };
 
   React.useEffect(() => {
@@ -315,7 +334,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
       {/* Floating Mini Player */}
       <AnimatePresence>
-        {isMiniPlayerOpen && liveVideoId && (
+        {isMiniPlayerOpen && hasLiveStream && (
           <motion.div
             initial={{ opacity: 0, scale: 0.8, y: 50 }}
             animate={{ 
@@ -351,11 +370,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 <X size={16} />
               </button>
             </div>
-            <div className="aspect-video">
+            <div className="aspect-video relative group/player">
               <iframe
                 width="100%"
                 height="100%"
-                src={`https://www.youtube.com/embed/${liveVideoId}?autoplay=1&mute=0`}
+                src={`https://www.youtube.com/embed/${liveVideoId}?autoplay=1&mute=0&rel=0`}
                 title="YouTube video player"
                 frameBorder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
