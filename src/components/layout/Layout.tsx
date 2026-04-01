@@ -85,7 +85,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         iframe.style.border = 'none';
         iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
         iframe.allowFullscreen = true;
-        iframe.referrerPolicy = "no-referrer-when-downgrade";
+        iframe.referrerPolicy = "strict-origin-when-cross-origin";
 
         pipWindow.document.body.appendChild(iframe);
 
@@ -398,7 +398,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 frameBorder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                 allowFullScreen
-                referrerPolicy="no-referrer-when-downgrade"
+                referrerPolicy="strict-origin-when-cross-origin"
                 className="w-full h-full"
               ></iframe>
             </div>
