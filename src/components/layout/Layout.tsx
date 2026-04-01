@@ -53,6 +53,24 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           height: 270,
         });
 
+        // Copia todos os estilos do documento principal para a janela PiP
+        // Isso garante que fontes e cores do Tailwind funcionem lá dentro
+        [...document.styleSheets].forEach((styleSheet) => {
+          try {
+            const cssRules = [...styleSheet.cssRules].map((rule) => rule.cssText).join("");
+            const style = document.createElement("style");
+            style.textContent = cssRules;
+            pipWindow.document.head.appendChild(style);
+          } catch (e) {
+            const link = document.createElement("link");
+            if (styleSheet.href) {
+              link.rel = "stylesheet";
+              link.href = styleSheet.href;
+              pipWindow.document.head.appendChild(link);
+            }
+          }
+        });
+
         // Configura o estilo básico da nova janela
         pipWindow.document.body.style.margin = '0';
         pipWindow.document.body.style.overflow = 'hidden';
