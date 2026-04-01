@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, MapPin, Phone, LayoutDashboard } from 'lucide-react';
+import { Menu, X, MapPin, Phone, LayoutDashboard, Maximize2, Minimize2, PictureInPicture2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
 import { useFirestoreDoc } from '../../hooks/useFirestore';
@@ -19,11 +19,35 @@ const navLinks = [
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isMiniPlayerOpen, setIsMiniPlayerOpen] = useState(false);
+  const [isMiniPlayerExpanded, setIsMiniPlayerExpanded] = useState(false);
   const location = useLocation();
   const { data: contactConfig } = useFirestoreDoc<any>('config', 'contact');
   const { data: siteConfig } = useFirestoreDoc<any>('config', 'site');
 
+  const liveVideoId = siteConfig?.liveVideoId || "";
+
   const isAdminPage = location.pathname.startsWith('/admin');
+
+  const openPiP = () => {
+    if (!liveVideoId) return;
+    const width = 480;
+    const height = 270;
+    const left = window.screen.width - width - 20;
+    const top = window.screen.height - height - 100;
+    
+    window.open(
+      `https://www.youtube.com/embed/${liveVideoId}?autoplay=1`, 
+      'YouTubePiP', 
+      `width=${width},height=${height},left=${left},top=${top},menubar=no,toolbar=no,location=no,status=no,resizable=yes,scrollbars=no`
+    );
+  };
+
+  React.useEffect(() => {
+    const handleTogglePlayer = () => setIsMiniPlayerOpen(true);
+    window.addEventListener('toggle-live-player', handleTogglePlayer);
+    return () => window.removeEventListener('toggle-live-player', handleTogglePlayer);
+  }, []);
 
   React.useEffect(() => {
     if (isAdminPage) {
@@ -253,6 +277,60 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           </motion.div>
         </AnimatePresence>
       </main>
+
+      {/* Floating Mini Player */}
+      <AnimatePresence>
+        {isMiniPlayerOpen && liveVideoId && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8, y: 50 }}
+            animate={{ 
+              opacity: 1, 
+              scale: 1, 
+              y: 0,
+              width: isMiniPlayerExpanded ? 'min(90vw, 800px)' : 'min(80vw, 320px)',
+              height: 'auto'
+            }}
+            exit={{ opacity: 0, scale: 0.8, y: 50 }}
+            className="fixed bottom-6 right-6 z-[60] bg-black rounded-2xl overflow-hidden shadow-2xl border border-white/10 group"
+          >
+            <div className="absolute top-2 right-2 z-20 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+              <button 
+                onClick={openPiP}
+                className="p-2 bg-black/50 hover:bg-white/20 text-white rounded-full backdrop-blur-sm transition-colors"
+                title="Abrir em Janela Separada (PiP)"
+              >
+                <PictureInPicture2 size={16} />
+              </button>
+              <button 
+                onClick={() => setIsMiniPlayerExpanded(!isMiniPlayerExpanded)}
+                className="p-2 bg-black/50 hover:bg-white/20 text-white rounded-full backdrop-blur-sm transition-colors"
+                title={isMiniPlayerExpanded ? "Minimizar" : "Expandir"}
+              >
+                {isMiniPlayerExpanded ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
+              </button>
+              <button 
+                onClick={() => setIsMiniPlayerOpen(false)}
+                className="p-2 bg-black/50 hover:bg-red-600 text-white rounded-full backdrop-blur-sm transition-colors"
+                title="Fechar"
+              >
+                <X size={16} />
+              </button>
+            </div>
+            <div className="aspect-video">
+              <iframe
+                width="100%"
+                height="100%"
+                src={`https://www.youtube.com/embed/${liveVideoId}?autoplay=1&mute=0`}
+                title="YouTube video player"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+                className="w-full h-full"
+              ></iframe>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Footer */}
       {!isAdminPage && (
