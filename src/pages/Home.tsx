@@ -722,8 +722,8 @@ export default function Home() {
                       key={isLocalVideoPlaying ? 'playing' : 'paused'}
                       width="100%"
                       height="100%"
-                      src={`https://www.youtube.com/embed/${liveVideoId}?autoplay=0&mute=0&rel=0&enablejsapi=1&origin=${window.location.origin}`}
-                      title="YouTube video player"
+                      src={`https://www.youtube.com/embed/${liveVideoId}?autoplay=0&mute=0&rel=0&enablejsapi=1&origin=${encodeURIComponent(window.location.origin)}&modestbranding=1`}
+                      title="Transmissão ao Vivo - AD Mutuá"
                       frameBorder="0"
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                       allowFullScreen
