@@ -7,6 +7,13 @@ import { motion, AnimatePresence } from 'motion/react';
 import Skeleton from '../components/ui/Skeleton';
 import ScrollReveal from '../components/ui/ScrollReveal';
 
+const extractYoutubeId = (urlOrId: string) => {
+  if (!urlOrId) return "";
+  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|live\/)([^#\&\?]*).*/;
+  const match = urlOrId.match(regExp);
+  return (match && match[2].length === 11) ? match[2] : urlOrId;
+};
+
 export default function Home() {
   const [selectedEvent, setSelectedEvent] = useState<any>(null);
   const [currentEventIndex, setCurrentEventIndex] = useState(0);
@@ -164,8 +171,9 @@ export default function Home() {
   const heroTitle = siteConfig?.heroTitle || "Bem-vindo à Assembleia de Deus em Mutuá";
   const heroSubtitle = siteConfig?.heroSubtitle || "Um lugar de paz, fé e comunhão. Venha fazer parte da nossa família e viver o amor de Cristo.";
   const heroBackgroundImage = siteConfig?.heroBackgroundImage || "/hero-bg.png";
-  const liveVideoId = siteConfig?.liveVideoId || "";
-  const hasLiveStream = Boolean(liveVideoId && liveVideoId.trim() !== "");
+  const rawLiveVideoId = siteConfig?.liveVideoId || "";
+  const liveVideoId = extractYoutubeId(rawLiveVideoId);
+  const hasLiveStream = Boolean(liveVideoId && liveVideoId.length === 11);
   const [isLocalVideoPlaying, setIsLocalVideoPlaying] = useState(true);
 
   React.useEffect(() => {
@@ -709,21 +717,21 @@ export default function Home() {
                 <div className="absolute -inset-4 bg-gradient-to-tr from-red-600/30 to-church-blue/30 blur-3xl rounded-[4rem] opacity-50 animate-pulse"></div>
                 
                 <div className="relative p-2 rounded-[2.5rem] bg-white/5 border border-white/10 backdrop-blur-md shadow-[0_50px_100px_-20px_rgba(0,0,0,0.8)]">
-                  <div className="aspect-video bg-[#0a0a0a] rounded-[2rem] overflow-hidden relative group">
+                  <div className="aspect-video bg-[#0a0a0a] rounded-[2rem] overflow-hidden relative group/player">
                     <iframe
                       key={isLocalVideoPlaying ? 'playing' : 'paused'}
                       width="100%"
                       height="100%"
-                      src={`https://www.youtube.com/embed/${liveVideoId}?autoplay=${isLocalVideoPlaying ? 0 : 0}&mute=0`}
+                      src={`https://www.youtube.com/embed/${liveVideoId}?autoplay=0&mute=0&rel=0`}
                       title="YouTube video player"
                       frameBorder="0"
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                       allowFullScreen
-                      className="w-full h-full opacity-80 group-hover:opacity-100 transition-opacity duration-700 relative z-10"
+                      className="w-full h-full opacity-80 group-hover/player:opacity-100 transition-opacity duration-700 relative z-10"
                     ></iframe>
                     
                     {/* Subtle overlay to blend iframe with the dark theme when not hovered */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#050B14]/80 to-transparent pointer-events-none opacity-50 group-hover:opacity-0 transition-opacity duration-700 z-20"></div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#050B14]/80 to-transparent pointer-events-none opacity-50 group-hover/player:opacity-0 transition-opacity duration-700 z-20"></div>
                   </div>
                 </div>
               </ScrollReveal>
