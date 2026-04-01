@@ -19,7 +19,7 @@ const navLinks = [
 
 const extractYoutubeId = (urlOrId: string) => {
   if (!urlOrId) return "";
-  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|live\/)([^#\&\?]*).*/;
+  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|live\/|shorts\/)([^#\&\?]*).*/;
   const match = urlOrId.match(regExp);
   return (match && match[2].length === 11) ? match[2] : urlOrId;
 };
@@ -61,12 +61,13 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
         // Cria o iframe dentro da janela PiP
         const iframe = document.createElement('iframe');
-        iframe.src = `https://www.youtube.com/embed/${liveVideoId}?autoplay=1&rel=0`;
+        iframe.src = `https://www.youtube.com/embed/${liveVideoId}?autoplay=1&rel=0&enablejsapi=1&origin=${window.location.origin}`;
         iframe.style.width = '100vw';
         iframe.style.height = '100vh';
         iframe.style.border = 'none';
         iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
         iframe.allowFullscreen = true;
+        iframe.referrerPolicy = "no-referrer-when-downgrade";
 
         pipWindow.document.body.appendChild(iframe);
 
@@ -85,7 +86,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     const top = window.screen.height - height - 100;
     
     const popup = window.open(
-      `https://www.youtube.com/embed/${liveVideoId}?autoplay=1&rel=0`, 
+      `https://www.youtube.com/embed/${liveVideoId}?autoplay=1&rel=0&enablejsapi=1&origin=${window.location.origin}`, 
       'YouTubePiP', 
       `width=${width},height=${height},left=${left},top=${top},menubar=no,toolbar=no,location=no,status=no,resizable=yes,scrollbars=no`
     );
@@ -374,11 +375,12 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               <iframe
                 width="100%"
                 height="100%"
-                src={`https://www.youtube.com/embed/${liveVideoId}?autoplay=1&mute=0&rel=0`}
+                src={`https://www.youtube.com/embed/${liveVideoId}?autoplay=1&mute=0&rel=0&enablejsapi=1&origin=${window.location.origin}`}
                 title="YouTube video player"
                 frameBorder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                 allowFullScreen
+                referrerPolicy="no-referrer-when-downgrade"
                 className="w-full h-full"
               ></iframe>
             </div>
