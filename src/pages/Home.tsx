@@ -727,7 +727,7 @@ export default function Home() {
                       frameBorder="0"
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                       allowFullScreen
-                      referrerPolicy="no-referrer-when-downgrade"
+                      referrerPolicy="strict-origin-when-cross-origin"
                       className="w-full h-full opacity-80 group-hover/player:opacity-100 transition-opacity duration-700 relative z-10"
                     ></iframe>
                     
