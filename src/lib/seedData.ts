@@ -71,8 +71,7 @@ export const seedInitialData = async () => {
       imageUrl: "https://picsum.photos/seed/event/1920/1080",
       link: "/contato",
       details: "O Congresso de Jovens 2026 será um marco em nossa igreja. Teremos preletores convidados, bandas de adoração e momentos profundos de oração. \n\nProgramação:\n- Sexta: 19:30 - Abertura\n- Sábado: 09:00 - Workshops / 19:00 - Culto de Celebração\n- Domingo: 18:30 - Encerramento\n\nNão perca!",
-      isRegistrationOpen: true,
-      registrationLink: "https://forms.gle/sample",
+      hasLimitedSpots: true,
       additionalImages: [
         "https://picsum.photos/seed/event1/800/600",
         "https://picsum.photos/seed/event2/800/600",

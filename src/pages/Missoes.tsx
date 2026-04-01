@@ -1,13 +1,34 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useFirestoreCollection, useFirestoreDoc } from '../hooks/useFirestore';
 import { orderBy, where } from 'firebase/firestore';
-import { Mail, MapPin, Newspaper, Heart, CreditCard, Copy } from 'lucide-react';
+import { Mail, MapPin, Newspaper, Heart, CreditCard, Copy, X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { motion, AnimatePresence } from 'motion/react';
 
 export default function Missoes() {
   const { data: missionaries } = useFirestoreCollection<any>('missionaries', orderBy('name', 'asc'));
   const { data: news } = useFirestoreCollection<any>('updates', where('subject', '==', 'Missoes'), orderBy('createdAt', 'desc'));
   const { data: contactConfig } = useFirestoreDoc<any>('config', 'contact');
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [currentNewsIndex, setCurrentNewsIndex] = useState(0);
+
+  // Auto-play timer for news (10 seconds)
+  useEffect(() => {
+    const newsCount = news.length;
+    if (newsCount <= 1) return;
+    const timer = setInterval(() => {
+      setCurrentNewsIndex((prev) => (prev + 1) % newsCount);
+    }, 10000);
+    return () => clearInterval(timer);
+  }, [news.length]);
+
+  // Reset index if out of bounds
+  useEffect(() => {
+    const newsCount = news.length;
+    if (currentNewsIndex >= newsCount && newsCount > 0) {
+      setCurrentNewsIndex(0);
+    }
+  }, [news.length, currentNewsIndex]);
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
@@ -61,28 +82,79 @@ export default function Missoes() {
           </p>
         </header>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16 mb-20">
           {missionaries.map((m: any) => (
-            <div key={m.id} className="bg-white p-8 rounded-[2.5rem] shadow-sm border border-church-blue/5 hover:shadow-md transition-all flex flex-col">
-              <div className="w-48 h-48 rounded-[2rem] overflow-hidden mb-8 mx-auto shadow-xl border-4 border-church-vibrant/10">
-                <img src={m.imageUrl || '/placeholder-avatar.png'} alt={m.name} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
-              </div>
-              <h3 className="text-2xl text-church-blue font-serif italic mb-2 text-center">{m.name}</h3>
-              <p className="text-church-vibrant text-[10px] text-center mb-6 font-bold uppercase tracking-[0.2em]">{m.field}</p>
-              <p className="text-church-muted text-sm mb-8 text-center font-light leading-relaxed flex-1">{m.bio}</p>
+            <div 
+              key={m.id} 
+              className="bg-white rounded-[2rem] shadow-[0_30px_60px_rgba(0,0,0,0.04)] hover:shadow-[0_40px_80px_rgba(0,0,0,0.08)] transition-all duration-700 flex flex-col relative group/card hover:-translate-y-4 border border-church-blue/5 overflow-visible"
+            >
+              {/* Flag "Stamp" - Centered and clean */}
+              {m.countryCode && (
+                <div className="absolute -top-6 left-1/2 -translate-x-1/2 z-30 transform -rotate-2 group-hover/card:rotate-0 transition-all duration-700 group-hover/card:scale-110">
+                  <div className="relative p-1 bg-white rounded-md shadow-[0_10px_25px_rgba(0,0,0,0.1)] border border-church-blue/5 ring-2 ring-pearl">
+                    <div className="relative overflow-hidden rounded-sm">
+                      <img 
+                        src={`https://flagcdn.com/w160/${m.countryCode.toLowerCase()}.png`} 
+                        alt="" 
+                        className="h-10 w-auto block" 
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
               
-              <div className="space-y-4 pt-6 border-t border-church-blue/5">
-                {m.email && (
-                  <div className="flex items-center justify-center gap-3 text-xs text-church-muted">
-                    <Mail size={14} className="text-church-vibrant" /> {m.email}
-                  </div>
-                )}
-                {m.location && (
-                  <div className="flex items-center justify-center gap-3 text-xs text-church-muted">
-                    <MapPin size={14} className="text-church-vibrant" /> {m.location}
-                  </div>
-                )}
+              {/* Image Section with Editorial Frame */}
+              <div className="p-8 pb-0">
+                <div 
+                  className="relative aspect-square rounded-2xl overflow-hidden shadow-2xl border-8 border-pearl group-hover/card:border-white transition-all duration-500 cursor-zoom-in"
+                  onClick={() => setSelectedImage(m.imageUrl || '/placeholder-avatar.png')}
+                >
+                  <img src={m.imageUrl || '/placeholder-avatar.png'} alt={m.name} className="w-full h-full object-cover group-hover/card:scale-110 transition-transform duration-1000" referrerPolicy="no-referrer" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-church-blue/40 via-transparent to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-700"></div>
+                </div>
               </div>
+              
+              {/* Content Section */}
+              <div className="p-10 pt-8 flex flex-col flex-1 text-center">
+                <h3 className="text-3xl text-church-blue font-serif italic mb-2 group-hover/card:text-church-vibrant transition-colors duration-500">{m.name}</h3>
+                
+                <div className="flex items-center justify-center gap-3 mb-6">
+                  <div className="h-[1px] flex-1 bg-gradient-to-r from-transparent to-church-vibrant/20"></div>
+                  <p className="text-church-vibrant text-[10px] font-bold uppercase tracking-[0.4em] whitespace-nowrap">{m.field}</p>
+                  <div className="h-[1px] flex-1 bg-gradient-to-l from-transparent to-church-vibrant/20"></div>
+                </div>
+                
+                <div className="relative mb-10 flex-1">
+                  <p className="text-church-muted text-base font-light leading-relaxed italic font-serif relative z-10 px-4">
+                    "{m.bio}"
+                  </p>
+                  {/* Decorative quote mark */}
+                  <span className="absolute top-0 left-0 text-6xl text-church-blue/5 font-serif -translate-x-2 -translate-y-4 select-none">“</span>
+                </div>
+                
+                {/* Contact Rail - Professional Grid */}
+                <div className="grid grid-cols-1 gap-3 pt-8 border-t border-church-blue/5">
+                  {m.email && (
+                    <div className="flex items-center justify-center gap-3 text-[11px] text-church-muted group/link cursor-pointer hover:text-church-blue transition-colors">
+                      <div className="w-6 h-6 rounded-full bg-pearl flex items-center justify-center group-hover/link:bg-church-vibrant/10 transition-colors">
+                        <Mail size={12} className="text-church-vibrant" />
+                      </div>
+                      <span className="font-light tracking-wide">{m.email}</span>
+                    </div>
+                  )}
+                  {m.location && (
+                    <div className="flex items-center justify-center gap-3 text-[11px] text-church-muted group/link cursor-pointer hover:text-church-blue transition-colors">
+                      <div className="w-6 h-6 rounded-full bg-pearl flex items-center justify-center group-hover/link:bg-church-vibrant/10 transition-colors">
+                        <MapPin size={12} className="text-church-vibrant" />
+                      </div>
+                      <span className="font-light tracking-wide">{m.location}</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+              
+              {/* Bottom Decorative Bar */}
+              <div className="h-1.5 w-full bg-gradient-to-r from-church-blue via-church-vibrant to-church-blue rounded-b-[2rem] opacity-0 group-hover/card:opacity-100 transition-opacity duration-700"></div>
             </div>
           ))}
           {missionaries.length === 0 && (
@@ -99,16 +171,106 @@ export default function Missoes() {
                 <Newspaper size={24} className="text-church-vibrant" />
                 Notícias de Missões
               </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {news.map((item: any) => (
-                  <Link key={item.id} to={`/noticias/${item.id}`} className="group bg-pearl p-6 rounded-3xl shadow-sm border border-church-blue/5 hover:shadow-lg transition-all">
-                    <div className="aspect-video rounded-2xl overflow-hidden mb-4">
-                      <img src={item.imageUrl} alt={item.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" referrerPolicy="no-referrer" />
+              <div className="relative h-[450px] w-full overflow-hidden flex flex-col items-center justify-center">
+                <div className="relative w-full h-full flex items-center justify-center perspective-1000">
+                  <AnimatePresence initial={false}>
+                    {news.map((item: any, idx: number) => {
+                      let position = idx - currentNewsIndex;
+                      const total = news.length;
+                      if (position > total / 2) position -= total;
+                      if (position < -total / 2) position += total;
+                      if (Math.abs(position) > 1) return null;
+
+                      return (
+                        <motion.div
+                          key={item.id}
+                          initial={false}
+                          animate={{
+                            x: position * 480,
+                            scale: position === 0 ? 1 : 0.8,
+                            opacity: position === 0 ? 1 : 0.3,
+                            zIndex: position === 0 ? 20 : 10,
+                            rotateY: position * -15,
+                            filter: position === 0 ? 'blur(0px)' : 'blur(4px)',
+                          }}
+                          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                          className="absolute w-full max-w-[500px] cursor-pointer"
+                          onClick={() => {
+                            if (position !== 0) setCurrentNewsIndex(idx);
+                          }}
+                        >
+                          <Link 
+                            to={`/noticias/${item.id}`} 
+                            className="group relative aspect-[4/3] rounded-[3rem] overflow-hidden shadow-[0_40px_80px_-15px_rgba(0,0,0,0.3)] bg-pearl border border-white/10 block"
+                            onClick={(e) => {
+                              if (position !== 0) e.preventDefault();
+                            }}
+                          >
+                            <img 
+                              src={item.imageUrl} 
+                              alt={item.title} 
+                              className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+                              referrerPolicy="no-referrer"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-church-blue via-church-blue/20 to-transparent opacity-80"></div>
+                            
+                            <div className="absolute inset-0 p-8 flex flex-col justify-end">
+                              <span className="text-church-vibrant text-[9px] font-bold tracking-[0.3em] uppercase mb-3 block">
+                                {item.date}
+                              </span>
+                              <h3 className="text-2xl text-white font-serif italic leading-tight mb-4">
+                                {item.title}
+                              </h3>
+                              
+                              {position === 0 && (
+                                <motion.div
+                                  initial={{ opacity: 0, y: 10 }}
+                                  animate={{ opacity: 1, y: 0 }}
+                                  className="space-y-6"
+                                >
+                                  <p className="text-pearl/70 text-sm font-light italic line-clamp-2">
+                                    {item.description}
+                                  </p>
+                                  <div className="w-full h-12 rounded-2xl bg-church-vibrant text-church-blue font-bold text-[10px] uppercase tracking-widest flex items-center justify-center hover:bg-white transition-all duration-500">
+                                    Ler Notícia
+                                  </div>
+                                </motion.div>
+                              )}
+                            </div>
+                          </Link>
+                        </motion.div>
+                      );
+                    })}
+                  </AnimatePresence>
+                </div>
+
+                {news.length > 1 && (
+                  <div className="flex items-center gap-8 mt-4">
+                    <button 
+                      onClick={() => setCurrentNewsIndex((prev) => (prev === 0 ? news.length - 1 : prev - 1))}
+                      className="w-14 h-14 rounded-full border border-church-blue/10 flex items-center justify-center text-church-blue hover:bg-church-blue hover:text-white transition-all group/btn"
+                    >
+                      <ChevronLeft size={24} strokeWidth={1.5} className="group-hover/btn:-translate-x-1 transition-transform" />
+                    </button>
+                    
+                    <div className="flex gap-2">
+                      {news.map((_: any, i: number) => (
+                        <button
+                          key={i}
+                          onClick={() => setCurrentNewsIndex(i)}
+                          className={`h-1 rounded-full transition-all duration-500 ${i === currentNewsIndex ? 'w-10 bg-church-vibrant' : 'w-2 bg-church-blue/10'}`}
+                        />
+                      ))}
                     </div>
-                    <h4 className="text-lg text-church-blue font-serif italic mb-2 group-hover:text-church-vibrant transition-colors">{item.title}</h4>
-                    <p className="text-sm text-church-muted line-clamp-2">{item.description}</p>
-                  </Link>
-                ))}
+
+                    <button 
+                      onClick={() => setCurrentNewsIndex((prev) => (prev === news.length - 1 ? 0 : prev + 1))}
+                      className="w-14 h-14 rounded-full border border-church-blue/10 flex items-center justify-center text-church-blue hover:bg-church-blue hover:text-white transition-all group/btn"
+                    >
+                      <ChevronRight size={24} strokeWidth={1.5} className="group-hover/btn:translate-x-1 transition-transform" />
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           </section>
@@ -168,6 +330,30 @@ export default function Missoes() {
           </div>
         </section>
       </div>
+
+      {/* Lightbox Modal */}
+      {selectedImage && (
+        <div 
+          className="fixed inset-0 z-[100] bg-church-blue/95 backdrop-blur-md flex items-center justify-center p-4 md:p-10 animate-in fade-in duration-300"
+          onClick={() => setSelectedImage(null)}
+        >
+          <button 
+            className="absolute top-6 right-6 text-pearl/60 hover:text-pearl transition-colors p-2 bg-white/10 rounded-full backdrop-blur-sm"
+            onClick={() => setSelectedImage(null)}
+          >
+            <X size={32} />
+          </button>
+          
+          <div className="relative max-w-5xl w-full aspect-square md:aspect-auto md:h-[80vh] rounded-3xl overflow-hidden shadow-2xl border-4 border-white/10 animate-in zoom-in-95 duration-500">
+            <img 
+              src={selectedImage} 
+              alt="Enlarged view" 
+              className="w-full h-full object-contain bg-black/20"
+              referrerPolicy="no-referrer"
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 }

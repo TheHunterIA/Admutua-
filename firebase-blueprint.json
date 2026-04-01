@@ -9,6 +9,7 @@
         "heroSubtitle": { "type": "string" },
         "heroBackgroundImage": { "type": "string" },
         "liveVideoId": { "type": "string" },
+        "liveBackgroundImageUrl": { "type": "string" },
         "logoUrl": { "type": "string" },
         "footerBannerUrl": { "type": "string" }
       },
@@ -162,6 +163,24 @@
         "updatedAt": { "type": "timestamp" }
       },
       "required": ["name", "teacher", "location", "schedule", "createdAt"]
+    },
+    "Missionary": {
+      "title": "Missionary",
+      "description": "A missionary supported by the church",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "field": { "type": "string" },
+        "bio": { "type": "string" },
+        "email": { "type": "string" },
+        "location": { "type": "string" },
+        "imageUrl": { "type": "string" },
+        "countryCode": { "type": "string", "description": "ISO 3166-1 alpha-2 country code for the flag" },
+        "order": { "type": "integer" },
+        "createdAt": { "type": "timestamp" },
+        "updatedAt": { "type": "timestamp" }
+      },
+      "required": ["name", "field", "bio", "createdAt"]
     }
   },
   "firestore": {
@@ -208,6 +227,10 @@
     "/ebdClasses/{classId}": {
       "schema": "EbdClass",
       "description": "Collection of EBD classes"
+    },
+    "/missionaries/{missionaryId}": {
+      "schema": "Missionary",
+      "description": "Collection of missionaries"
     }
   }
 }

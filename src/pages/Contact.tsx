@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { MapPin, Phone, Youtube, Send, CheckCircle, Mail } from 'lucide-react';
+import { MapPin, Phone, Send, CheckCircle, Mail } from 'lucide-react';
 import { useFirestoreDoc, firestoreService } from '../hooks/useFirestore';
 import { serverTimestamp } from 'firebase/firestore';
 import { motion } from 'motion/react';
@@ -202,8 +202,12 @@ export default function Contact() {
                 <h4 className="text-[10px] font-semibold tracking-[0.2em] uppercase text-church-muted mb-6">Redes Sociais</h4>
                 <div className="flex gap-6">
                   {contactConfig?.youtubeChannelUrl && (
-                    <a href={contactConfig.youtubeChannelUrl} target="_blank" rel="noopener noreferrer" className="w-16 h-16 rounded-[1.5rem] bg-church-blue text-pearl flex items-center justify-center hover:bg-church-vibrant transition-all duration-500 shadow-xl shadow-church-blue/10">
-                      <Youtube size={28} strokeWidth={1.5} />
+                    <a href={contactConfig.youtubeChannelUrl} target="_blank" rel="noopener noreferrer" className="w-16 h-16 rounded-[1.5rem] bg-church-blue text-pearl flex items-center justify-center hover:bg-church-vibrant transition-all duration-500 shadow-xl shadow-church-blue/10 overflow-hidden">
+                      <img 
+                        src="/botao-de-reproducao-do-youtube-com-renderizacao-3d.png" 
+                        alt="YouTube" 
+                        className="w-10 h-10 object-contain group-hover:scale-110 transition-transform duration-500" 
+                      />
                     </a>
                   )}
                 </div>

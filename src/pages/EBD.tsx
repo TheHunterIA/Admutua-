@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { BookOpen, Users, Clock, MapPin, ArrowRight, Heart, Sparkles, GraduationCap, Quote, ChevronRight, Newspaper } from 'lucide-react';
+import { BookOpen, Users, Clock, MapPin, ArrowRight, Heart, Sparkles, GraduationCap, Quote, ChevronRight, ChevronLeft, Newspaper } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useFirestoreCollection } from '../hooks/useFirestore';
 import { orderBy, where } from 'firebase/firestore';
@@ -10,6 +10,7 @@ export default function EBD() {
   const { data: ebdClasses, loading: loadingClasses } = useFirestoreCollection<any>('ebdClasses', orderBy('createdAt', 'asc'));
   const { data: news } = useFirestoreCollection<any>('updates', where('subject', '==', 'EBD'), orderBy('createdAt', 'desc'));
   const [selectedLessonId, setSelectedLessonId] = useState<string | null>(null);
+  const [currentNewsIndex, setCurrentNewsIndex] = useState(0);
 
   const currentLesson = lessons.find((l: any) => l.id === selectedLessonId) || lessons[0];
   const pastLessons = lessons.filter((l: any) => l.id !== currentLesson?.id);
@@ -20,6 +21,24 @@ export default function EBD() {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }, [selectedLessonId]);
+
+  // Auto-play timer for news (10 seconds)
+  useEffect(() => {
+    const newsCount = news.length;
+    if (newsCount <= 1) return;
+    const timer = setInterval(() => {
+      setCurrentNewsIndex((prev) => (prev + 1) % newsCount);
+    }, 10000);
+    return () => clearInterval(timer);
+  }, [news.length]);
+
+  // Reset index if out of bounds
+  useEffect(() => {
+    const newsCount = news.length;
+    if (currentNewsIndex >= newsCount && newsCount > 0) {
+      setCurrentNewsIndex(0);
+    }
+  }, [news.length, currentNewsIndex]);
 
   return (
     <div className="min-h-screen bg-pearl pt-20">
@@ -240,16 +259,106 @@ export default function EBD() {
               <Newspaper size={24} className="text-church-vibrant" />
               Notícias da EBD
             </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {news.map((item: any) => (
-                <Link key={item.id} to={`/noticias/${item.id}`} className="group bg-pearl p-6 rounded-3xl shadow-sm border border-church-blue/5 hover:shadow-lg transition-all">
-                  <div className="aspect-video rounded-2xl overflow-hidden mb-4">
-                    <img src={item.imageUrl} alt={item.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" referrerPolicy="no-referrer" />
+            <div className="relative h-[450px] w-full overflow-hidden flex flex-col items-center justify-center">
+              <div className="relative w-full h-full flex items-center justify-center perspective-1000">
+                <AnimatePresence initial={false}>
+                  {news.map((item: any, idx: number) => {
+                    let position = idx - currentNewsIndex;
+                    const total = news.length;
+                    if (position > total / 2) position -= total;
+                    if (position < -total / 2) position += total;
+                    if (Math.abs(position) > 1) return null;
+
+                    return (
+                      <motion.div
+                        key={item.id}
+                        initial={false}
+                        animate={{
+                          x: position * 480,
+                          scale: position === 0 ? 1 : 0.8,
+                          opacity: position === 0 ? 1 : 0.3,
+                          zIndex: position === 0 ? 20 : 10,
+                          rotateY: position * -15,
+                          filter: position === 0 ? 'blur(0px)' : 'blur(4px)',
+                        }}
+                        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                        className="absolute w-full max-w-[500px] cursor-pointer"
+                        onClick={() => {
+                          if (position !== 0) setCurrentNewsIndex(idx);
+                        }}
+                      >
+                        <Link 
+                          to={`/noticias/${item.id}`} 
+                          className="group relative aspect-[4/3] rounded-[3rem] overflow-hidden shadow-[0_40px_80px_-15px_rgba(0,0,0,0.3)] bg-pearl border border-white/10 block"
+                          onClick={(e) => {
+                            if (position !== 0) e.preventDefault();
+                          }}
+                        >
+                          <img 
+                            src={item.imageUrl} 
+                            alt={item.title} 
+                            className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+                            referrerPolicy="no-referrer"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-church-blue via-church-blue/20 to-transparent opacity-80"></div>
+                          
+                          <div className="absolute inset-0 p-8 flex flex-col justify-end">
+                            <span className="text-church-vibrant text-[9px] font-bold tracking-[0.3em] uppercase mb-3 block">
+                              {item.date}
+                            </span>
+                            <h3 className="text-2xl text-white font-serif italic leading-tight mb-4">
+                              {item.title}
+                            </h3>
+                            
+                            {position === 0 && (
+                              <motion.div
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                className="space-y-6"
+                              >
+                                <p className="text-pearl/70 text-sm font-light italic line-clamp-2">
+                                  {item.description}
+                                </p>
+                                <div className="w-full h-12 rounded-2xl bg-church-vibrant text-church-blue font-bold text-[10px] uppercase tracking-widest flex items-center justify-center hover:bg-white transition-all duration-500">
+                                  Ler Notícia
+                                </div>
+                              </motion.div>
+                            )}
+                          </div>
+                        </Link>
+                      </motion.div>
+                    );
+                  })}
+                </AnimatePresence>
+              </div>
+
+              {news.length > 1 && (
+                <div className="flex items-center gap-8 mt-4">
+                  <button 
+                    onClick={() => setCurrentNewsIndex((prev) => (prev === 0 ? news.length - 1 : prev - 1))}
+                    className="w-14 h-14 rounded-full border border-church-blue/10 flex items-center justify-center text-church-blue hover:bg-church-blue hover:text-white transition-all group/btn"
+                  >
+                    <ChevronLeft size={24} strokeWidth={1.5} className="group-hover/btn:-translate-x-1 transition-transform" />
+                  </button>
+                  
+                  <div className="flex gap-2">
+                    {news.map((_: any, i: number) => (
+                      <button
+                        key={i}
+                        onClick={() => setCurrentNewsIndex(i)}
+                        className={`h-1 rounded-full transition-all duration-500 ${i === currentNewsIndex ? 'w-10 bg-church-vibrant' : 'w-2 bg-church-blue/10'}`}
+                      />
+                    ))}
                   </div>
-                  <h4 className="text-lg text-church-blue font-serif italic mb-2 group-hover:text-church-vibrant transition-colors">{item.title}</h4>
-                  <p className="text-sm text-church-muted line-clamp-2">{item.description}</p>
-                </Link>
-              ))}
+
+                  <button 
+                    onClick={() => setCurrentNewsIndex((prev) => (prev === news.length - 1 ? 0 : prev + 1))}
+                    className="w-14 h-14 rounded-full border border-church-blue/10 flex items-center justify-center text-church-blue hover:bg-church-blue hover:text-white transition-all group/btn"
+                  >
+                    <ChevronRight size={24} strokeWidth={1.5} className="group-hover/btn:translate-x-1 transition-transform" />
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </section>

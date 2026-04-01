@@ -14,6 +14,7 @@ import {
   Edit2, 
   Save, 
   X,
+  Menu,
   MessageSquare,
   Database,
   ImagePlus,
@@ -37,6 +38,12 @@ export default function Admin() {
   const [isSeeding, setIsSeeding] = useState(false);
   const [activeTab, setActiveTab] = useState('home');
   const [modal, setModal] = useState<{ type: 'confirm' | 'success' | 'error', message: string, onConfirm?: () => void } | null>(null);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const handleTabClick = (tab: string) => {
+    setActiveTab(tab);
+    setIsMobileMenuOpen(false);
+  };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (u) => {
@@ -94,7 +101,7 @@ export default function Admin() {
   const handleRemoveSeedData = async () => {
     setModal({
       type: 'confirm',
-      message: 'ATENÇÃO: Isso irá apagar apenas os dados de exemplo (pré-definidos) de serviços, departamentos, eventos e atualizações. Os dados que você adicionou manualmente não serão afetados. Deseja continuar?',
+      message: 'ATENÇÃO: Isso irá apagar apenas os dados de exemplo (pré-definidos) de serviços, departamentos, programações e atualizações. Os dados que você adicionou manualmente não serão afetados. Deseja continuar?',
       onConfirm: async () => {
         setModal(null);
         setIsSeeding(true);
@@ -164,9 +171,43 @@ export default function Admin() {
   }
 
   return (
-    <div className="flex-1 flex flex-col md:flex-row font-sans text-church-text overflow-hidden min-h-0">
+    <div className="flex-1 flex flex-col md:flex-row font-sans text-church-text overflow-hidden min-h-0 relative">
+      {/* Mobile Header */}
+      <div className="md:hidden bg-church-blue p-4 flex items-center justify-between border-b border-church-vibrant/10 z-50">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 bg-church-vibrant text-church-blue rounded-xl flex items-center justify-center shadow-lg shadow-church-vibrant/20">
+            <LayoutDashboard size={20} strokeWidth={1.5} />
+          </div>
+          <span className="text-pearl font-serif italic text-lg">Painel AD Mutuá</span>
+        </div>
+        <button 
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          className="p-2 text-church-vibrant hover:bg-white/5 rounded-xl transition-colors"
+        >
+          {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
+      </div>
+
+      {/* Sidebar Overlay for Mobile */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setIsMobileMenuOpen(false)}
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60] md:hidden"
+          />
+        )}
+      </AnimatePresence>
+
       {/* Sidebar */}
-      <aside className="w-full md:w-80 flex-shrink-0 h-full bg-church-blue text-pearl border-r border-church-vibrant/10 shadow-[0_0_50px_rgba(0,0,0,0.2)] relative overflow-y-auto custom-scrollbar">
+      <aside className={`
+        fixed inset-y-0 left-0 z-[70] w-80 bg-church-blue text-pearl border-r border-church-vibrant/10 shadow-[0_0_50px_rgba(0,0,0,0.2)] 
+        transform transition-transform duration-500 ease-in-out overflow-y-auto custom-scrollbar
+        md:relative md:translate-x-0 md:z-auto
+        ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}
+      `}>
         <div className="p-10 border-b border-church-vibrant/5 relative overflow-hidden group">
           <div className="absolute inset-0 bg-pearl/5 translate-y-full group-hover:translate-y-0 transition-transform duration-700"></div>
           <h2 className="text-2xl font-serif italic text-pearl flex items-center gap-3 relative z-10">
@@ -178,21 +219,24 @@ export default function Admin() {
         </div>
         
         <nav className="p-8 space-y-4">
-          <TabButton active={activeTab === 'home'} onClick={() => setActiveTab('home')} icon={<HomeIcon size={20} strokeWidth={1.5} />} label="Início" />
-          <TabButton active={activeTab === 'leadership'} onClick={() => setActiveTab('leadership')} icon={<Users size={20} strokeWidth={1.5} />} label="Liderança" />
-          <TabButton active={activeTab === 'events'} onClick={() => setActiveTab('events')} icon={<Calendar size={20} strokeWidth={1.5} />} label="Eventos" />
-          <TabButton active={activeTab === 'services'} onClick={() => setActiveTab('services')} icon={<Clock size={20} strokeWidth={1.5} />} label="Cultos" />
-          <TabButton active={activeTab === 'departments'} onClick={() => setActiveTab('departments')} icon={<Users size={20} strokeWidth={1.5} />} label="Departamentos" />
-          <TabButton active={activeTab === 'ebd'} onClick={() => setActiveTab('ebd')} icon={<BookOpen size={20} strokeWidth={1.5} />} label="EBD" />
-          <TabButton active={activeTab === 'news'} onClick={() => setActiveTab('news')} icon={<Newspaper size={20} strokeWidth={1.5} />} label="Notícias" />
-          <TabButton active={activeTab === 'congregations'} onClick={() => setActiveTab('congregations')} icon={<Church size={20} strokeWidth={1.5} />} label="Congregações" />
-          <TabButton active={activeTab === 'contact'} onClick={() => setActiveTab('contact')} icon={<Mail size={20} strokeWidth={1.5} />} label="Contato" />
-          <TabButton active={activeTab === 'missionaries'} onClick={() => setActiveTab('missionaries')} icon={<Users size={20} strokeWidth={1.5} />} label="Missionários" />
-          <TabButton active={activeTab === 'submissions'} onClick={() => setActiveTab('submissions')} icon={<MessageSquare size={20} strokeWidth={1.5} />} label="Mensagens" />
+          <TabButton active={activeTab === 'home'} onClick={() => handleTabClick('home')} icon={<HomeIcon size={20} strokeWidth={1.5} />} label="Início" />
+          <TabButton active={activeTab === 'leadership'} onClick={() => handleTabClick('leadership')} icon={<Users size={20} strokeWidth={1.5} />} label="Liderança" />
+          <TabButton active={activeTab === 'events'} onClick={() => handleTabClick('events')} icon={<Calendar size={20} strokeWidth={1.5} />} label="Programações Especiais" />
+          <TabButton active={activeTab === 'services'} onClick={() => handleTabClick('services')} icon={<Clock size={20} strokeWidth={1.5} />} label="Cultos" />
+          <TabButton active={activeTab === 'departments'} onClick={() => handleTabClick('departments')} icon={<Users size={20} strokeWidth={1.5} />} label="Departamentos" />
+          <TabButton active={activeTab === 'ebd'} onClick={() => handleTabClick('ebd')} icon={<BookOpen size={20} strokeWidth={1.5} />} label="EBD" />
+          <TabButton active={activeTab === 'news'} onClick={() => handleTabClick('news')} icon={<Newspaper size={20} strokeWidth={1.5} />} label="Notícias" />
+          <TabButton active={activeTab === 'congregations'} onClick={() => handleTabClick('congregations')} icon={<Church size={20} strokeWidth={1.5} />} label="Congregações" />
+          <TabButton active={activeTab === 'contact'} onClick={() => handleTabClick('contact')} icon={<Mail size={20} strokeWidth={1.5} />} label="Contato" />
+          <TabButton active={activeTab === 'missionaries'} onClick={() => handleTabClick('missionaries')} icon={<Users size={20} strokeWidth={1.5} />} label="Missionários" />
+          <TabButton active={activeTab === 'submissions'} onClick={() => handleTabClick('submissions')} icon={<MessageSquare size={20} strokeWidth={1.5} />} label="Mensagens" />
           
           <div className="pt-8 mt-8 border-t border-church-vibrant/10">
             <button
-              onClick={handleSeed}
+              onClick={() => {
+                handleSeed();
+                setIsMobileMenuOpen(false);
+              }}
               disabled={isSeeding}
               className="w-full flex items-center gap-4 px-6 py-5 rounded-2xl text-pearl/60 hover:bg-white/5 hover:text-pearl transition-all font-medium disabled:opacity-50 group border border-transparent hover:border-church-vibrant/10"
             >
@@ -203,7 +247,10 @@ export default function Admin() {
             </button>
 
             <button
-              onClick={handleRemoveSeedData}
+              onClick={() => {
+                handleRemoveSeedData();
+                setIsMobileMenuOpen(false);
+              }}
               disabled={isSeeding}
               className="w-full flex items-center gap-4 px-6 py-5 rounded-2xl text-red-400/60 hover:bg-red-500/10 hover:text-red-400 transition-all font-medium disabled:opacity-50 group border border-transparent hover:border-red-500/10"
             >
@@ -227,7 +274,10 @@ export default function Admin() {
             </div>
           </div>
           <button
-            onClick={logout}
+            onClick={() => {
+              logout();
+              setIsMobileMenuOpen(false);
+            }}
             className="w-full flex items-center justify-center gap-3 px-6 py-4 text-red-400 hover:bg-red-500/10 rounded-2xl transition-all font-semibold text-sm border border-red-500/20"
           >
             <LogOut size={18} strokeWidth={2} />
@@ -252,7 +302,7 @@ export default function Admin() {
             >
               {activeTab === 'home' && <HomeEditor setModal={setModal} />}
               {activeTab === 'leadership' && <LeadershipEditor setModal={setModal} />}
-              {activeTab === 'events' && <ListEditor collectionPath="events" title="Eventos Especiais" setModal={setModal} />}
+              {activeTab === 'events' && <ListEditor collectionPath="events" title="Programações Especiais" setModal={setModal} />}
               {activeTab === 'services' && <ListEditor collectionPath="services" title="Horários de Cultos" setModal={setModal} />}
               {activeTab === 'departments' && <ListEditor collectionPath="departments" title="Departamentos" setModal={setModal} />}
               {activeTab === 'ebd' && <EbdAdmin setModal={setModal} />}
@@ -326,7 +376,7 @@ function TabButton({ active, onClick, icon, label }: { active: boolean, onClick:
   return (
     <button
       onClick={onClick}
-      className={`w-full flex items-center gap-5 px-6 py-5 rounded-2xl transition-all duration-500 font-medium group relative overflow-hidden ${
+      className={`w-full flex items-center text-left gap-5 px-6 py-5 rounded-2xl transition-all duration-500 font-medium group relative overflow-hidden ${
         active 
           ? 'bg-church-blue-light text-church-vibrant shadow-[0_10px_30px_rgba(0,0,0,0.3)] scale-[1.02] border border-white/5' 
           : 'text-pearl/40 hover:bg-white/5 hover:text-pearl'
@@ -340,7 +390,7 @@ function TabButton({ active, onClick, icon, label }: { active: boolean, onClick:
           transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
         />
       )}
-      <div className={`relative z-10 transition-all duration-500 ${active ? 'text-church-vibrant scale-110' : 'text-church-vibrant/20 group-hover:text-church-vibrant group-hover:scale-110'}`}>
+      <div className={`relative z-10 transition-all duration-500 shrink-0 ${active ? 'text-church-vibrant scale-110' : 'text-church-vibrant/20 group-hover:text-church-vibrant group-hover:scale-110'}`}>
         {icon}
       </div>
       <span className={`relative z-10 text-[10px] font-bold uppercase tracking-[0.2em] transition-all duration-500 ${active ? 'opacity-100' : 'opacity-60 group-hover:opacity-100'}`}>
@@ -391,6 +441,254 @@ const compressImage = (file: File, maxSize = 1200): Promise<string> => {
   });
 };
 
+const COUNTRIES = [
+  { code: 'AF', name: 'Afeganistão' },
+  { code: 'ZA', name: 'África do Sul' },
+  { code: 'AL', name: 'Albânia' },
+  { code: 'DE', name: 'Alemanha' },
+  { code: 'AD', name: 'Andorra' },
+  { code: 'AO', name: 'Angola' },
+  { code: 'AI', name: 'Anguilla' },
+  { code: 'AQ', name: 'Antártida' },
+  { code: 'AG', name: 'Antígua e Barbuda' },
+  { code: 'SA', name: 'Arábia Saudita' },
+  { code: 'DZ', name: 'Argélia' },
+  { code: 'AR', name: 'Argentina' },
+  { code: 'AM', name: 'Armênia' },
+  { code: 'AW', name: 'Aruba' },
+  { code: 'AU', name: 'Austrália' },
+  { code: 'AT', name: 'Áustria' },
+  { code: 'AZ', name: 'Azerbaijão' },
+  { code: 'BS', name: 'Bahamas' },
+  { code: 'BH', name: 'Bahrein' },
+  { code: 'BD', name: 'Bangladesh' },
+  { code: 'BB', name: 'Barbados' },
+  { code: 'BE', name: 'Bélgica' },
+  { code: 'BZ', name: 'Belize' },
+  { code: 'BJ', name: 'Benin' },
+  { code: 'BM', name: 'Bermudas' },
+  { code: 'BY', name: 'Bielorrússia' },
+  { code: 'BO', name: 'Bolívia' },
+  { code: 'BA', name: 'Bósnia e Herzegovina' },
+  { code: 'BW', name: 'Botsuana' },
+  { code: 'BR', name: 'Brasil' },
+  { code: 'BN', name: 'Brunei' },
+  { code: 'BG', name: 'Bulgária' },
+  { code: 'BF', name: 'Burkina Faso' },
+  { code: 'BI', name: 'Burundi' },
+  { code: 'BT', name: 'Butão' },
+  { code: 'CV', name: 'Cabo Verde' },
+  { code: 'CM', name: 'Camarões' },
+  { code: 'KH', name: 'Camboja' },
+  { code: 'CA', name: 'Canadá' },
+  { code: 'QA', name: 'Catar' },
+  { code: 'KZ', name: 'Cazaquistão' },
+  { code: 'TD', name: 'Chade' },
+  { code: 'CL', name: 'Chile' },
+  { code: 'CN', name: 'China' },
+  { code: 'CY', name: 'Chipre' },
+  { code: 'CO', name: 'Colômbia' },
+  { code: 'KM', name: 'Comores' },
+  { code: 'CG', name: 'Congo-Brazzaville' },
+  { code: 'CD', name: 'Congo-Kinshasa' },
+  { code: 'KP', name: 'Coreia do Norte' },
+  { code: 'KR', name: 'Coreia do Sul' },
+  { code: 'CI', name: 'Costa do Marfim' },
+  { code: 'CR', name: 'Costa Rica' },
+  { code: 'HR', name: 'Croácia' },
+  { code: 'CU', name: 'Cuba' },
+  { code: 'CW', name: 'Curaçao' },
+  { code: 'DK', name: 'Dinamarca' },
+  { code: 'DJ', name: 'Djibuti' },
+  { code: 'DM', name: 'Dominica' },
+  { code: 'EG', name: 'Egito' },
+  { code: 'SV', name: 'El Salvador' },
+  { code: 'AE', name: 'Emirados Árabes Unidos' },
+  { code: 'EC', name: 'Equador' },
+  { code: 'ER', name: 'Eritreia' },
+  { code: 'SK', name: 'Eslováquia' },
+  { code: 'SI', name: 'Eslovênia' },
+  { code: 'ES', name: 'Espanha' },
+  { code: 'US', name: 'Estados Unidos' },
+  { code: 'EE', name: 'Estônia' },
+  { code: 'ET', name: 'Etiópia' },
+  { code: 'FJ', name: 'Fiji' },
+  { code: 'PH', name: 'Filipinas' },
+  { code: 'FI', name: 'Finlândia' },
+  { code: 'FR', name: 'França' },
+  { code: 'GA', name: 'Gabão' },
+  { code: 'GM', name: 'Gâmbia' },
+  { code: 'GH', name: 'Gana' },
+  { code: 'GE', name: 'Geórgia' },
+  { code: 'GI', name: 'Gibraltar' },
+  { code: 'GR', name: 'Grécia' },
+  { code: 'GD', name: 'Granada' },
+  { code: 'GL', name: 'Groenlândia' },
+  { code: 'GP', name: 'Guadalupe' },
+  { code: 'GU', name: 'Guam' },
+  { code: 'GT', name: 'Guatemala' },
+  { code: 'GG', name: 'Guernsey' },
+  { code: 'GY', name: 'Guiana' },
+  { code: 'GF', name: 'Guiana Francesa' },
+  { code: 'GN', name: 'Guiné' },
+  { code: 'GQ', name: 'Guiné Equatorial' },
+  { code: 'GW', name: 'Guiné-Bissau' },
+  { code: 'HT', name: 'Haiti' },
+  { code: 'HN', name: 'Honduras' },
+  { code: 'HK', name: 'Hong Kong' },
+  { code: 'HU', name: 'Hungria' },
+  { code: 'YE', name: 'Iêmen' },
+  { code: 'IM', name: 'Ilha de Man' },
+  { code: 'CX', name: 'Ilha Christmas' },
+  { code: 'NF', name: 'Ilha Norfolk' },
+  { code: 'AX', name: 'Ilhas Aland' },
+  { code: 'KY', name: 'Ilhas Cayman' },
+  { code: 'CC', name: 'Ilhas Cocos' },
+  { code: 'CK', name: 'Ilhas Cook' },
+  { code: 'FO', name: 'Ilhas Faroé' },
+  { code: 'GS', name: 'Ilhas Geórgia do Sul e Sandwich do Sul' },
+  { code: 'HM', name: 'Ilhas Heard e McDonald' },
+  { code: 'FK', name: 'Ilhas Malvinas' },
+  { code: 'MP', name: 'Ilhas Marianas do Norte' },
+  { code: 'MH', name: 'Ilhas Marshall' },
+  { code: 'UM', name: 'Ilhas Menores Distantes dos Estados Unidos' },
+  { code: 'SB', name: 'Ilhas Salomão' },
+  { code: 'TC', name: 'Ilhas Turcas e Caicos' },
+  { code: 'VG', name: 'Ilhas Virgens Britânicas' },
+  { code: 'VI', name: 'Ilhas Virgens Americanas' },
+  { code: 'IN', name: 'Índia' },
+  { code: 'ID', name: 'Indonésia' },
+  { code: 'IR', name: 'Irã' },
+  { code: 'IQ', name: 'Iraque' },
+  { code: 'IE', name: 'Irlanda' },
+  { code: 'IS', name: 'Islândia' },
+  { code: 'IL', name: 'Israel' },
+  { code: 'IT', name: 'Itália' },
+  { code: 'JM', name: 'Jamaica' },
+  { code: 'JP', name: 'Japão' },
+  { code: 'JE', name: 'Jersey' },
+  { code: 'JO', name: 'Jordânia' },
+  { code: 'KW', name: 'Kuwait' },
+  { code: 'LA', name: 'Laos' },
+  { code: 'LS', name: 'Lesoto' },
+  { code: 'LV', name: 'Letônia' },
+  { code: 'LB', name: 'Líbano' },
+  { code: 'LR', name: 'Libéria' },
+  { code: 'LY', name: 'Líbia' },
+  { code: 'LI', name: 'Liechtenstein' },
+  { code: 'LT', name: 'Lituânia' },
+  { code: 'LU', name: 'Luxemburgo' },
+  { code: 'MO', name: 'Macau' },
+  { code: 'MK', name: 'Macedônia do Norte' },
+  { code: 'MG', name: 'Madagascar' },
+  { code: 'MY', name: 'Malásia' },
+  { code: 'MW', name: 'Malauí' },
+  { code: 'MV', name: 'Maldivas' },
+  { code: 'ML', name: 'Mali' },
+  { code: 'MT', name: 'Malta' },
+  { code: 'MA', name: 'Marrocos' },
+  { code: 'MQ', name: 'Martinica' },
+  { code: 'MU', name: 'Maurício' },
+  { code: 'MR', name: 'Mauritânia' },
+  { code: 'YT', name: 'Mayotte' },
+  { code: 'MX', name: 'México' },
+  { code: 'MM', name: 'Mianmar' },
+  { code: 'FM', name: 'Micronésia' },
+  { code: 'MZ', name: 'Moçambique' },
+  { code: 'MD', name: 'Moldávia' },
+  { code: 'MC', name: 'Mônaco' },
+  { code: 'MN', name: 'Mongólia' },
+  { code: 'ME', name: 'Montenegro' },
+  { code: 'MS', name: 'Montserrat' },
+  { code: 'NA', name: 'Namíbia' },
+  { code: 'NR', name: 'Nauru' },
+  { code: 'NP', name: 'Nepal' },
+  { code: 'NI', name: 'Nicarágua' },
+  { code: 'NE', name: 'Níger' },
+  { code: 'NG', name: 'Nigéria' },
+  { code: 'NU', name: 'Niue' },
+  { code: 'NO', name: 'Noruega' },
+  { code: 'NC', name: 'Nova Caledônia' },
+  { code: 'NZ', name: 'Nova Zelândia' },
+  { code: 'OM', name: 'Omã' },
+  { code: 'NL', name: 'Países Baixos' },
+  { code: 'PW', name: 'Palau' },
+  { code: 'PS', name: 'Palestina' },
+  { code: 'PA', name: 'Panamá' },
+  { code: 'PG', name: 'Papua-Nova Guiné' },
+  { code: 'PK', name: 'Paquistão' },
+  { code: 'PY', name: 'Paraguai' },
+  { code: 'PE', name: 'Peru' },
+  { code: 'PF', name: 'Polinésia Francesa' },
+  { code: 'PL', name: 'Polônia' },
+  { code: 'PR', name: 'Porto Rico' },
+  { code: 'PT', name: 'Portugal' },
+  { code: 'KE', name: 'Quênia' },
+  { code: 'KG', name: 'Quirguistão' },
+  { code: 'KI', name: 'Quiribati' },
+  { code: 'GB', name: 'Reino Unido' },
+  { code: 'CF', name: 'República Centro-Africana' },
+  { code: 'DO', name: 'República Dominicana' },
+  { code: 'CZ', name: 'República Tcheca' },
+  { code: 'RE', name: 'Reunião' },
+  { code: 'RO', name: 'Romênia' },
+  { code: 'RW', name: 'Ruanda' },
+  { code: 'RU', name: 'Rússia' },
+  { code: 'EH', name: 'Saara Ocidental' },
+  { code: 'WS', name: 'Samoa' },
+  { code: 'AS', name: 'Samoa Americana' },
+  { code: 'BL', name: 'São Bartolomeu' },
+  { code: 'KN', name: 'São Cristóvão e Névis' },
+  { code: 'MF', name: 'São Martinho' },
+  { code: 'PM', name: 'São Pedro e Miquelão' },
+  { code: 'ST', name: 'São Tomé e Príncipe' },
+  { code: 'VC', name: 'São Vicente e Granadinas' },
+  { code: 'SH', name: 'Santa Helena' },
+  { code: 'LC', name: 'Santa Lúcia' },
+  { code: 'SN', name: 'Senegal' },
+  { code: 'RS', name: 'Sérvia' },
+  { code: 'SC', name: 'Seychelles' },
+  { code: 'SL', name: 'Serra Leoa' },
+  { code: 'SG', name: 'Singapura' },
+  { code: 'SX', name: 'Sint Maarten' },
+  { code: 'SY', name: 'Síria' },
+  { code: 'SO', name: 'Somália' },
+  { code: 'LK', name: 'Sri Lanka' },
+  { code: 'SZ', name: 'Suazilândia' },
+  { code: 'SD', name: 'Sudão' },
+  { code: 'SS', name: 'Sudão do Sul' },
+  { code: 'SE', name: 'Suécia' },
+  { code: 'CH', name: 'Suíça' },
+  { code: 'SR', name: 'Suriname' },
+  { code: 'SJ', name: 'Svalbard e Jan Mayen' },
+  { code: 'TH', name: 'Tailândia' },
+  { code: 'TW', name: 'Taiwan' },
+  { code: 'TJ', name: 'Tajiquistão' },
+  { code: 'TZ', name: 'Tanzânia' },
+  { code: 'TF', name: 'Territórios Franceses do Sul' },
+  { code: 'IO', name: 'Território Britânico do Oceano Índico' },
+  { code: 'TL', name: 'Timor-Leste' },
+  { code: 'TG', name: 'Togo' },
+  { code: 'TK', name: 'Toquelau' },
+  { code: 'TO', name: 'Tonga' },
+  { code: 'TT', name: 'Trinidad e Tobago' },
+  { code: 'TN', name: 'Tunísia' },
+  { code: 'TM', name: 'Turcomenistão' },
+  { code: 'TR', name: 'Turquia' },
+  { code: 'TV', name: 'Tuvalu' },
+  { code: 'UA', name: 'Ucrânia' },
+  { code: 'UG', name: 'Uganda' },
+  { code: 'UY', name: 'Uruguai' },
+  { code: 'UZ', name: 'Uzbequistão' },
+  { code: 'VU', name: 'Vanuatu' },
+  { code: 'VA', name: 'Vaticano' },
+  { code: 'VE', name: 'Venezuela' },
+  { code: 'VN', name: 'Vietnã' },
+  { code: 'WF', name: 'Wallis e Futuna' },
+  { code: 'ZM', name: 'Zâmbia' },
+  { code: 'ZW', name: 'Zimbábue' }
+];
+
 function MissionariesManager({ setModal }: { setModal: (m: any) => void }) {
   return (
     <div className="space-y-16">
@@ -406,6 +704,7 @@ function HomeEditor({ setModal }: { setModal: (m: any) => void }) {
     heroSubtitle: '', 
     heroBackgroundImage: '', 
     liveVideoId: '',
+    liveBackgroundImageUrl: '',
     logoUrl: '',
     footerBannerUrl: ''
   });
@@ -449,6 +748,13 @@ function HomeEditor({ setModal }: { setModal: (m: any) => void }) {
           <div className="grid grid-cols-1 gap-10">
             <Field label="Título do Hero" value={formData.heroTitle} onChange={v => setFormData({...formData, heroTitle: v})} />
             <Field label="Subtítulo do Hero" value={formData.heroSubtitle} onChange={v => setFormData({...formData, heroSubtitle: v})} isTextArea />
+            <div>
+              <label className="block text-sm font-semibold text-church-blue tracking-wide uppercase text-[10px] mb-4">Imagem de Fundo do Hero</label>
+              <ImageUploadField 
+                value={formData.heroBackgroundImage} 
+                onChange={v => setFormData({...formData, heroBackgroundImage: v})} 
+              />
+            </div>
           </div>
         </section>
 
@@ -472,6 +778,13 @@ function HomeEditor({ setModal }: { setModal: (m: any) => void }) {
                 }}
                 className="w-full px-6 py-4 rounded-2xl border border-church-vibrant/10 focus:ring-2 focus:ring-church-vibrant outline-none bg-pearl/30 text-church-blue font-light"
                 placeholder="Cole a URL do vídeo ou apenas o ID (Ex: ABC123XYZ)"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-semibold text-church-blue tracking-wide uppercase text-[10px] mb-4">Imagem de Fundo da Seção Live</label>
+              <ImageUploadField 
+                value={formData.liveBackgroundImageUrl} 
+                onChange={v => setFormData({...formData, liveBackgroundImageUrl: v})} 
               />
             </div>
           </div>
@@ -723,7 +1036,7 @@ function ListEditor({ collectionPath, title, setModal }: { collectionPath: strin
                 {collectionPath === 'events' && (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div className="md:col-span-2">
-                      <Field label="Título do Evento" value={formData.title} onChange={v => setFormData({...formData, title: v})} />
+                      <Field label="Título da Programação" value={formData.title} onChange={v => setFormData({...formData, title: v})} />
                     </div>
                     <Field label="Tema" value={formData.theme} onChange={v => setFormData({...formData, theme: v})} />
                     <Field label="Data" value={formData.date} onChange={v => setFormData({...formData, date: v})} />
@@ -739,19 +1052,13 @@ function ListEditor({ collectionPath, title, setModal }: { collectionPath: strin
                     <div className="md:col-span-2 flex items-center gap-4 p-6 bg-pearl/30 rounded-2xl border border-church-vibrant/10">
                       <input 
                         type="checkbox" 
-                        id="isRegistrationOpen"
-                        checked={formData.isRegistrationOpen || false} 
-                        onChange={e => setFormData({...formData, isRegistrationOpen: e.target.checked})}
+                        id="hasLimitedSpots"
+                        checked={formData.hasLimitedSpots || false} 
+                        onChange={e => setFormData({...formData, hasLimitedSpots: e.target.checked})}
                         className="w-6 h-6 rounded-lg border-church-vibrant/20 text-church-blue focus:ring-church-vibrant"
                       />
-                      <label htmlFor="isRegistrationOpen" className="text-sm font-semibold text-church-blue cursor-pointer tracking-wide uppercase text-[10px]">Habilitar Inscrições Online?</label>
+                      <label htmlFor="hasLimitedSpots" className="text-sm font-semibold text-church-blue cursor-pointer tracking-wide uppercase text-[10px]">Vagas Limitadas?</label>
                     </div>
-
-                    {formData.isRegistrationOpen && (
-                      <div className="md:col-span-2">
-                        <Field label="Link para Inscrição" value={formData.registrationLink} onChange={v => setFormData({...formData, registrationLink: v})} placeholder="Ex: Link do Google Forms ou Sympla" />
-                      </div>
-                    )}
 
                     <div className="md:col-span-2 space-y-4">
                       <label className="block text-sm font-semibold text-church-blue tracking-wide uppercase text-[10px]">Imagem Principal</label>
@@ -816,7 +1123,7 @@ function ListEditor({ collectionPath, title, setModal }: { collectionPath: strin
                         <option value="Missoes">Missões</option>
                         <option value="Cultos">Cultos</option>
                         <option value="Noticias">Notícias</option>
-                        <option value="Eventos">Eventos</option>
+                        <option value="Programacoes Especiais">Programações Especiais</option>
                         <option value="Departamentos">Departamentos</option>
                         <option value="Jovens">Jovens</option>
                         <option value="Criancas">Crianças</option>
@@ -903,6 +1210,21 @@ function ListEditor({ collectionPath, title, setModal }: { collectionPath: strin
                     </div>
                     <Field label="Email" value={formData.email} onChange={v => setFormData({...formData, email: v})} />
                     <Field label="Localização" value={formData.location} onChange={v => setFormData({...formData, location: v})} />
+                    <div className="md:col-span-2">
+                      <label className="block text-sm font-semibold text-church-blue tracking-wide uppercase text-[10px] mb-2">País (Para Bandeira)</label>
+                      <select 
+                        value={formData.countryCode || ''} 
+                        onChange={e => setFormData({...formData, countryCode: e.target.value})}
+                        className="w-full px-6 py-4 rounded-2xl border border-church-vibrant/10 focus:ring-2 focus:ring-church-vibrant outline-none bg-pearl/30 text-church-blue font-light"
+                      >
+                        <option value="">Selecione um país</option>
+                        {COUNTRIES.map(country => (
+                          <option key={country.code} value={country.code}>
+                            {country.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
                     <div className="md:col-span-2 space-y-4">
                       <label className="block text-sm font-semibold text-church-blue tracking-wide uppercase text-[10px]">Foto do Missionário</label>
                       <ImageUploadField value={formData.imageUrl} onChange={v => setFormData({...formData, imageUrl: v})} />
@@ -1164,20 +1486,14 @@ function ImageUploadField({ value, onChange }: { value: string, onChange: (v: st
         />
       </div>
       {value && (
-        <div className="flex items-center gap-3">
-          <input 
-            type="text" 
-            value={value} 
-            onChange={(e) => onChange(e.target.value)}
-            placeholder="Ou cole a URL da imagem aqui"
-            className="flex-1 px-6 py-3 text-xs rounded-xl border border-church-vibrant/10 outline-none focus:ring-2 focus:ring-church-vibrant bg-pearl/20 text-church-blue font-light"
-          />
+        <div className="flex items-center justify-end">
           <button 
             onClick={() => onChange('')}
-            className="p-3 text-red-500 hover:bg-red-50 rounded-xl transition-colors border border-red-100"
+            className="flex items-center gap-2 px-4 py-2 text-sm text-red-500 hover:bg-red-50 rounded-xl transition-colors border border-red-100"
             title="Remover imagem"
           >
-            <Trash2 size={18} strokeWidth={1.5} />
+            <Trash2 size={16} strokeWidth={1.5} />
+            Remover Imagem
           </button>
         </div>
       )}

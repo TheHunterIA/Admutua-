@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Youtube, MapPin, Phone, LayoutDashboard } from 'lucide-react';
+import { Menu, X, MapPin, Phone, LayoutDashboard } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
 import { useFirestoreDoc } from '../../hooks/useFirestore';
@@ -140,7 +140,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 <span className="hidden sm:flex items-center gap-2"><Phone size={10} className="text-church-vibrant" /> {contactConfig?.phone || '(21) 2713-5394'}</span>
               </div>
               <div className="flex gap-6">
-                <a href={contactConfig?.youtubeChannelUrl} target="_blank" rel="noopener noreferrer" className="hover:text-church-vibrant transition-colors">YouTube</a>
               </div>
             </div>
           </div>
@@ -240,7 +239,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         </div>
       </div>
 
-      <main className="flex-1 flex flex-col pt-36 md:pt-40">
+      <main className={`flex-1 flex flex-col ${location.pathname === '/' ? '' : 'pt-28 md:pt-32'}`}>
         <AnimatePresence mode="wait">
           <motion.div
             key={location.pathname}
@@ -258,9 +257,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       {/* Footer */}
       {!isAdminPage && (
         <footer className="bg-church-blue text-pearl pt-20 pb-12 mt-auto overflow-hidden relative">
-          <div className="absolute top-0 right-0 opacity-5 pointer-events-none">
-            <span className="text-[20vw] font-serif italic leading-none vertical-text">Mutuá</span>
-          </div>
           
           <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-24 relative z-10">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-20 mb-16">
@@ -279,13 +275,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 <p className="text-pearl/60 leading-relaxed font-light">
                   Uma igreja que ama a Deus e ama as pessoas. Venha nos fazer uma visita e sinta o agir de Deus em sua vida.
                 </p>
-                <div className="flex space-x-6">
-                  {contactConfig?.youtubeChannelUrl && (
-                    <a href={contactConfig.youtubeChannelUrl} target="_blank" rel="noopener noreferrer" className="text-pearl/40 hover:text-church-vibrant transition-colors">
-                      <Youtube size={20} strokeWidth={1.5} />
-                    </a>
-                  )}
-                </div>
               </div>
 
               {/* Coluna 2: Contato */}

@@ -1,4 +1,4 @@
-import { Clock, Calendar, Youtube } from 'lucide-react';
+import { Clock, Calendar } from 'lucide-react';
 import { useFirestoreCollection } from '../hooks/useFirestore';
 import { orderBy } from 'firebase/firestore';
 import { motion } from 'motion/react';
@@ -45,22 +45,26 @@ export default function Services() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.8, delay: idx * 0.1 }}
-                  className="bg-white p-10 rounded-[2.5rem] shadow-xl border border-church-vibrant/5 flex flex-col items-start gap-8 hover:shadow-2xl transition-all duration-500 group relative"
+                  className="bg-white p-10 rounded-[2.5rem] shadow-xl border border-church-vibrant/5 flex flex-col items-start gap-6 hover:shadow-2xl transition-all duration-500 group h-full relative min-h-[220px]"
                 >
                   {service.isLiveStream && (
-                    <div className="absolute top-8 right-8 text-red-600">
-                      <Youtube size={32} />
+                    <div className="absolute top-8 right-8">
+                      <img src="/botao-de-reproducao-do-youtube-com-renderizacao-3d.png" alt="YouTube Live" className="w-12 h-12 object-contain" title="Com transmissão ao vivo" />
                     </div>
                   )}
-                  <div className="w-16 h-16 bg-church-blue/5 rounded-2xl flex items-center justify-center text-church-vibrant group-hover:bg-church-vibrant group-hover:text-pearl transition-colors duration-500">
-                    <Calendar size={32} strokeWidth={1.5} />
-                  </div>
-                  <div className="space-y-4">
-                    <h3 className="text-2xl text-church-blue font-serif italic">{service.name}</h3>
-                    <div className="flex items-center gap-3 text-church-vibrant font-medium tracking-wide">
-                      <Clock size={18} strokeWidth={2} />
-                      <span className="text-lg">{service.day} às {service.time}</span>
+                  <div className="space-y-6 w-full pr-12">
+                    <h3 className="text-3xl text-church-blue font-serif italic">{service.name}</h3>
+                    
+                    <div className="flex items-center gap-4 text-church-vibrant font-medium tracking-wide">
+                      <div className="w-14 h-14 bg-church-blue/5 rounded-2xl flex items-center justify-center text-church-vibrant group-hover:bg-church-vibrant group-hover:text-pearl transition-colors duration-500 shrink-0">
+                        <Calendar size={28} strokeWidth={1.5} />
+                      </div>
+                      <div className="flex flex-col gap-1">
+                        <span className="text-lg leading-none">{service.day}</span>
+                        <span className="text-sm opacity-80 flex items-center gap-1 leading-none"><Clock size={14} /> às {service.time}</span>
+                      </div>
                     </div>
+
                     {service.description && (
                       <p className="text-church-muted font-light leading-relaxed">
                         {service.description}

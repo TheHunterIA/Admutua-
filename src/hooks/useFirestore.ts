@@ -45,8 +45,9 @@ interface FirestoreErrorInfo {
 }
 
 function handleFirestoreError(error: unknown, operationType: OperationType, path: string | null) {
+  const errorMessage = error instanceof Error ? error.message : String(error);
   const errInfo: FirestoreErrorInfo = {
-    error: error instanceof Error ? error.message : String(error),
+    error: errorMessage,
     authInfo: {
       userId: auth.currentUser?.uid,
       email: auth.currentUser?.email,
@@ -64,6 +65,12 @@ function handleFirestoreError(error: unknown, operationType: OperationType, path
     path
   }
   console.error('Firestore Error: ', JSON.stringify(errInfo));
+  
+  if (errorMessage.includes('Quota limit exceeded') || errorMessage.includes('Quota exceeded')) {
+    // Do not throw for quota errors to prevent app crashes, just return the error info
+    return new Error(JSON.stringify(errInfo));
+  }
+
   throw new Error(JSON.stringify(errInfo));
 }
 
@@ -93,7 +100,32 @@ export function useFirestoreCollection<T = DocumentData>(collectionPath: string,
         setLoading(false);
       },
       (err) => {
-        handleFirestoreError(err, OperationType.GET, collectionPath);
+        try {
+          const processedError = handleFirestoreError(err, OperationType.GET, collectionPath);
+          setError(processedError as Error);
+          
+          // Fallback mock data for quota exceeded
+          if (processedError && processedError.message.includes('Quota')) {
+            if (collectionPath === 'updates') {
+              setData([
+                { id: '1', title: 'Culto de Celebração', description: 'Junte-se a nós neste domingo para um culto especial de adoração e louvor.', imageUrl: 'https://picsum.photos/seed/church1/800/600', date: 'DOM, 10:00' } as any,
+                { id: '2', title: 'Estudo Bíblico', description: 'Aprofunde-se na palavra de Deus com nosso grupo de estudos.', imageUrl: 'https://picsum.photos/seed/bible/800/600', date: 'QUA, 19:30' } as any,
+                { id: '3', title: 'Encontro de Jovens', description: 'Uma noite de comunhão, louvor e palavra para os jovens.', imageUrl: 'https://picsum.photos/seed/youth/800/600', date: 'SÁB, 20:00' } as any,
+              ]);
+            } else if (collectionPath === 'events') {
+              setData([
+                { id: '1', title: 'Conferência Anual', description: 'Nossa maior conferência do ano está chegando.', imageUrl: 'https://picsum.photos/seed/conference/1200/400', date: '15-17 NOV', location: 'Templo Principal' } as any,
+              ]);
+            } else if (collectionPath === 'ebdLessons') {
+              setData([
+                { id: '1', title: 'A Graça de Deus', description: 'Um estudo profundo sobre a graça salvadora.', imageUrl: 'https://picsum.photos/seed/grace/800/600', date: 'DOM, 09:00', teacher: 'Pr. João Silva' } as any,
+                { id: '2', title: 'Os Frutos do Espírito', description: 'Como desenvolver o caráter de Cristo.', imageUrl: 'https://picsum.photos/seed/spirit/800/600', date: 'DOM, 09:00', teacher: 'Pra. Maria Silva' } as any,
+              ]);
+            }
+          }
+        } catch (e) {
+          setError(e as Error);
+        }
         setLoading(false);
       }
     );
@@ -119,7 +151,49 @@ export function useFirestoreDoc<T = DocumentData>(collectionPath: string, docId:
         setLoading(false);
       },
       (err) => {
-        handleFirestoreError(err, OperationType.GET, `${collectionPath}/${docId}`);
+        try {
+          const processedError = handleFirestoreError(err, OperationType.GET, `${collectionPath}/${docId}`);
+          setError(processedError as Error);
+
+          if (processedError && processedError.message.includes('Quota')) {
+            if (collectionPath === 'config' && docId === 'site') {
+              setData({
+                heroTitle: "Bem-vindo à Nossa Igreja",
+                heroSubtitle: "Um lugar de paz, amor e comunhão.",
+                heroImageUrl: "https://picsum.photos/seed/church/1920/1080",
+                aboutText: "Somos uma comunidade apaixonada por Jesus e dedicada a servir ao próximo.",
+                aboutImageUrl: "https://picsum.photos/seed/community/800/600",
+                mission: "Nossa missão é espalhar o amor de Cristo.",
+                vision: "Ser uma igreja relevante na sociedade.",
+                values: "Amor, Fé, Esperança, Comunhão."
+              } as any);
+            } else if (collectionPath === 'config' && docId === 'leadership') {
+              setData({
+                title: "Nossa Liderança",
+                subtitle: "Conheça os pastores e líderes que servem nossa comunidade.",
+                leaders: [
+                  { name: "Pr. João Silva", role: "Pastor Presidente", imageUrl: "https://picsum.photos/seed/pastor1/400/400" },
+                  { name: "Pra. Maria Silva", role: "Pastora Auxiliar", imageUrl: "https://picsum.photos/seed/pastor2/400/400" }
+                ]
+              } as any);
+            } else if (collectionPath === 'config' && docId === 'contact') {
+              setData({
+                address: "Rua Principal, 123 - Centro",
+                phone: "(11) 99999-9999",
+                email: "contato@nossaigreja.com",
+                facebook: "https://facebook.com",
+                instagram: "https://instagram.com",
+                youtube: "https://youtube.com",
+                services: [
+                  { day: "Domingo", time: "10:00 e 18:00", name: "Culto de Celebração" },
+                  { day: "Quarta", time: "19:30", name: "Estudo Bíblico" }
+                ]
+              } as any);
+            }
+          }
+        } catch (e) {
+          setError(e as Error);
+        }
         setLoading(false);
       }
     );

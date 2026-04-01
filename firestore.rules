@@ -8,9 +8,18 @@ service cloud.firestore {
       return request.auth != null;
     }
 
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
     function isAdmin() {
       return isAuthenticated() &&
-        (request.auth.token.email == "cleitonprado003@gmail.com");
+        (request.auth.token.email == "cleitonprado003@gmail.com" && request.auth.token.email_verified == true);
+    }
+
+    match /users/{userId} {
+      allow read: if isOwner(userId) || isAdmin();
+      allow write: if isAdmin();
     }
 
     // ===============================================================
