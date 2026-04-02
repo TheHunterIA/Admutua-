@@ -39,73 +39,75 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
   const isAdminPage = location.pathname.startsWith('/admin');
 
-  const openPiP = async () => {
-    if (!liveVideoId) return;
+ const openPiP = async () => {
+  if (!liveVideoId) return;
 
-    const isInIframe = window.self !== window.top;
+  const isInIframe = window.self !== window.top;
 
-    // Tentativa com Document Picture-in-Picture (melhor para "sempre por cima")
-    if ('documentPictureInPicture' in window && !isInIframe) {
-      try {
-        const pipWindow = await (window as any).documentPictureInPicture.requestWindow({
-          width: 520,
-          height: 300,
-        });
+  if ('documentPictureInPicture' in window && !isInIframe) {
+    try {
+      const pipWindow = await (window as any).documentPictureInPicture.requestWindow({
+        width: 520,
+        height: 320,        // um pouco mais alto para ficar melhor
+      });
 
-        // Copia estilos (seu código atual já faz isso bem)
-        [...document.styleSheets].forEach((styleSheet) => {
-          try {
-            const cssRules = [...styleSheet.cssRules].map((rule) => rule.cssText).join("");
-            const style = document.createElement("style");
-            style.textContent = cssRules;
-            pipWindow.document.head.appendChild(style);
-          } catch (e) {
-            if (styleSheet.href) {
-              const link = document.createElement("link");
-              link.rel = "stylesheet";
-              link.href = styleSheet.href;
-              pipWindow.document.head.appendChild(link);
-            }
-          }
-        });
+      // Configurações importantes para o YouTube
+      pipWindow.document.body.style.margin = '0';
+      pipWindow.document.body.style.padding = '0';
+      pipWindow.document.body.style.overflow = 'hidden';
+      pipWindow.document.body.style.backgroundColor = '#000';
+      pipWindow.document.title = 'AD Mutuá - Culto ao Vivo';
 
-        pipWindow.document.body.style.margin = '0';
-        pipWindow.document.body.style.overflow = 'hidden';
-        pipWindow.document.body.style.backgroundColor = '#000';
-        pipWindow.document.title = 'AD Mutuá - Culto ao Vivo';
+      // Cria um HTML completo dentro da janela PiP (melhor que só iframe solto)
+      const htmlContent = `
+        <!DOCTYPE html>
+        <html lang="pt-BR">
+        <head>
+          <meta charset="utf-8">
+          <title>AD Mutuá - Ao Vivo</title>
+          <meta name="referrer" content="strict-origin-when-cross-origin">
+          <style>
+            body, html { margin:0; padding:0; height:100%; background:#000; overflow:hidden; }
+            iframe { width:100%; height:100%; border:none; }
+          </style>
+        </head>
+        <body>
+          <iframe 
+            src="https://www.youtube-nocookie.com/embed/${liveVideoId}?autoplay=1&rel=0&modestbranding=1&playsinline=1" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen
+            referrerpolicy="strict-origin-when-cross-origin">
+          </iframe>
+        </body>
+        </html>
+      `;
 
-        const iframe = document.createElement('iframe');
-        iframe.src = `https://www.youtube-nocookie.com/embed/${liveVideoId}?autoplay=1&rel=0&enablejsapi=1&origin=${encodeURIComponent(window.location.origin)}`;
-        iframe.style.width = '100%';
-        iframe.style.height = '100%';
-        iframe.style.border = 'none';
-        iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
-        iframe.allowFullscreen = true;
-        iframe.referrerPolicy = "strict-origin-when-cross-origin";
+      pipWindow.document.open();
+      pipWindow.document.write(htmlContent);
+      pipWindow.document.close();
 
-        pipWindow.document.body.appendChild(iframe);
+      setIsMiniPlayerOpen(false);
+      return;
 
-        setIsMiniPlayerOpen(false);
-        return;
-      } catch (err) {
-        console.warn("Document PiP falhou:", err);
-      }
+    } catch (err) {
+      console.warn("Document PiP falhou:", err);
     }
+  }
 
-    // Fallback: popup tradicional (já está bom, mas atualize a URL)
-    const width = 520;
-    const height = 300;
-    const left = window.screen.width - width - 30;
-    const top = window.screen.height - height - 100;
+  // Fallback: janela popup normal (mais confiável para YouTube)
+  const width = 520;
+  const height = 320;
+  const left = window.screen.width - width - 40;
+  const top = window.screen.height - height - 120;
 
-    window.open(
-      `https://www.youtube-nocookie.com/embed/${liveVideoId}?autoplay=1&rel=0&enablejsapi=1&origin=${encodeURIComponent(window.location.origin)}`,
-      'YouTubePiP',
-      `width=${width},height=${height},left=${left},top=${top},menubar=no,toolbar=no,location=no,status=no,resizable=yes,scrollbars=no`
-    );
+  window.open(
+    `https://www.youtube-nocookie.com/embed/${liveVideoId}?autoplay=1&rel=0&modestbranding=1`,
+    'ADMutuaLive',
+    `width=${width},height=${height},left=${left},top=${top},menubar=no,toolbar=no,location=no,status=no,resizable=yes,scrollbars=no`
+  );
 
-    setIsMiniPlayerOpen(false);
-  };
+  setIsMiniPlayerOpen(false);
+};
 
   React.useEffect(() => {
     const handleTogglePlayer = () => setIsMiniPlayerOpen(true);
