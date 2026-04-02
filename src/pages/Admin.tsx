@@ -220,6 +220,7 @@ export default function Admin() {
         
         <nav className="p-8 space-y-4">
           <TabButton active={activeTab === 'home'} onClick={() => handleTabClick('home')} icon={<HomeIcon size={20} strokeWidth={1.5} />} label="Início" />
+          <TabButton active={activeTab === 'about'} onClick={() => handleTabClick('about')} icon={<BookOpen size={20} strokeWidth={1.5} />} label="Sobre Nós" />
           <TabButton active={activeTab === 'leadership'} onClick={() => handleTabClick('leadership')} icon={<Users size={20} strokeWidth={1.5} />} label="Liderança" />
           <TabButton active={activeTab === 'events'} onClick={() => handleTabClick('events')} icon={<Calendar size={20} strokeWidth={1.5} />} label="Programações Especiais" />
           <TabButton active={activeTab === 'services'} onClick={() => handleTabClick('services')} icon={<Clock size={20} strokeWidth={1.5} />} label="Cultos" />
@@ -301,6 +302,7 @@ export default function Admin() {
               transition={{ duration: 0.5 }}
             >
               {activeTab === 'home' && <HomeEditor setModal={setModal} />}
+              {activeTab === 'about' && <AboutEditor setModal={setModal} />}
               {activeTab === 'leadership' && <LeadershipEditor setModal={setModal} />}
               {activeTab === 'events' && <ListEditor collectionPath="events" title="Programações Especiais" setModal={setModal} />}
               {activeTab === 'services' && <ListEditor collectionPath="services" title="Horários de Cultos" setModal={setModal} />}
@@ -803,6 +805,87 @@ function HomeEditor({ setModal }: { setModal: (m: any) => void }) {
           </button>
         </div>
       </div>
+    </div>
+  );
+}
+
+function AboutEditor({ setModal }: { setModal: (m: any) => void }) {
+  const { data: config, loading } = useFirestoreDoc<any>('config', 'about');
+  
+  const defaultAbout = {
+    titleLine1: "Nossa Casa,",
+    titleLine2: "Sua Família",
+    text: "A Assembleia de Deus Mutuá é uma comunidade cristã firmada na Palavra de Deus. Nosso propósito é adorar ao Senhor, pregar o Evangelho e cuidar das pessoas, proporcionando um ambiente de crescimento espiritual e acolhimento para todas as idades.\n\nCom décadas de história no coração de Mutuá, temos sido um farol de esperança e fé, dedicados a transformar vidas através do amor de Cristo e do serviço à nossa comunidade.",
+    imageUrl: "https://picsum.photos/seed/church-interior/800/1000",
+    quote: "\"Até aqui nos ajudou o Senhor\""
+  };
+
+  const [formData, setFormData] = useState(defaultAbout);
+
+  useEffect(() => {
+    if (config) setFormData(prev => ({ ...prev, ...config }));
+  }, [config]);
+
+  const handleSave = async () => {
+    try {
+      await firestoreService.set('config', 'about', { ...formData, updatedAt: serverTimestamp() });
+      setModal({ type: 'success', message: 'Configurações de Sobre Nós salvas com sucesso!' });
+    } catch (error: any) {
+      setModal({ type: 'error', message: 'Erro ao salvar: ' + error.message });
+    }
+  };
+
+  if (loading) return (
+    <div className="flex justify-center py-20">
+      <div className="w-10 h-10 border-2 border-church-vibrant border-t-transparent rounded-full animate-spin"></div>
+    </div>
+  );
+
+  return (
+    <div className="space-y-16 pb-20">
+      <header className="relative">
+        <div className="absolute -left-8 top-1/2 -translate-y-1/2 w-1 h-12 bg-church-vibrant rounded-full hidden md:block"></div>
+        <span className="text-church-vibrant text-[10px] font-semibold tracking-[0.4em] uppercase mb-2 block">Administração</span>
+        <h1 className="text-4xl md:text-6xl text-church-blue font-serif italic">Sobre Nós</h1>
+        <p className="text-church-muted font-light mt-4 max-w-2xl">Edite o texto principal, a imagem de destaque e a galeria de momentos históricos da igreja.</p>
+      </header>
+
+      <div className="bg-white rounded-[4rem] shadow-2xl border border-church-vibrant/5 p-12 md:p-16 space-y-16 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-church-blue/5 rounded-full blur-3xl -mr-32 -mt-32"></div>
+        
+        <section className="space-y-10 relative z-10">
+          <div className="grid grid-cols-1 gap-10">
+            <div className="grid md:grid-cols-2 gap-6">
+              <Field label="Título (Linha 1)" value={formData.titleLine1} onChange={v => setFormData({...formData, titleLine1: v})} />
+              <Field label="Título (Linha 2)" value={formData.titleLine2} onChange={v => setFormData({...formData, titleLine2: v})} />
+            </div>
+            <Field label="Texto Principal" value={formData.text} onChange={v => setFormData({...formData, text: v})} isTextArea />
+            <Field label="Citação (Flutuante)" value={formData.quote} onChange={v => setFormData({...formData, quote: v})} />
+            
+            <div>
+              <label className="block text-sm font-semibold text-church-blue tracking-wide uppercase text-[10px] mb-4">Imagem Principal</label>
+              <ImageUploadField 
+                value={formData.imageUrl} 
+                onChange={v => setFormData({...formData, imageUrl: v})} 
+              />
+            </div>
+          </div>
+        </section>
+
+        <div className="pt-6">
+          <button 
+            onClick={handleSave}
+            className="bg-church-blue text-pearl px-10 py-4 rounded-2xl font-bold hover:bg-church-vibrant transition-all flex items-center gap-3 shadow-xl shadow-church-blue/20"
+          >
+            <Save size={20} strokeWidth={1.5} />
+            Salvar Alterações
+          </button>
+        </div>
+      </div>
+
+      <div className="w-full h-px bg-church-vibrant/20"></div>
+
+      <HistoryManager setModal={setModal} />
     </div>
   );
 }
@@ -1420,6 +1503,138 @@ function SubmissionsViewer({ setModal }: { setModal: (m: any) => void }) {
           ))
         )}
       </div>
+    </div>
+  );
+}
+
+function HistoryManager({ setModal }: { setModal: (m: any) => void }) {
+  const { data: history, loading } = useFirestoreCollection<any>('history', orderBy('order', 'asc'));
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [formData, setFormData] = useState<any>({ date: '', title: '', description: '', imageUrl: '', order: 0 });
+
+  const handleEdit = (item: any) => {
+    setEditingId(item.id);
+    setFormData(item);
+  };
+
+  const handleAdd = () => {
+    setEditingId('new');
+    setFormData({ date: '', title: '', description: '', imageUrl: '', order: history.length });
+  };
+
+  const handleSave = async () => {
+    try {
+      const dataToSave = { ...formData, order: Number(formData.order) };
+      if (editingId === 'new') {
+        dataToSave.createdAt = serverTimestamp();
+        await firestoreService.add('history', dataToSave);
+      } else if (editingId) {
+        await firestoreService.update('history', editingId, dataToSave);
+      }
+      setEditingId(null);
+      setModal({ type: 'success', message: 'Momento histórico salvo com sucesso!' });
+    } catch (error: any) {
+      setModal({ type: 'error', message: 'Erro ao salvar: ' + error.message });
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    setModal({
+      type: 'confirm',
+      message: 'Tem certeza que deseja excluir este momento histórico?',
+      onConfirm: async () => {
+        setModal(null);
+        try {
+          await firestoreService.delete('history', id);
+          setModal({ type: 'success', message: 'Momento histórico excluído com sucesso!' });
+        } catch (error: any) {
+          setModal({ type: 'error', message: 'Erro ao excluir: ' + error.message });
+        }
+      }
+    });
+  };
+
+  if (loading) return (
+    <div className="flex justify-center p-12">
+      <div className="w-8 h-8 border-2 border-church-blue border-t-transparent rounded-full animate-spin"></div>
+    </div>
+  );
+
+  return (
+    <div className="space-y-8">
+      <div className="flex justify-between items-center">
+        <h2 className="text-2xl font-serif italic text-church-blue">Momentos Históricos</h2>
+        {!editingId && (
+          <button onClick={handleAdd} className="bg-church-blue text-white px-6 py-3 rounded-2xl flex items-center gap-2 hover:bg-church-blue-light transition-colors shadow-lg">
+            <Plus size={20} /> Adicionar Momento
+          </button>
+        )}
+      </div>
+
+      {editingId ? (
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-white p-8 rounded-[2rem] shadow-xl border border-church-vibrant/10">
+          <div className="grid gap-6">
+            <div className="grid md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-bold text-church-blue mb-2">Data / Ano</label>
+                <input type="text" value={formData.date} onChange={e => setFormData({...formData, date: e.target.value})} className="w-full p-4 bg-pearl/50 border border-church-vibrant/20 rounded-2xl focus:ring-2 focus:ring-church-vibrant focus:border-transparent transition-all" placeholder="Ex: 1980 ou Dias Atuais" />
+              </div>
+              <div>
+                <label className="block text-sm font-bold text-church-blue mb-2">Ordem de Exibição</label>
+                <input type="number" value={formData.order} onChange={e => setFormData({...formData, order: e.target.value})} className="w-full p-4 bg-pearl/50 border border-church-vibrant/20 rounded-2xl focus:ring-2 focus:ring-church-vibrant focus:border-transparent transition-all" />
+              </div>
+            </div>
+            <div>
+              <label className="block text-sm font-bold text-church-blue mb-2">Título</label>
+              <input type="text" value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} className="w-full p-4 bg-pearl/50 border border-church-vibrant/20 rounded-2xl focus:ring-2 focus:ring-church-vibrant focus:border-transparent transition-all" />
+            </div>
+            <div>
+              <label className="block text-sm font-bold text-church-blue mb-2">Descrição</label>
+              <textarea value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} className="w-full p-4 bg-pearl/50 border border-church-vibrant/20 rounded-2xl focus:ring-2 focus:ring-church-vibrant focus:border-transparent transition-all h-32" />
+            </div>
+            <div>
+              <label className="block text-sm font-bold text-church-blue mb-2">Imagem</label>
+              <ImageUploadField value={formData.imageUrl} onChange={v => setFormData({...formData, imageUrl: v})} />
+            </div>
+            <div className="flex gap-4 pt-4 border-t border-church-vibrant/10">
+              <button onClick={handleSave} className="flex-1 bg-church-blue text-white px-6 py-4 rounded-2xl font-bold hover:bg-church-blue-light transition-colors flex items-center justify-center gap-2">
+                <Save size={20} /> Salvar
+              </button>
+              <button onClick={() => setEditingId(null)} className="px-6 py-4 rounded-2xl font-bold text-church-blue hover:bg-pearl transition-colors border border-church-vibrant/20">
+                Cancelar
+              </button>
+            </div>
+          </div>
+        </motion.div>
+      ) : (
+        <div className="grid gap-4">
+          {history.map((item: any) => (
+            <motion.div key={item.id} layout initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="bg-white p-6 rounded-3xl shadow-sm border border-church-vibrant/10 flex items-center gap-6 group hover:shadow-md transition-all">
+              {item.imageUrl && (
+                <div className="w-24 h-24 rounded-2xl overflow-hidden flex-shrink-0">
+                  <img src={item.imageUrl} alt={item.title} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                </div>
+              )}
+              <div className="flex-1">
+                <div className="flex items-center gap-2 text-church-vibrant mb-1">
+                  <Calendar size={14} />
+                  <span className="text-xs font-bold">{item.date}</span>
+                </div>
+                <h3 className="font-bold text-church-blue text-lg mb-1">{item.title}</h3>
+                <p className="text-sm text-church-text/70 line-clamp-2">{item.description}</p>
+              </div>
+              <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                <button onClick={() => handleEdit(item)} className="p-3 text-church-blue hover:bg-pearl rounded-xl transition-colors">
+                  <Edit2 size={20} />
+                </button>
+                <button onClick={() => handleDelete(item.id)} className="p-3 text-red-500 hover:bg-red-50 rounded-xl transition-colors">
+                  <Trash2 size={20} />
+                </button>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

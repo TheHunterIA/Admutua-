@@ -13,6 +13,15 @@ export const seedInitialData = async () => {
       footerBannerUrl: "/banner.png"
     });
 
+    // Config About
+    await firestoreService.set('config', 'about', {
+      titleLine1: "Nossa Casa,",
+      titleLine2: "Sua Família",
+      text: "A Assembleia de Deus Mutuá é uma comunidade cristã firmada na Palavra de Deus. Nosso propósito é adorar ao Senhor, pregar o Evangelho e cuidar das pessoas, proporcionando um ambiente de crescimento espiritual e acolhimento para todas as idades.\n\nCom décadas de história no coração de Mutuá, temos sido um farol de esperança e fé, dedicados a transformar vidas através do amor de Cristo e do serviço à nossa comunidade.",
+      imageUrl: "https://picsum.photos/seed/church-interior/800/1000",
+      quote: "\"Até aqui nos ajudou o Senhor\""
+    });
+
     // Config Leadership
     await firestoreService.set('config', 'leadership', {
       name: "Pr. Adilson Faria Soares",
@@ -152,6 +161,61 @@ export const seedInitialData = async () => {
       await firestoreService.set('ebdClasses', `seed-ebd-class-${c.order}`, c);
     }
 
+    // Historical Moments
+    const historicalMoments = [
+      {
+        date: "1980",
+        title: "O Início de Tudo",
+        description: "A fundação da nossa congregação no bairro do Mutuá. Um pequeno grupo de irmãos unidos pela fé e pelo desejo de espalhar a palavra de Deus.",
+        imageUrl: "https://picsum.photos/seed/history1/800/600",
+        order: 0,
+        createdAt: serverTimestamp()
+      },
+      {
+        date: "1995",
+        title: "Construção do Templo",
+        description: "Com muito esforço e oração, inauguramos nosso templo principal. Um marco de crescimento e consolidação do nosso ministério.",
+        imageUrl: "https://picsum.photos/seed/history2/800/1000",
+        order: 1,
+        createdAt: serverTimestamp()
+      },
+      {
+        date: "2010",
+        title: "Expansão Missionária",
+        description: "O envio dos nossos primeiros missionários. A visão de alcançar vidas além das nossas fronteiras se tornou realidade.",
+        imageUrl: "https://picsum.photos/seed/history3/1000/800",
+        order: 2,
+        createdAt: serverTimestamp()
+      },
+      {
+        date: "2020",
+        title: "Igreja Digital",
+        description: "Em meio aos desafios globais, iniciamos nossas transmissões online, levando esperança e conforto para dentro dos lares.",
+        imageUrl: "https://picsum.photos/seed/history4/800/800",
+        order: 3,
+        createdAt: serverTimestamp()
+      },
+      {
+        date: "2023",
+        title: "Novo Departamento Infantil",
+        description: "Inauguração do novo espaço dedicado às nossas crianças, investindo na próxima geração de adoradores.",
+        imageUrl: "https://picsum.photos/seed/history5/800/600",
+        order: 4,
+        createdAt: serverTimestamp()
+      },
+      {
+        date: "Dias Atuais",
+        title: "Uma Família em Crescimento",
+        description: "Continuamos nossa jornada, firmados na rocha que é Cristo, acolhendo novas famílias e vivendo o propósito de Deus.",
+        imageUrl: "https://picsum.photos/seed/history6/1000/1000",
+        order: 5,
+        createdAt: serverTimestamp()
+      }
+    ];
+    for (const h of historicalMoments) {
+      await firestoreService.set('history', `seed-history-${h.order}`, h);
+    }
+
     return true;
   } catch (error) {
     console.error("Error seeding data:", error);
@@ -167,7 +231,8 @@ export const removeSeedData = async () => {
       congregations: [0].map(i => `seed-cong-${i}`),
       events: ['seed-event-0'],
       updates: [0, 1, 2].map(i => `seed-update-${i}`),
-      ebdClasses: [0, 1, 2, 3].map(i => `seed-ebd-class-${i}`)
+      ebdClasses: [0, 1, 2, 3].map(i => `seed-ebd-class-${i}`),
+      history: [0, 1, 2, 3, 4, 5].map(i => `seed-history-${i}`)
     };
 
     for (const [collection, ids] of Object.entries(seedIds)) {
@@ -184,7 +249,7 @@ export const removeSeedData = async () => {
 
 export const clearAllData = async () => {
   try {
-    const collections = ['services', 'departments', 'congregations', 'events', 'updates', 'contactSubmissions', 'ebdLessons', 'ebdClasses'];
+    const collections = ['services', 'departments', 'congregations', 'events', 'updates', 'contactSubmissions', 'ebdLessons', 'ebdClasses', 'history'];
     for (const coll of collections) {
       await firestoreService.clearCollection(coll);
     }
