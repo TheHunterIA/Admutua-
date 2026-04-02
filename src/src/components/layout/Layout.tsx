@@ -1,0 +1,490 @@
+import React, { useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Menu, X, MapPin, Phone, LayoutDashboard, Maximize2, Minimize2, PictureInPicture2, ExternalLink, ArrowLeft } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
+
+import { useFirestoreDoc } from '../../hooks/useFirestore';
+
+const navLinks = [
+  { name: 'Início', href: '/' },
+  { name: 'Nossa Igreja', href: '/sobre' },
+  { name: 'Cultos', href: '/cultos' },
+  { name: 'Departamentos', href: '/departamentos' },
+  { name: 'EBD', href: '/ebd' },
+  { name: 'Congregações', href: '/congregacoes' },
+  { name: 'Liderança', href: '/lideranca' },
+  { name: 'Missões', href: '/missoes' },
+  { name: 'Contato', href: '/contato' },
+];
+
+const extractYoutubeId = (urlOrId: string) => {
+  if (!urlOrId) return "";
+  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|live\/|shorts\/)([^#\&\?]*).*/;
+  const match = urlOrId.match(regExp);
+  return (match && match[2].length === 11) ? match[2] : urlOrId;
+};
+
+export default function Layout({ children }: { children: React.ReactNode }) {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isMiniPlayerOpen, setIsMiniPlayerOpen] = useState(false);
+  const [isMiniPlayerExpanded, setIsMiniPlayerExpanded] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { data: contactConfig } = useFirestoreDoc<any>('config', 'contact');
+  const { data: siteConfig } = useFirestoreDoc<any>('config', 'site');
+
+  const rawLiveVideoId = siteConfig?.liveVideoId || "";
+  const liveVideoId = extractYoutubeId(rawLiveVideoId);
+  const hasLiveStream = Boolean(liveVideoId && liveVideoId.length === 11);
+
+  const isAdminPage = location.pathname.startsWith('/admin');
+
+  const openPiP = async () => {
+    if (!liveVideoId) return;
+
+    const isInIframe = window.self !== window.top;
+
+    // Tentativa com Document Picture-in-Picture (melhor para "sempre por cima")
+    if ('documentPictureInPicture' in window && !isInIframe) {
+      try {
+        const pipWindow = await (window as any).documentPictureInPicture.requestWindow({
+          width: 520,
+          height: 300,
+        });
+
+        // Copia estilos (seu código atual já faz isso bem)
+        [...document.styleSheets].forEach((styleSheet) => {
+          try {
+            const cssRules = [...styleSheet.cssRules].map((rule) => rule.cssText).join("");
+            const style = document.createElement("style");
+            style.textContent = cssRules;
+            pipWindow.document.head.appendChild(style);
+          } catch (e) {
+            if (styleSheet.href) {
+              const link = document.createElement("link");
+              link.rel = "stylesheet";
+              link.href = styleSheet.href;
+              pipWindow.document.head.appendChild(link);
+            }
+          }
+        });
+
+        pipWindow.document.body.style.margin = '0';
+        pipWindow.document.body.style.overflow = 'hidden';
+        pipWindow.document.body.style.backgroundColor = '#000';
+        pipWindow.document.title = 'AD Mutuá - Culto ao Vivo';
+
+        const iframe = document.createElement('iframe');
+        iframe.src = `https://www.youtube-nocookie.com/embed/${liveVideoId}?autoplay=1&rel=0&enablejsapi=1&origin=${encodeURIComponent(window.location.origin)}`;
+        iframe.style.width = '100%';
+        iframe.style.height = '100%';
+        iframe.style.border = 'none';
+        iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+        iframe.allowFullscreen = true;
+        iframe.referrerPolicy = "strict-origin-when-cross-origin";
+
+        pipWindow.document.body.appendChild(iframe);
+
+        setIsMiniPlayerOpen(false);
+        return;
+      } catch (err) {
+        console.warn("Document PiP falhou:", err);
+      }
+    }
+
+    // Fallback: popup tradicional (já está bom, mas atualize a URL)
+    const width = 520;
+    const height = 300;
+    const left = window.screen.width - width - 30;
+    const top = window.screen.height - height - 100;
+
+    window.open(
+      `https://www.youtube-nocookie.com/embed/${liveVideoId}?autoplay=1&rel=0&enablejsapi=1&origin=${encodeURIComponent(window.location.origin)}`,
+      'YouTubePiP',
+      `width=${width},height=${height},left=${left},top=${top},menubar=no,toolbar=no,location=no,status=no,resizable=yes,scrollbars=no`
+    );
+
+    setIsMiniPlayerOpen(false);
+  };
+
+  React.useEffect(() => {
+    const handleTogglePlayer = () => setIsMiniPlayerOpen(true);
+    window.addEventListener('toggle-live-player', handleTogglePlayer);
+    return () => window.removeEventListener('toggle-live-player', handleTogglePlayer);
+  }, []);
+
+  React.useEffect(() => {
+    if (isAdminPage) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isAdminPage]);
+
+  if (isAdminPage) {
+    return (
+      <div className="h-screen flex flex-col bg-pearl font-sans text-church-text overflow-hidden">
+          <header className="h-24 md:h-28 flex-shrink-0 flex items-center justify-between px-6 md:px-12 border-b border-church-blue/5">
+          <Link to="/" className="text-[10px] font-bold uppercase tracking-[0.2em] text-church-blue/60 hover:text-church-purple transition-all flex items-center gap-2">
+            <ArrowLeft size={14} />
+            Voltar ao Site
+          </Link>
+          <button 
+            onClick={() => setIsMenuOpen(true)} 
+            className="bg-church-purple text-white p-3 rounded-2xl hover:bg-church-purple-deep transition-all shadow-lg shadow-church-purple/20"
+          >
+            <Menu size={24} strokeWidth={1.5} />
+          </button>
+        </header>
+
+        <main className="flex-1 overflow-hidden flex flex-col min-h-0">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={location.pathname}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+              className="flex-1 flex flex-col min-h-0 overflow-hidden"
+            >
+              {children}
+            </motion.div>
+          </AnimatePresence>
+        </main>
+
+        {/* Overlay */}
+        <AnimatePresence>
+          {isMenuOpen && (
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-church-blue/40 backdrop-blur-sm z-40 transition-opacity"
+              onClick={() => setIsMenuOpen(false)}
+            />
+          )}
+        </AnimatePresence>
+
+        {/* Side Drawer */}
+        <div 
+          className={`fixed inset-y-0 right-0 w-full sm:w-96 bg-gradient-to-br from-church-blue to-church-blue-light text-pearl shadow-2xl z-50 transform transition-transform duration-700 ease-in-out flex flex-col ${
+            isMenuOpen ? 'translate-x-0' : 'translate-x-full'
+          }`}
+        >
+          <div className="flex justify-between items-center p-10">
+            <span className="font-serif text-2xl italic tracking-tight">Menu</span>
+            <button 
+              onClick={() => setIsMenuOpen(false)} 
+              className="text-pearl/60 hover:text-pearl focus:outline-none p-2 transition-colors"
+            >
+              <X size={32} strokeWidth={1} />
+            </button>
+          </div>
+          <div className="px-10 pb-10 space-y-6 overflow-y-auto flex-1">
+            {navLinks.map((link, index) => (
+              <React.Fragment key={link.name}>
+                <Link 
+                  to={link.href} 
+                  onClick={() => setIsMenuOpen(false)}
+                  className={`block text-xl font-serif tracking-tight transition-all duration-500 hover:pl-4 ${
+                    location.pathname === link.href 
+                      ? 'text-church-vibrant italic' 
+                      : 'text-pearl/80 hover:text-pearl'
+                  }`}
+                >
+                  {link.name}
+                </Link>
+                {index < navLinks.length - 1 && (
+                  <div className="h-px bg-white/5 w-full" />
+                )}
+              </React.Fragment>
+            ))}
+            <div className="pt-12 space-y-6">
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-pearl font-sans text-church-text flex flex-col">
+      
+      {/* Header / Navegação */}
+      <header className="fixed top-0 w-full z-40">
+        {/* Top Bar */}
+        {!isAdminPage && (
+          <div className="bg-church-blue text-pearl/60 py-2 px-6 md:px-12 border-b border-white/5">
+            <div className="flex justify-between items-center text-[9px] font-bold uppercase tracking-[0.3em]">
+              <div className="flex gap-6">
+                <span className="flex items-center gap-2"><MapPin size={10} className="text-church-vibrant" /> São Gonçalo, RJ</span>
+                <span className="hidden sm:flex items-center gap-2"><Phone size={10} className="text-church-vibrant" /> {contactConfig?.phone || '(21) 2713-5394'}</span>
+              </div>
+              <div className="flex gap-6">
+              </div>
+            </div>
+          </div>
+        )}
+
+        <div className="bg-pearl/90 backdrop-blur-md border-b border-church-blue/5">
+          <div className="w-full px-6 md:px-12 lg:px-16">
+            <div className="flex justify-between items-center h-24 md:h-28">
+              
+              {/* Logo - Fixed to left */}
+              <Link to="/" className="flex-shrink-0 flex items-center gap-4 group">
+                <div className="relative">
+                  <img 
+                    src={siteConfig?.footerBannerUrl || "/banner.png"} 
+                    alt="AD Mutuá" 
+                    className="h-20 md:h-24 w-auto object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-500" 
+                    referrerPolicy="no-referrer"
+                  />
+                </div>
+                <div className="hidden sm:block border-l border-church-blue/10 pl-4">
+                  <span className="block font-serif text-lg md:text-xl tracking-tight leading-none text-church-blue">AD Mutuá</span>
+                  <span className="block text-[8px] md:text-[9px] uppercase tracking-[0.2em] text-church-muted mt-1">Assembleia de Deus</span>
+                </div>
+              </Link>
+
+              {/* Desktop Navigation - Pushed to right for better distribution with logo on left */}
+              <div className="hidden lg:flex items-center gap-8 xl:gap-12 ml-auto">
+                <nav className="flex items-center gap-2 xl:gap-4">
+                  {navLinks.map((link) => (
+                    <Link 
+                      key={link.name}
+                      to={link.href}
+                      className={`px-5 py-2 rounded-full text-[10px] xl:text-[11px] font-bold uppercase tracking-[0.25em] transition-all duration-500 relative group ${
+                        location.pathname === link.href 
+                          ? 'text-church-vibrant' 
+                          : 'text-church-dark-deep hover:text-church-purple'
+                      }`}
+                    >
+                      <span className="relative z-10">{link.name}</span>
+                      
+                      {/* Gold Accent Dot */}
+                      {location.pathname === link.href && (
+                        <motion.div 
+                          layoutId="header-active-dot"
+                          className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-church-vibrant rounded-full shadow-[0_0_8px_rgba(217,119,6,0.8)]"
+                          transition={{ type: "spring", bounce: 0.3, duration: 0.6 }}
+                        />
+                      )}
+                    </Link>
+                  ))}
+                </nav>
+              </div>
+
+              {/* Menu Button (Mobile/Tablet) */}
+              <div className="flex items-center gap-4">
+                <button 
+                  onClick={() => setIsMenuOpen(true)} 
+                  className="lg:hidden bg-church-purple text-white p-3 rounded-2xl hover:bg-church-purple-deep transition-all shadow-lg shadow-church-purple/20"
+                >
+                  <Menu size={24} strokeWidth={1.5} />
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      {/* Overlay */}
+      <AnimatePresence>
+        {isMenuOpen && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-church-blue/40 backdrop-blur-sm z-40 transition-opacity"
+            onClick={() => setIsMenuOpen(false)}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* Side Drawer */}
+      <div 
+        className={`fixed inset-y-0 right-0 w-full sm:w-96 bg-gradient-to-br from-church-blue to-church-blue-light text-pearl shadow-2xl z-50 transform transition-transform duration-700 ease-in-out flex flex-col ${
+          isMenuOpen ? 'translate-x-0' : 'translate-x-full'
+        }`}
+      >
+        <div className="flex justify-between items-center p-10">
+          <span className="font-serif text-2xl italic tracking-tight">Menu</span>
+          <button 
+            onClick={() => setIsMenuOpen(false)} 
+            className="text-pearl/60 hover:text-pearl focus:outline-none p-2 transition-colors"
+          >
+            <X size={32} strokeWidth={1} />
+          </button>
+        </div>
+        <div className="px-10 pb-10 space-y-6 overflow-y-auto flex-1">
+          {navLinks.map((link, index) => (
+            <React.Fragment key={link.name}>
+              <Link 
+                to={link.href} 
+                onClick={() => setIsMenuOpen(false)}
+                className={`block text-xl font-serif tracking-tight transition-all duration-500 hover:pl-4 ${
+                  location.pathname === link.href 
+                    ? 'text-church-vibrant italic' 
+                    : 'text-pearl/80 hover:text-church-vibrant'
+                }`}
+              >
+                {link.name}
+              </Link>
+              {index < navLinks.length - 1 && (
+                <div className="h-px bg-white/5 w-full" />
+              )}
+            </React.Fragment>
+          ))}
+          <div className="pt-12 space-y-6">
+          </div>
+        </div>
+      </div>
+
+      <main className={`flex-1 flex flex-col ${location.pathname === '/' ? '' : 'pt-28 md:pt-32'}`}>
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={location.pathname}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+            className="flex-1 flex flex-col"
+          >
+            {children}
+          </motion.div>
+        </AnimatePresence>
+      </main>
+
+      {/* Floating Mini Player */}
+      <AnimatePresence>
+        {isMiniPlayerOpen && hasLiveStream && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8, y: 50 }}
+            animate={{ 
+              opacity: 1, 
+              scale: 1, 
+              y: 0,
+              width: isMiniPlayerExpanded ? 'min(90vw, 800px)' : 'min(80vw, 320px)',
+              height: 'auto'
+            }}
+            exit={{ opacity: 0, scale: 0.8, y: 50 }}
+            className="fixed bottom-6 right-6 z-[60] bg-black rounded-2xl overflow-hidden shadow-2xl border border-white/10 group"
+          >
+            <div className="absolute top-2 right-2 z-20 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+              <button 
+                onClick={openPiP}
+                className="p-2 bg-black/50 hover:bg-white/20 text-white rounded-full backdrop-blur-sm transition-colors"
+                title="Abrir em Janela Separada (PiP)"
+              >
+                <PictureInPicture2 size={16} />
+              </button>
+              <button 
+                onClick={() => setIsMiniPlayerExpanded(!isMiniPlayerExpanded)}
+                className="p-2 bg-black/50 hover:bg-white/20 text-white rounded-full backdrop-blur-sm transition-colors"
+                title={isMiniPlayerExpanded ? "Minimizar" : "Expandir"}
+              >
+                {isMiniPlayerExpanded ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
+              </button>
+              <button 
+                onClick={() => setIsMiniPlayerOpen(false)}
+                className="p-2 bg-black/50 hover:bg-red-600 text-white rounded-full backdrop-blur-sm transition-colors"
+                title="Fechar"
+              >
+                <X size={16} />
+              </button>
+            </div>
+            <div className="aspect-video relative group/player">
+              <iframe
+                width="100%"
+                height="100%"
+                src={`https://www.youtube-nocookie.com/embed/${liveVideoId}?autoplay=1&rel=0&enablejsapi=1&origin=${encodeURIComponent(window.location.origin)}`}
+                title="YouTube video player"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+                referrerPolicy="strict-origin-when-cross-origin"
+                className="w-full h-full"
+              ></iframe>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Footer */}
+      {!isAdminPage && (
+        <footer className="bg-church-blue text-pearl pt-20 pb-12 mt-auto overflow-hidden relative">
+          
+          <div className="max-w-[1600px] mx-auto px-6 md:px-12 lg:px-24 relative z-10">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-20 mb-16">
+              
+              {/* Coluna 1: Info */}
+              <div className="space-y-8">
+                <div className="flex items-center gap-4">
+                  <img 
+                    src={siteConfig?.footerBannerUrl || "/banner.png"} 
+                    alt="AD Mutuá Banner" 
+                    className="h-32 w-auto object-contain cursor-default select-none" 
+                    referrerPolicy="no-referrer"
+                    onClick={(e) => {
+                      if (e.detail === 3) {
+                        navigate('/admin');
+                      }
+                    }}
+                  />
+                  <h4 className="text-2xl font-serif italic tracking-tight">AD Mutuá</h4>
+                </div>
+                <p className="text-pearl/60 leading-relaxed font-light">
+                  Uma igreja que ama a Deus e ama as pessoas. Venha nos fazer uma visita e sinta o agir de Deus em sua vida.
+                </p>
+              </div>
+
+              {/* Coluna 2: Contato */}
+              <div className="space-y-8">
+                <h4 className="text-[10px] font-semibold tracking-[0.4em] uppercase text-church-vibrant">Contato</h4>
+                <ul className="space-y-6">
+                  <li className="flex items-start gap-4 text-pearl/60 group">
+                    <MapPin size={18} className="text-church-vibrant shrink-0 mt-1 group-hover:scale-110 transition-transform" />
+                    <span className="font-light leading-relaxed">{contactConfig?.address || 'R. Dr. Cumplido de Santana, 42 Mutua, São Gonçalo - RJ'}</span>
+                  </li>
+                  <li className="flex items-center gap-4 text-pearl/60 group">
+                    <Phone size={18} className="text-church-vibrant shrink-0 group-hover:scale-110 transition-transform" />
+                    <span className="font-light">{contactConfig?.phone || '(21) 2713-5394'}</span>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Coluna 3: Links */}
+              <div className="space-y-8">
+                <h4 className="text-[10px] font-semibold tracking-[0.4em] uppercase text-church-vibrant">Explorar</h4>
+                <ul className="grid grid-cols-2 gap-y-4 gap-x-8">
+                  {navLinks.map(link => (
+                    <li key={link.name}>
+                      <Link to={link.href} className="text-pearl/60 hover:text-church-vibrant transition-colors text-sm font-light flex items-center gap-2 group">
+                        <span className="w-0 h-px bg-church-vibrant transition-all duration-300 group-hover:w-2"></span>
+                        {link.name}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+            </div>
+
+            <div className="border-t border-pearl/10 pt-12 flex flex-col md:flex-row justify-between items-center gap-6">
+              <p className="text-pearl/30 text-[10px] tracking-[0.2em] uppercase">
+                &copy; {new Date().getFullYear()} Assembleia de Deus em Mutuá
+              </p>
+              <div className="flex gap-8">
+                <span className="text-pearl/30 text-[10px] tracking-[0.2em] uppercase">São Gonçalo</span>
+                <span className="text-pearl/30 text-[10px] tracking-[0.2em] uppercase">Rio de Janeiro</span>
+              </div>
+            </div>
+          </div>
+        </footer>
+      )}
+    </div>
+  );
+}
