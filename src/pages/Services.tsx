@@ -25,7 +25,7 @@ export default function Services() {
         {/* Decorative background element */}
         <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-church-vibrant/20 to-transparent"></div>
 
-        <div className="max-w-[1600px] mx-auto relative z-10">
+        <div className="max-w-[1440px] mx-auto relative z-10">
           <div className="text-center mb-16">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -100,7 +100,7 @@ export default function Services() {
             <div className="absolute inset-0 bg-gradient-to-br from-church-purple/20 via-transparent to-church-dark/90"></div>
           </div>
 
-          <div className="max-w-[1600px] mx-auto relative z-10">
+          <div className="max-w-[1440px] mx-auto relative z-10">
             <div className="flex flex-col lg:flex-row items-center gap-16">
               <div className="lg:w-1/2 space-y-8">
                 <motion.div

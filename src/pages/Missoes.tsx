@@ -53,7 +53,7 @@ export default function Missoes() {
         </div>
       </div>
 
-      <div className="max-w-[1600px] mx-auto relative z-10">
+      <div className="max-w-[1440px] mx-auto relative z-10">
         <header className="mb-16 text-center">
           <div className="flex justify-center gap-4 mb-8 overflow-hidden py-4">
             <div className="flex gap-8 animate-marquee whitespace-nowrap">
@@ -171,7 +171,7 @@ export default function Missoes() {
 
         {news.length > 0 && (
           <section className="py-12 bg-white rounded-[3rem] shadow-sm border border-church-blue/5 mb-12">
-            <div className="max-w-[1600px] mx-auto px-8">
+            <div className="max-w-[1440px] mx-auto px-8">
               <h3 className="text-2xl font-serif italic text-church-blue mb-8 flex items-center gap-3">
                 <Newspaper size={24} className="text-church-vibrant" />
                 Notícias de Missões

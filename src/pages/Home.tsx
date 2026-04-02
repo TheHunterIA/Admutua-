@@ -189,29 +189,43 @@ export default function Home() {
       {/* Hero Section */}
       <section id="inicio" className="relative min-h-[70vh] flex items-center overflow-hidden">
         <div className="absolute inset-0 z-0">
-          <img 
-            src={heroBackgroundImage} 
-            alt="Church" 
-            className="w-full h-full object-cover scale-105"
-            referrerPolicy="no-referrer"
-          />
+          {loadingSite ? (
+            <div className="w-full h-full bg-church-dark animate-pulse" />
+          ) : (
+            <img 
+              src={heroBackgroundImage} 
+              alt="Church" 
+              className="w-full h-full object-cover scale-105"
+              referrerPolicy="no-referrer"
+            />
+          )}
           <div className="absolute inset-0 bg-church-dark/80 backdrop-blur-[2px]"></div>
           <div className="absolute inset-0 bg-gradient-to-b from-church-purple/20 via-transparent to-church-dark/90"></div>
         </div>
 
-        <div className="max-w-[1600px] mx-auto px-6 md:px-12 lg:px-24 relative z-10 w-full pt-48 md:pt-56 pb-20">
+        <div className="max-w-[1440px] mx-auto px-6 md:px-12 lg:px-24 relative z-10 w-full pt-48 md:pt-56 pb-20">
           <div className="max-w-3xl">
             <ScrollReveal direction="right">
               <span className="text-church-vibrant text-[10px] font-semibold tracking-[0.5em] uppercase mb-6 block">
                 Assembleia de Deus em Mutuá
               </span>
-              <h1 className="text-4xl md:text-7xl text-pearl mb-8 leading-[0.9] font-serif italic">
-                {heroTitle}
-              </h1>
-              <p className="text-lg md:text-xl text-pearl/70 mb-12 font-light leading-relaxed max-w-xl">
-                {heroSubtitle}
-              </p>
-              <div className="flex flex-wrap gap-6">
+              {loadingSite ? (
+                <div className="space-y-6">
+                  <Skeleton className="h-16 md:h-24 w-full bg-pearl/10" />
+                  <Skeleton className="h-4 md:h-6 w-3/4 bg-pearl/10" />
+                  <Skeleton className="h-4 md:h-6 w-1/2 bg-pearl/10" />
+                </div>
+              ) : (
+                <>
+                  <h1 className="text-4xl md:text-7xl text-pearl mb-8 leading-[0.9] font-serif italic">
+                    {heroTitle}
+                  </h1>
+                  <p className="text-lg md:text-xl text-pearl/70 mb-12 font-light leading-relaxed max-w-xl">
+                    {heroSubtitle}
+                  </p>
+                </>
+              )}
+              <div className="flex flex-wrap gap-6 mt-12">
                 {hasLiveStream && (
                   <button 
                     onClick={() => {
@@ -250,7 +264,7 @@ export default function Home() {
         <section className="pt-8 pb-12 px-6 md:px-12 lg:px-20 bg-pearl relative overflow-hidden">
           <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-church-vibrant/20 to-transparent"></div>
           
-          <div className="max-w-[1600px] mx-auto">
+          <div className="max-w-[1440px] mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 lg:gap-16">
               
               {/* Left Side: News */}
@@ -471,7 +485,7 @@ export default function Home() {
       {/* Events Banner Section - Cinematic Editorial Version */}
       {loadingEvents ? (
         <section className="relative min-h-[600px] md:min-h-[700px] flex flex-col items-center justify-center overflow-hidden bg-church-blue py-16 md:py-24">
-          <div className="max-w-[1600px] mx-auto px-6 relative z-10 w-full">
+          <div className="max-w-[1440px] mx-auto px-6 relative z-10 w-full">
             <div className="text-center mb-10 md:mb-16 space-y-4">
               <Skeleton className="h-4 w-32 mx-auto" />
               <Skeleton className="h-16 w-3/4 mx-auto" />
@@ -501,7 +515,7 @@ export default function Home() {
             </motion.div>
           </AnimatePresence>
 
-          <div className="max-w-[1600px] mx-auto px-6 relative z-10 w-full">
+          <div className="max-w-[1440px] mx-auto px-6 relative z-10 w-full">
             <ScrollReveal className="text-center mb-10 md:mb-16">
               <span className="text-church-vibrant text-[10px] font-bold tracking-[0.6em] uppercase mb-3 md:mb-4 block">
                 Não Perca
@@ -658,7 +672,7 @@ export default function Home() {
           <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay"></div>
         </div>
 
-        <div className="max-w-[1600px] mx-auto relative z-10">
+        <div className="max-w-[1440px] mx-auto relative z-10">
           <div className={`flex flex-col ${hasLiveStream ? 'lg:flex-row' : 'items-center text-center'} items-center gap-12 lg:gap-16`}>
             <div className={`${hasLiveStream ? 'lg:w-1/2' : 'max-w-3xl'} space-y-6`}>
               {loadingSite ? (

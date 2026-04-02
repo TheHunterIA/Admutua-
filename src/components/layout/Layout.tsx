@@ -31,7 +31,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const location = useLocation();
   const navigate = useNavigate();
   const { data: contactConfig } = useFirestoreDoc<any>('config', 'contact');
-  const { data: siteConfig } = useFirestoreDoc<any>('config', 'site');
+  const { data: siteConfig, loading: loadingSite } = useFirestoreDoc<any>('config', 'site');
 
   const rawLiveVideoId = siteConfig?.liveVideoId || "";
   const liveVideoId = extractYoutubeId(rawLiveVideoId);
@@ -236,12 +236,16 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               {/* Logo - Fixed to left */}
               <Link to="/" className="flex-shrink-0 flex items-center gap-4 group">
                 <div className="relative">
-                  <img 
-                    src={siteConfig?.footerBannerUrl || "/banner.png"} 
-                    alt="AD Mutuá" 
-                    className="h-20 md:h-24 w-auto object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-500" 
-                    referrerPolicy="no-referrer"
-                  />
+                  {loadingSite ? (
+                    <div className="h-20 md:h-24 w-32 bg-church-blue/5 animate-pulse rounded-xl" />
+                  ) : (
+                    <img 
+                      src={siteConfig?.footerBannerUrl || "/banner.png"} 
+                      alt="AD Mutuá" 
+                      className="h-20 md:h-24 w-auto object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-500" 
+                      referrerPolicy="no-referrer"
+                    />
+                  )}
                 </div>
                 <div className="hidden sm:block border-l border-church-blue/10 pl-4">
                   <span className="block font-serif text-lg md:text-xl tracking-tight leading-none text-church-blue">AD Mutuá</span>
@@ -417,7 +421,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       {!isAdminPage && (
         <footer className="bg-church-blue text-pearl pt-20 pb-12 mt-auto overflow-hidden relative">
           
-          <div className="max-w-[1600px] mx-auto px-6 md:px-12 lg:px-24 relative z-10">
+          <div className="max-w-[1440px] mx-auto px-6 md:px-12 lg:px-24 relative z-10">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-20 mb-16">
               
               {/* Coluna 1: Info */}

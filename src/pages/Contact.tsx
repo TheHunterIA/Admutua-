@@ -46,7 +46,7 @@ export default function Contact() {
       <div className="absolute top-0 right-0 w-full h-px bg-gradient-to-r from-transparent via-church-blue/20 to-transparent"></div>
       <div className="absolute -bottom-20 -left-20 w-96 h-96 bg-church-blue/[0.03] rounded-full blur-3xl"></div>
 
-      <div className="max-w-[1600px] mx-auto relative z-10">
+      <div className="max-w-[1440px] mx-auto relative z-10">
         <div className="text-center mb-16">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
