@@ -53,7 +53,7 @@ export default function Missoes() {
         </div>
       </div>
 
-      <div className="max-w-[1440px] mx-auto relative z-10">
+      <div className="max-w-7xl mx-auto relative z-10">
         <header className="mb-16 text-center">
           <div className="flex justify-center gap-4 mb-8 overflow-hidden py-4">
             <div className="flex gap-8 animate-marquee whitespace-nowrap">
@@ -82,7 +82,7 @@ export default function Missoes() {
           </p>
         </header>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16 mb-20">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 mb-20">
           {missionaries.map((m: any, idx: number) => (
             <motion.div 
               key={m.id} 
@@ -91,17 +91,17 @@ export default function Missoes() {
               whileHover={{ y: -10 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8, delay: idx * 0.1 }}
-              className="bg-white rounded-[2rem] shadow-[0_30px_60px_rgba(0,0,0,0.04)] hover:shadow-[0_40px_80px_rgba(0,0,0,0.08)] hover:shadow-church-blue/10 transition-all duration-700 flex flex-col relative group/card border border-church-blue/5 overflow-visible"
+              className="bg-white rounded-[1.5rem] shadow-[0_20px_40px_rgba(0,0,0,0.03)] hover:shadow-[0_30px_60px_rgba(0,0,0,0.06)] hover:shadow-church-blue/10 transition-all duration-700 flex flex-col relative group/card border border-church-blue/5 overflow-visible"
             >
               {/* Flag "Stamp" - Centered and clean */}
               {m.countryCode && (
-                <div className="absolute -top-6 left-1/2 -translate-x-1/2 z-30 transform -rotate-2 group-hover/card:rotate-0 transition-all duration-700 group-hover/card:scale-110">
-                  <div className="relative p-1 bg-white rounded-md shadow-[0_10px_25px_rgba(0,0,0,0.1)] border border-church-blue/5 ring-2 ring-pearl">
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-30 transform -rotate-2 group-hover/card:rotate-0 transition-all duration-700 group-hover/card:scale-110">
+                  <div className="relative p-1 bg-white rounded-md shadow-[0_8px_20px_rgba(0,0,0,0.08)] border border-church-blue/5 ring-2 ring-pearl">
                     <div className="relative overflow-hidden rounded-sm">
                       <img 
                         src={`https://flagcdn.com/w160/${m.countryCode.toLowerCase()}.png`} 
                         alt="" 
-                        className="h-10 w-auto block" 
+                        className="h-8 w-auto block" 
                       />
                     </div>
                   </div>
@@ -109,9 +109,9 @@ export default function Missoes() {
               )}
               
               {/* Image Section with Editorial Frame */}
-              <div className="p-8 pb-0">
+              <div className="p-4 pb-0">
                 <div 
-                  className="relative aspect-square rounded-2xl overflow-hidden shadow-2xl border-8 border-pearl group-hover/card:border-white transition-all duration-500 cursor-zoom-in"
+                  className="relative aspect-square rounded-xl overflow-hidden shadow-xl border-4 border-pearl group-hover/card:border-white transition-all duration-500 cursor-zoom-in"
                   onClick={() => setSelectedImage(m.imageUrl || '/placeholder-avatar.png')}
                 >
                   <img src={m.imageUrl || '/placeholder-avatar.png'} alt={m.name} className="w-full h-full object-cover group-hover/card:scale-110 group-hover/card:rotate-1 transition-transform duration-1000" referrerPolicy="no-referrer" />
@@ -120,37 +120,37 @@ export default function Missoes() {
               </div>
               
               {/* Content Section */}
-              <div className="p-10 pt-8 flex flex-col flex-1 text-center">
-                <h3 className="text-3xl text-church-blue font-serif italic mb-2 group-hover/card:text-church-vibrant transition-colors duration-500 transform group-hover/card:-translate-y-1">{m.name}</h3>
+              <div className="p-6 pt-4 flex flex-col flex-1 text-center">
+                <h3 className="text-xl text-church-blue font-serif italic mb-1 group-hover/card:text-church-vibrant transition-colors duration-500 transform group-hover/card:-translate-y-1">{m.name}</h3>
                 
-                <div className="flex items-center justify-center gap-3 mb-6 transform group-hover/card:-translate-y-1 transition-transform duration-500 delay-75">
+                <div className="flex items-center justify-center gap-2 mb-4 transform group-hover/card:-translate-y-1 transition-transform duration-500 delay-75">
                   <div className="h-[1px] flex-1 bg-gradient-to-r from-transparent to-church-vibrant/20"></div>
-                  <p className="text-church-vibrant text-[10px] font-bold uppercase tracking-[0.4em] whitespace-nowrap">{m.field}</p>
+                  <p className="text-church-vibrant text-[8px] font-bold uppercase tracking-[0.3em] whitespace-nowrap">{m.field}</p>
                   <div className="h-[1px] flex-1 bg-gradient-to-l from-transparent to-church-vibrant/20"></div>
                 </div>
                 
-                <div className="relative mb-10 flex-1 transform group-hover/card:-translate-y-1 transition-transform duration-500 delay-100">
-                  <p className="text-church-muted text-base font-light leading-relaxed italic font-serif relative z-10 px-4 group-hover/card:text-church-blue/80 transition-colors duration-300">
+                <div className="relative mb-6 flex-1 transform group-hover/card:-translate-y-1 transition-transform duration-500 delay-100">
+                  <p className="text-church-muted text-xs font-light leading-relaxed italic font-serif relative z-10 px-2 group-hover/card:text-church-blue/80 transition-colors duration-300 line-clamp-3">
                     "{m.bio}"
                   </p>
                   {/* Decorative quote mark */}
-                  <span className="absolute top-0 left-0 text-6xl text-church-blue/5 font-serif -translate-x-2 -translate-y-4 select-none group-hover/card:text-church-vibrant/10 transition-colors duration-500">“</span>
+                  <span className="absolute top-0 left-0 text-4xl text-church-blue/5 font-serif -translate-x-1 -translate-y-2 select-none group-hover/card:text-church-vibrant/10 transition-colors duration-500">“</span>
                 </div>
                 
                 {/* Contact Rail - Professional Grid */}
-                <div className="grid grid-cols-1 gap-3 pt-8 border-t border-church-blue/5 transform group-hover/card:-translate-y-1 transition-transform duration-500 delay-150">
+                <div className="grid grid-cols-1 gap-2 pt-4 border-t border-church-blue/5 transform group-hover/card:-translate-y-1 transition-transform duration-500 delay-150">
                   {m.email && (
-                    <div className="flex items-center justify-center gap-3 text-[11px] text-church-muted group/link cursor-pointer hover:text-church-blue transition-colors">
-                      <div className="w-6 h-6 rounded-full bg-pearl flex items-center justify-center group-hover/link:bg-church-vibrant group-hover/link:text-white transition-colors duration-300">
-                        <Mail size={12} className="text-church-vibrant group-hover/link:text-white transition-colors duration-300" />
+                    <div className="flex items-center justify-center gap-2 text-[10px] text-church-muted group/link cursor-pointer hover:text-church-blue transition-colors">
+                      <div className="w-5 h-5 rounded-full bg-pearl flex items-center justify-center group-hover/link:bg-church-vibrant group-hover/link:text-white transition-colors duration-300">
+                        <Mail size={10} className="text-church-vibrant group-hover/link:text-white transition-colors duration-300" />
                       </div>
-                      <span className="font-light tracking-wide group-hover/link:text-church-vibrant transition-colors duration-300">{m.email}</span>
+                      <span className="font-light tracking-wide group-hover/link:text-church-vibrant transition-colors duration-300 truncate max-w-[150px]">{m.email}</span>
                     </div>
                   )}
                   {m.location && (
-                    <div className="flex items-center justify-center gap-3 text-[11px] text-church-muted group/link cursor-pointer hover:text-church-blue transition-colors">
-                      <div className="w-6 h-6 rounded-full bg-pearl flex items-center justify-center group-hover/link:bg-church-vibrant group-hover/link:text-white transition-colors duration-300">
-                        <MapPin size={12} className="text-church-vibrant group-hover/link:text-white transition-colors duration-300" />
+                    <div className="flex items-center justify-center gap-2 text-[10px] text-church-muted group/link cursor-pointer hover:text-church-blue transition-colors">
+                      <div className="w-5 h-5 rounded-full bg-pearl flex items-center justify-center group-hover/link:bg-church-vibrant group-hover/link:text-white transition-colors duration-300">
+                        <MapPin size={10} className="text-church-vibrant group-hover/link:text-white transition-colors duration-300" />
                       </div>
                       <span className="font-light tracking-wide group-hover/link:text-church-vibrant transition-colors duration-300">{m.location}</span>
                     </div>
@@ -159,7 +159,7 @@ export default function Missoes() {
               </div>
               
               {/* Bottom Decorative Bar */}
-              <div className="h-1.5 w-full bg-gradient-to-r from-church-blue via-church-vibrant to-church-blue rounded-b-[2rem] opacity-0 group-hover/card:opacity-100 transition-opacity duration-700"></div>
+              <div className="h-1 w-full bg-gradient-to-r from-church-blue via-church-vibrant to-church-blue rounded-b-[1.5rem] opacity-0 group-hover/card:opacity-100 transition-opacity duration-700"></div>
             </motion.div>
           ))}
           {missionaries.length === 0 && (
@@ -171,7 +171,7 @@ export default function Missoes() {
 
         {news.length > 0 && (
           <section className="py-12 bg-white rounded-[3rem] shadow-sm border border-church-blue/5 mb-12">
-            <div className="max-w-[1440px] mx-auto px-8">
+            <div className="max-w-7xl mx-auto px-8">
               <h3 className="text-2xl font-serif italic text-church-blue mb-8 flex items-center gap-3">
                 <Newspaper size={24} className="text-church-vibrant" />
                 Notícias de Missões

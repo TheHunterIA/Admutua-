@@ -1,19 +1,23 @@
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Menu, X, MapPin, Phone, LayoutDashboard, Maximize2, Minimize2, PictureInPicture2, ExternalLink, ArrowLeft } from 'lucide-react';
+import { Menu, X, MapPin, Phone, LayoutDashboard, Maximize2, Minimize2, PictureInPicture2, ExternalLink, ArrowLeft, ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
 import { useFirestoreDoc } from '../../hooks/useFirestore';
 
 const navLinks = [
   { name: 'Início', href: '/' },
-  { name: 'Nossa Igreja', href: '/sobre' },
-  { name: 'Cultos', href: '/cultos' },
-  { name: 'Departamentos', href: '/departamentos' },
-  { name: 'EBD', href: '/ebd' },
-  { name: 'Congregações', href: '/congregacoes' },
-  { name: 'Liderança', href: '/lideranca' },
+  { 
+    name: 'Nossa Igreja', 
+    submenu: [
+      { name: 'História', href: '/sobre' },
+      { name: 'Liderança', href: '/lideranca' },
+      { name: 'Departamentos', href: '/departamentos' },
+      { name: 'Cultos', href: '/cultos' },
+    ]
+  },
   { name: 'Missões', href: '/missoes' },
+  { name: 'EBD', href: '/ebd' },
   { name: 'Contato', href: '/contato' },
 ];
 
@@ -39,75 +43,87 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
   const isAdminPage = location.pathname.startsWith('/admin');
 
- const openPiP = async () => {
-  if (!liveVideoId) return;
-
-  const isInIframe = window.self !== window.top;
-
-  if ('documentPictureInPicture' in window && !isInIframe) {
-    try {
-      const pipWindow = await (window as any).documentPictureInPicture.requestWindow({
-        width: 520,
-        height: 320,        // um pouco mais alto para ficar melhor
-      });
-
-      // Configurações importantes para o YouTube
-      pipWindow.document.body.style.margin = '0';
-      pipWindow.document.body.style.padding = '0';
-      pipWindow.document.body.style.overflow = 'hidden';
-      pipWindow.document.body.style.backgroundColor = '#000';
-      pipWindow.document.title = 'AD Mutuá - Culto ao Vivo';
-
-      // Cria um HTML completo dentro da janela PiP (melhor que só iframe solto)
-      const htmlContent = `
-        <!DOCTYPE html>
-        <html lang="pt-BR">
-        <head>
-          <meta charset="utf-8">
-          <title>AD Mutuá - Ao Vivo</title>
-          <meta name="referrer" content="strict-origin-when-cross-origin">
-          <style>
-            body, html { margin:0; padding:0; height:100%; background:#000; overflow:hidden; }
-            iframe { width:100%; height:100%; border:none; }
-          </style>
-        </head>
-        <body>
-          <iframe 
-            src="https://www.youtube-nocookie.com/embed/${liveVideoId}?autoplay=1&rel=0&modestbranding=1&playsinline=1" 
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            allowfullscreen
-            referrerpolicy="strict-origin-when-cross-origin">
-          </iframe>
-        </body>
-        </html>
-      `;
-
-      pipWindow.document.open();
-      pipWindow.document.write(htmlContent);
-      pipWindow.document.close();
-
-      setIsMiniPlayerOpen(false);
+  const openPiP = async () => {
+    if (!liveVideoId) {
+      alert("Nenhuma transmissão ao vivo configurada no momento.");
       return;
-
-    } catch (err) {
-      console.warn("Document PiP falhou:", err);
     }
-  }
 
-  // Fallback: janela popup normal (mais confiável para YouTube)
-  const width = 520;
-  const height = 320;
-  const left = window.screen.width - width - 40;
-  const top = window.screen.height - height - 120;
+    // Se estiver dentro de iframe, pula direto pro popup
+    if (window.self !== window.top) {
+      abrirPopupFallback();
+      return;
+    }
 
-  window.open(
-    `https://www.youtube-nocookie.com/embed/${liveVideoId}?autoplay=1&rel=0&modestbranding=1`,
-    'ADMutuaLive',
-    `width=${width},height=${height},left=${left},top=${top},menubar=no,toolbar=no,location=no,status=no,resizable=yes,scrollbars=no`
-  );
+    // Tenta Document Picture-in-Picture primeiro
+    if ('documentPictureInPicture' in window) {
+      try {
+        const pipWindow = await (window as any).documentPictureInPicture.requestWindow({
+          width: 540,
+          height: 340,
+        });
 
-  setIsMiniPlayerOpen(false);
-};
+        const html = `
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <meta charset="UTF-8">
+            <title>AD Mutuá - Culto Ao Vivo</title>
+            <style>
+              body, html { 
+                margin: 0; 
+                padding: 0; 
+                height: 100%; 
+                background: #000; 
+                overflow: hidden; 
+              }
+              iframe {
+                width: 100%;
+                height: 100%;
+                border: none;
+              }
+            </style>
+          </head>
+          <body>
+            <iframe 
+              src="https://www.youtube-nocookie.com/embed/${liveVideoId}?autoplay=1&rel=0&modestbranding=1&playsinline=1" 
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowfullscreen
+              referrerpolicy="strict-origin-when-cross-origin">
+            </iframe>
+          </body>
+          </html>
+        `;
+
+        pipWindow.document.open();
+        pipWindow.document.write(html);
+        pipWindow.document.close();
+
+        setIsMiniPlayerOpen(false);
+        return;
+      } catch (err) {
+        console.warn("Document PiP falhou, usando fallback:", err);
+      }
+    }
+
+    // Fallback: popup normal
+    abrirPopupFallback();
+  };
+
+  const abrirPopupFallback = () => {
+    const width = 540;
+    const height = 340;
+    const left = window.screen.width - width - 40;
+    const top = window.screen.height - height - 120;
+
+    window.open(
+      `https://www.youtube-nocookie.com/embed/${liveVideoId}?autoplay=1&rel=0&modestbranding=1`,
+      'ADMutuaLive',
+      `width=${width},height=${height},left=${left},top=${top},menubar=no,toolbar=no,location=no,status=no,resizable=yes`
+    );
+
+    setIsMiniPlayerOpen(false);
+  };
 
   React.useEffect(() => {
     const handleTogglePlayer = () => setIsMiniPlayerOpen(true);
@@ -188,17 +204,39 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <div className="px-10 pb-10 space-y-6 overflow-y-auto flex-1">
             {navLinks.map((link, index) => (
               <React.Fragment key={link.name}>
-                <Link 
-                  to={link.href} 
-                  onClick={() => setIsMenuOpen(false)}
-                  className={`block text-xl font-serif tracking-tight transition-all duration-500 hover:pl-4 ${
-                    location.pathname === link.href 
-                      ? 'text-church-vibrant italic' 
-                      : 'text-pearl/80 hover:text-pearl'
-                  }`}
-                >
-                  {link.name}
-                </Link>
+                {link.submenu ? (
+                  <div className="space-y-4">
+                    <span className="block text-xl font-serif tracking-tight text-pearl/40 italic">{link.name}</span>
+                    <div className="pl-4 space-y-4 border-l border-white/10">
+                      {link.submenu.map((sub) => (
+                        <Link 
+                          key={sub.name}
+                          to={sub.href} 
+                          onClick={() => setIsMenuOpen(false)}
+                          className={`block text-lg font-serif tracking-tight transition-all duration-500 hover:pl-2 ${
+                            location.pathname === sub.href 
+                              ? 'text-church-vibrant italic' 
+                              : 'text-pearl/80 hover:text-pearl'
+                          }`}
+                        >
+                          {sub.name}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                ) : (
+                  <Link 
+                    to={link.href!} 
+                    onClick={() => setIsMenuOpen(false)}
+                    className={`block text-xl font-serif tracking-tight transition-all duration-500 hover:pl-4 ${
+                      location.pathname === link.href 
+                        ? 'text-church-vibrant italic' 
+                        : 'text-pearl/80 hover:text-pearl'
+                    }`}
+                  >
+                    {link.name}
+                  </Link>
+                )}
                 {index < navLinks.length - 1 && (
                   <div className="h-px bg-white/5 w-full" />
                 )}
@@ -216,11 +254,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <div className="min-h-screen bg-pearl font-sans text-church-text flex flex-col">
       
       {/* Header / Navegação */}
-      <header className="fixed top-0 w-full z-40">
-        {/* Top Bar */}
-        {!isAdminPage && (
-          <div className="bg-church-blue text-pearl/60 py-2 px-6 md:px-12 border-b border-white/5">
-            <div className="flex justify-between items-center text-[9px] font-bold uppercase tracking-[0.3em]">
+      {!isAdminPage && (
+        <header className="fixed top-0 w-full z-40">
+          {/* Top Bar */}
+          <div className="bg-church-blue text-pearl/60 py-2 border-b border-white/5">
+            <div className="px-6 md:px-12 flex justify-between items-center text-[9px] font-bold uppercase tracking-[0.3em]">
               <div className="flex gap-6">
                 <span className="flex items-center gap-2"><MapPin size={10} className="text-church-vibrant" /> São Gonçalo, RJ</span>
                 <span className="hidden sm:flex items-center gap-2"><Phone size={10} className="text-church-vibrant" /> {contactConfig?.phone || '(21) 2713-5394'}</span>
@@ -229,77 +267,102 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               </div>
             </div>
           </div>
-        )}
 
-        <div className="bg-pearl/90 backdrop-blur-md border-b border-church-blue/5">
-          <div className="w-full px-6 md:px-12 lg:px-16">
-            <div className="flex justify-between items-center h-24 md:h-28">
-              
-              {/* Logo - Fixed to left */}
-              <Link to="/" className="flex-shrink-0 flex items-center gap-4 group">
-                <div className="relative">
-                  {loadingSite ? (
-                    <div className="h-20 md:h-24 w-32 bg-church-blue/5 animate-pulse rounded-xl" />
-                  ) : (
-                    <img 
-                      src={siteConfig?.footerBannerUrl || "/banner.png"} 
-                      alt="AD Mutuá" 
-                      className="h-20 md:h-24 w-auto object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-500" 
-                      referrerPolicy="no-referrer"
-                    />
-                  )}
+          <div className="bg-pearl/90 backdrop-blur-md border-b border-church-blue/5">
+            <div className="px-6 md:px-12 lg:px-16">
+              <div className="flex justify-between items-center h-20 md:h-24">
+                
+                {/* Logo - Fixed to left */}
+                <Link to="/" className="flex-shrink-0 flex items-center gap-4 group">
+                  <div className="relative">
+                    {loadingSite ? (
+                      <div className="h-16 md:h-20 w-24 md:w-32 bg-church-blue/5 animate-pulse rounded-xl" />
+                    ) : (
+                      <img 
+                        src={siteConfig?.footerBannerUrl || "/banner.png"} 
+                        alt="AD Mutuá" 
+                        className="h-16 md:h-20 w-auto max-w-[120px] md:max-w-[180px] object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-500" 
+                        referrerPolicy="no-referrer"
+                      />
+                    )}
+                  </div>
+                  <div className="hidden sm:block border-l border-church-blue/10 pl-4">
+                    <span className="block font-serif text-lg md:text-xl tracking-tight leading-none text-church-blue">AD Mutuá</span>
+                    <span className="block text-[8px] md:text-[9px] uppercase tracking-[0.2em] text-church-muted mt-1">Assembleia de Deus</span>
+                  </div>
+                </Link>
+
+                {/* Desktop Navigation - Pushed to right for better distribution with logo on left */}
+                <div className="hidden xl:flex items-center gap-2 ml-auto">
+                  <nav className="flex items-center gap-1">
+                    {navLinks.map((link) => (
+                      <div key={link.name} className="relative group/nav">
+                        {link.submenu ? (
+                          <div className="flex items-center gap-1 px-3 py-2 rounded-full text-[10px] xl:text-[11px] font-bold uppercase tracking-[0.2em] text-church-dark-deep hover:text-church-purple cursor-pointer transition-all duration-500">
+                            <span>{link.name}</span>
+                            <ChevronDown size={12} className="group-hover/nav:rotate-180 transition-transform duration-500" />
+                            
+                            {/* Submenu Dropdown */}
+                            <div className="absolute top-full left-0 pt-4 opacity-0 translate-y-2 pointer-events-none group-hover/nav:opacity-100 group-hover/nav:translate-y-0 group-hover/nav:pointer-events-auto transition-all duration-500 z-50">
+                              <div className="bg-white rounded-2xl shadow-2xl border border-church-blue/5 py-4 min-w-[200px] overflow-hidden">
+                                {link.submenu.map((sub) => (
+                                  <Link
+                                    key={sub.name}
+                                    to={sub.href}
+                                    className={`block px-6 py-3 text-[10px] font-bold uppercase tracking-[0.2em] transition-colors hover:bg-church-blue/5 ${
+                                      location.pathname === sub.href ? 'text-church-vibrant' : 'text-church-dark-deep hover:text-church-purple'
+                                    }`}
+                                  >
+                                    {sub.name}
+                                  </Link>
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+                        ) : (
+                          <Link 
+                            to={link.href!}
+                            className={`px-3 py-2 rounded-full text-[10px] xl:text-[11px] font-bold uppercase tracking-[0.2em] transition-all duration-500 relative group ${
+                              location.pathname === link.href 
+                                ? 'text-church-vibrant' 
+                                : 'text-church-dark-deep hover:text-church-purple'
+                            }`}
+                          >
+                            <span className="relative z-10">{link.name}</span>
+                            
+                            {/* Gold Accent Dot */}
+                            {location.pathname === link.href && (
+                              <motion.div 
+                                layoutId="header-active-dot"
+                                className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-church-vibrant rounded-full shadow-[0_0_8px_rgba(217,119,6,0.8)]"
+                                transition={{ type: "spring", bounce: 0.3, duration: 0.6 }}
+                              />
+                            )}
+                          </Link>
+                        )}
+                      </div>
+                    ))}
+                  </nav>
                 </div>
-                <div className="hidden sm:block border-l border-church-blue/10 pl-4">
-                  <span className="block font-serif text-lg md:text-xl tracking-tight leading-none text-church-blue">AD Mutuá</span>
-                  <span className="block text-[8px] md:text-[9px] uppercase tracking-[0.2em] text-church-muted mt-1">Assembleia de Deus</span>
+
+                {/* Menu Button (Mobile/Tablet) */}
+                <div className="flex items-center gap-4">
+                  <button 
+                    onClick={() => setIsMenuOpen(true)} 
+                    className="xl:hidden bg-church-purple text-white p-3 rounded-2xl hover:bg-church-purple-deep transition-all shadow-lg shadow-church-purple/20"
+                  >
+                    <Menu size={24} strokeWidth={1.5} />
+                  </button>
                 </div>
-              </Link>
-
-              {/* Desktop Navigation - Pushed to right for better distribution with logo on left */}
-              <div className="hidden lg:flex items-center gap-8 xl:gap-12 ml-auto">
-                <nav className="flex items-center gap-2 xl:gap-4">
-                  {navLinks.map((link) => (
-                    <Link 
-                      key={link.name}
-                      to={link.href}
-                      className={`px-5 py-2 rounded-full text-[10px] xl:text-[11px] font-bold uppercase tracking-[0.25em] transition-all duration-500 relative group ${
-                        location.pathname === link.href 
-                          ? 'text-church-vibrant' 
-                          : 'text-church-dark-deep hover:text-church-purple'
-                      }`}
-                    >
-                      <span className="relative z-10">{link.name}</span>
-                      
-                      {/* Gold Accent Dot */}
-                      {location.pathname === link.href && (
-                        <motion.div 
-                          layoutId="header-active-dot"
-                          className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-church-vibrant rounded-full shadow-[0_0_8px_rgba(217,119,6,0.8)]"
-                          transition={{ type: "spring", bounce: 0.3, duration: 0.6 }}
-                        />
-                      )}
-                    </Link>
-                  ))}
-                </nav>
-              </div>
-
-              {/* Menu Button (Mobile/Tablet) */}
-              <div className="flex items-center gap-4">
-                <button 
-                  onClick={() => setIsMenuOpen(true)} 
-                  className="lg:hidden bg-church-purple text-white p-3 rounded-2xl hover:bg-church-purple-deep transition-all shadow-lg shadow-church-purple/20"
-                >
-                  <Menu size={24} strokeWidth={1.5} />
-                </button>
               </div>
             </div>
           </div>
-        </div>
-      </header>
+        </header>
+      )}
 
       {/* Overlay */}
       <AnimatePresence>
-        {isMenuOpen && (
+        {!isAdminPage && isMenuOpen && (
           <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -311,45 +374,69 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       </AnimatePresence>
 
       {/* Side Drawer */}
-      <div 
-        className={`fixed inset-y-0 right-0 w-full sm:w-96 bg-gradient-to-br from-church-blue to-church-blue-light text-pearl shadow-2xl z-50 transform transition-transform duration-700 ease-in-out flex flex-col ${
-          isMenuOpen ? 'translate-x-0' : 'translate-x-full'
-        }`}
-      >
-        <div className="flex justify-between items-center p-10">
-          <span className="font-serif text-2xl italic tracking-tight">Menu</span>
-          <button 
-            onClick={() => setIsMenuOpen(false)} 
-            className="text-pearl/60 hover:text-pearl focus:outline-none p-2 transition-colors"
-          >
-            <X size={32} strokeWidth={1} />
-          </button>
-        </div>
-        <div className="px-10 pb-10 space-y-6 overflow-y-auto flex-1">
-          {navLinks.map((link, index) => (
-            <React.Fragment key={link.name}>
-              <Link 
-                to={link.href} 
-                onClick={() => setIsMenuOpen(false)}
-                className={`block text-xl font-serif tracking-tight transition-all duration-500 hover:pl-4 ${
-                  location.pathname === link.href 
-                    ? 'text-church-vibrant italic' 
-                    : 'text-pearl/80 hover:text-church-vibrant'
-                }`}
-              >
-                {link.name}
-              </Link>
-              {index < navLinks.length - 1 && (
-                <div className="h-px bg-white/5 w-full" />
-              )}
-            </React.Fragment>
-          ))}
-          <div className="pt-12 space-y-6">
+      {!isAdminPage && (
+        <div 
+          className={`fixed inset-y-0 right-0 w-full sm:w-96 bg-gradient-to-br from-church-blue to-church-blue-light text-pearl shadow-2xl z-50 transform transition-transform duration-700 ease-in-out flex flex-col ${
+            isMenuOpen ? 'translate-x-0' : 'translate-x-full'
+          }`}
+        >
+          <div className="flex justify-between items-center p-10">
+            <span className="font-serif text-2xl italic tracking-tight">Menu</span>
+            <button 
+              onClick={() => setIsMenuOpen(false)} 
+              className="text-pearl/60 hover:text-pearl focus:outline-none p-2 transition-colors"
+            >
+              <X size={32} strokeWidth={1} />
+            </button>
+          </div>
+          <div className="px-10 pb-10 space-y-6 overflow-y-auto flex-1">
+            {navLinks.map((link, index) => (
+              <React.Fragment key={link.name}>
+                {link.submenu ? (
+                  <div className="space-y-4">
+                    <span className="block text-xl font-serif tracking-tight text-pearl/40 italic">{link.name}</span>
+                    <div className="pl-4 space-y-4 border-l border-white/10">
+                      {link.submenu.map((sub) => (
+                        <Link 
+                          key={sub.name}
+                          to={sub.href} 
+                          onClick={() => setIsMenuOpen(false)}
+                          className={`block text-lg font-serif tracking-tight transition-all duration-500 hover:pl-2 ${
+                            location.pathname === sub.href 
+                              ? 'text-church-vibrant italic' 
+                              : 'text-pearl/80 hover:text-church-vibrant'
+                          }`}
+                        >
+                          {sub.name}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                ) : (
+                  <Link 
+                    to={link.href!} 
+                    onClick={() => setIsMenuOpen(false)}
+                    className={`block text-xl font-serif tracking-tight transition-all duration-500 hover:pl-4 ${
+                      location.pathname === link.href 
+                        ? 'text-church-vibrant italic' 
+                        : 'text-pearl/80 hover:text-church-vibrant'
+                    }`}
+                  >
+                    {link.name}
+                  </Link>
+                )}
+                {index < navLinks.length - 1 && (
+                  <div className="h-px bg-white/5 w-full" />
+                )}
+              </React.Fragment>
+            ))}
+            <div className="pt-12 space-y-6">
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
-      <main className={`flex-1 flex flex-col ${location.pathname === '/' ? '' : 'pt-28 md:pt-32'}`}>
+      <main className={`flex-1 flex flex-col ${isAdminPage ? 'pt-0' : (location.pathname === '/' ? '' : 'pt-24 md:pt-28')}`}>
         <AnimatePresence mode="wait">
           <motion.div
             key={location.pathname}
@@ -423,7 +510,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       {!isAdminPage && (
         <footer className="bg-church-blue text-pearl pt-20 pb-12 mt-auto overflow-hidden relative">
           
-          <div className="max-w-[1440px] mx-auto px-6 md:px-12 lg:px-24 relative z-10">
+          <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-24 relative z-10">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-20 mb-16">
               
               {/* Coluna 1: Info */}
@@ -467,12 +554,25 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 <h4 className="text-[10px] font-semibold tracking-[0.4em] uppercase text-church-vibrant">Explorar</h4>
                 <ul className="grid grid-cols-2 gap-y-4 gap-x-8">
                   {navLinks.map(link => (
-                    <li key={link.name}>
-                      <Link to={link.href} className="text-pearl/60 hover:text-church-vibrant transition-colors text-sm font-light flex items-center gap-2 group">
-                        <span className="w-0 h-px bg-church-vibrant transition-all duration-300 group-hover:w-2"></span>
-                        {link.name}
-                      </Link>
-                    </li>
+                    <React.Fragment key={link.name}>
+                      {link.submenu ? (
+                        link.submenu.map(sub => (
+                          <li key={sub.name}>
+                            <Link to={sub.href} className="text-pearl/60 hover:text-church-vibrant transition-colors text-sm font-light flex items-center gap-2 group">
+                              <span className="w-0 h-px bg-church-vibrant transition-all duration-300 group-hover:w-2"></span>
+                              {sub.name}
+                            </Link>
+                          </li>
+                        ))
+                      ) : (
+                        <li>
+                          <Link to={link.href!} className="text-pearl/60 hover:text-church-vibrant transition-colors text-sm font-light flex items-center gap-2 group">
+                            <span className="w-0 h-px bg-church-vibrant transition-all duration-300 group-hover:w-2"></span>
+                            {link.name}
+                          </Link>
+                        </li>
+                      )}
+                    </React.Fragment>
                   ))}
                 </ul>
               </div>

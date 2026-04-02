@@ -12,7 +12,7 @@ export default function Departments() {
       {/* Decorative background element */}
       <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-church-vibrant/20 to-transparent"></div>
 
-      <div className="max-w-[1440px] mx-auto relative z-10">
+      <div className="max-w-7xl mx-auto relative z-10">
         <div className="text-center mb-16">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -33,7 +33,7 @@ export default function Departments() {
             <div className="w-12 h-12 border-2 border-church-vibrant border-t-transparent rounded-full animate-spin"></div>
           </div>
         ) : (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
+          <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {departments.length === 0 ? (
               <div className="col-span-full text-center text-church-muted py-12 font-light italic">
                 Nenhum departamento cadastrado no momento.
@@ -46,9 +46,9 @@ export default function Departments() {
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.8, delay: idx * 0.05 }}
-                  className="bg-white rounded-[2.5rem] shadow-xl border border-church-vibrant/5 overflow-hidden hover:shadow-2xl hover:shadow-church-blue/10 hover:-translate-y-2 transition-all duration-500 group flex flex-col"
+                  className="bg-white rounded-[2rem] shadow-lg border border-church-vibrant/5 overflow-hidden hover:shadow-xl hover:shadow-church-blue/10 hover:-translate-y-1 transition-all duration-500 group flex flex-col"
                 >
-                  <div className="h-48 w-full relative overflow-hidden">
+                  <div className="h-40 w-full relative overflow-hidden">
                     {dept.imageUrl ? (
                       <img 
                         src={dept.imageUrl} 
@@ -58,31 +58,31 @@ export default function Departments() {
                       />
                     ) : (
                       <div className="absolute inset-0 bg-church-blue/10 flex items-center justify-center">
-                        <Users size={40} className="text-church-vibrant/30 group-hover:scale-110 transition-transform duration-500" />
+                        <Users size={32} className="text-church-vibrant/30 group-hover:scale-110 transition-transform duration-500" />
                       </div>
                     )}
                     <div className="absolute inset-0 bg-gradient-to-t from-church-blue/60 to-transparent group-hover:opacity-80 transition-opacity duration-500"></div>
                   </div>
-                  <div className="p-8 flex-1 flex flex-col relative">
-                    <div className="flex items-center gap-3 mb-6 transform group-hover:translate-x-1 transition-transform duration-300">
-                      <div className="w-8 h-8 bg-church-blue/5 rounded-lg flex items-center justify-center text-church-vibrant group-hover:bg-church-vibrant group-hover:text-pearl group-hover:rotate-12 transition-all duration-500">
-                        <Users size={16} strokeWidth={1.5} />
+                  <div className="p-5 flex-1 flex flex-col relative">
+                    <div className="flex items-center gap-2 mb-4 transform group-hover:translate-x-1 transition-transform duration-300">
+                      <div className="w-6 h-6 bg-church-blue/5 rounded-md flex items-center justify-center text-church-vibrant group-hover:bg-church-vibrant group-hover:text-pearl group-hover:rotate-12 transition-all duration-500">
+                        <Users size={12} strokeWidth={1.5} />
                       </div>
-                      <h3 className="text-xl text-church-blue font-serif italic leading-tight group-hover:text-church-vibrant transition-colors duration-300">{dept.name}</h3>
+                      <h3 className="text-base text-church-blue font-serif italic leading-tight group-hover:text-church-vibrant transition-colors duration-300">{dept.name}</h3>
                     </div>
                     
-                    <div className="space-y-6 flex-1">
-                      <div className="flex items-start gap-4 text-church-muted transform group-hover:translate-x-1 transition-transform duration-300 delay-75">
-                        <User size={18} className="text-church-vibrant shrink-0 mt-1 group-hover:scale-110 transition-transform duration-300" strokeWidth={1.5} />
+                    <div className="space-y-4 flex-1">
+                      <div className="flex items-start gap-3 text-church-muted transform group-hover:translate-x-1 transition-transform duration-300 delay-75">
+                        <User size={14} className="text-church-vibrant shrink-0 mt-0.5 group-hover:scale-110 transition-transform duration-300" strokeWidth={1.5} />
                         <div>
-                          <p className="text-[10px] font-semibold tracking-[0.2em] uppercase text-church-vibrant mb-1">Liderança</p>
-                          <p className="text-sm text-church-blue font-light group-hover:text-church-vibrant transition-colors duration-300">{dept.pastor || 'Não informado'}</p>
+                          <p className="text-[8px] font-semibold tracking-[0.2em] uppercase text-church-vibrant mb-0.5">Liderança</p>
+                          <p className="text-xs text-church-blue font-light group-hover:text-church-vibrant transition-colors duration-300">{dept.pastor || 'Não informado'}</p>
                         </div>
                       </div>
                       
-                      <div className="flex items-start gap-4 text-church-muted transform group-hover:translate-x-1 transition-transform duration-300 delay-150">
-                        <Info size={18} className="text-church-vibrant shrink-0 mt-1 group-hover:scale-110 transition-transform duration-300" strokeWidth={1.5} />
-                        <p className="text-sm text-church-text/80 font-light leading-relaxed">{dept.description}</p>
+                      <div className="flex items-start gap-3 text-church-muted transform group-hover:translate-x-1 transition-transform duration-300 delay-150">
+                        <Info size={14} className="text-church-vibrant shrink-0 mt-0.5 group-hover:scale-110 transition-transform duration-300" strokeWidth={1.5} />
+                        <p className="text-xs text-church-text/80 font-light leading-relaxed line-clamp-3">{dept.description}</p>
                       </div>
                     </div>
                   </div>

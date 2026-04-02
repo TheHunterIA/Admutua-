@@ -203,7 +203,7 @@ export default function Home() {
           <div className="absolute inset-0 bg-gradient-to-b from-church-purple/20 via-transparent to-church-dark/90"></div>
         </div>
 
-        <div className="max-w-[1440px] mx-auto px-6 md:px-12 lg:px-24 relative z-10 w-full pt-48 md:pt-56 pb-20">
+        <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-24 relative z-10 w-full pt-48 md:pt-56 pb-20">
           <div className="max-w-3xl">
             <ScrollReveal direction="right">
               <span className="text-church-vibrant text-[10px] font-semibold tracking-[0.5em] uppercase mb-6 block">
@@ -264,7 +264,7 @@ export default function Home() {
         <section className="pt-8 pb-12 px-6 md:px-12 lg:px-20 bg-pearl relative overflow-hidden">
           <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-church-vibrant/20 to-transparent"></div>
           
-          <div className="max-w-[1440px] mx-auto">
+          <div className="max-w-7xl mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 lg:gap-16">
               
               {/* Left Side: News */}
@@ -485,7 +485,7 @@ export default function Home() {
       {/* Events Banner Section - Cinematic Editorial Version */}
       {loadingEvents ? (
         <section className="relative min-h-[600px] md:min-h-[700px] flex flex-col items-center justify-center overflow-hidden bg-church-blue py-16 md:py-24">
-          <div className="max-w-[1440px] mx-auto px-6 relative z-10 w-full">
+          <div className="max-w-7xl mx-auto px-6 relative z-10 w-full">
             <div className="text-center mb-10 md:mb-16 space-y-4">
               <Skeleton className="h-4 w-32 mx-auto" />
               <Skeleton className="h-16 w-3/4 mx-auto" />
@@ -515,7 +515,7 @@ export default function Home() {
             </motion.div>
           </AnimatePresence>
 
-          <div className="max-w-[1440px] mx-auto px-6 relative z-10 w-full">
+          <div className="max-w-7xl mx-auto px-6 relative z-10 w-full">
             <ScrollReveal className="text-center mb-10 md:mb-16">
               <span className="text-church-vibrant text-[10px] font-bold tracking-[0.6em] uppercase mb-3 md:mb-4 block">
                 Não Perca
@@ -672,7 +672,7 @@ export default function Home() {
           <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay"></div>
         </div>
 
-        <div className="max-w-[1440px] mx-auto relative z-10">
+        <div className="max-w-7xl mx-auto relative z-10">
           <div className={`flex flex-col ${hasLiveStream ? 'lg:flex-row' : 'items-center text-center'} items-center gap-12 lg:gap-16`}>
             <div className={`${hasLiveStream ? 'lg:w-1/2' : 'max-w-3xl'} space-y-6`}>
               {loadingSite ? (

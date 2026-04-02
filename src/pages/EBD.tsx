@@ -45,7 +45,7 @@ export default function EBD() {
       {/* Lesson of the Week Section (Now the Hero/Top Section) */}
       {currentLesson && currentLesson.content ? (
         <section className="relative pt-8 pb-16 bg-white border-b border-church-blue/5">
-          <div className="max-w-[1440px] mx-auto px-6 md:px-12">
+          <div className="max-w-7xl mx-auto px-6 md:px-12">
             <div className="mb-8">
               <motion.div 
                 initial={{ opacity: 0, y: 20 }}
@@ -114,7 +114,7 @@ export default function EBD() {
         </section>
       ) : (
         <section className="relative pt-8 pb-16 bg-white border-b border-church-blue/5">
-          <div className="max-w-[1440px] mx-auto px-6 md:px-12">
+          <div className="max-w-7xl mx-auto px-6 md:px-12">
             <div className="mb-8">
               <motion.div 
                 initial={{ opacity: 0, y: 20 }}
@@ -184,7 +184,7 @@ export default function EBD() {
 
       {/* Classes Section */}
       <section className="section-padding bg-pearl relative">
-        <div className="max-w-[1440px] mx-auto px-6 md:px-12">
+        <div className="max-w-7xl mx-auto px-6 md:px-12">
           <div className="text-center max-w-3xl mx-auto mb-12">
             <h2 className="text-4xl md:text-6xl font-serif italic text-church-blue mb-6">
               Classes para <span className="text-church-vibrant">Todas as Idades</span>
@@ -255,7 +255,7 @@ export default function EBD() {
       {/* News Section */}
       {news.length > 0 && (
         <section className="py-12 bg-white border-t border-church-blue/5">
-          <div className="max-w-[1440px] mx-auto px-6 md:px-12">
+          <div className="max-w-7xl mx-auto px-6 md:px-12">
             <h3 className="text-2xl font-serif italic text-church-blue mb-8 flex items-center gap-3">
               <Newspaper size={24} className="text-church-vibrant" />
               Notícias da EBD

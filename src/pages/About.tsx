@@ -26,7 +26,7 @@ export default function About() {
         <div className="absolute top-0 right-0 w-1/2 h-full bg-church-blue/[0.02] -skew-x-12 translate-x-1/4"></div>
         <div className="absolute bottom-0 left-0 w-64 h-64 bg-church-blue/[0.03] rounded-full blur-3xl -translate-x-1/2 translate-y-1/2"></div>
         
-        <div className="max-w-[1440px] mx-auto relative z-10">
+        <div className="max-w-7xl mx-auto relative z-10">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <motion.div
               initial={{ opacity: 0, x: -30 }}
@@ -80,7 +80,7 @@ export default function About() {
 
       {/* Historical Gallery Section */}
       <section className="section-padding bg-white relative">
-        <div className="max-w-[1440px] mx-auto">
+        <div className="max-w-7xl mx-auto">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}

@@ -25,7 +25,7 @@ export default function Services() {
         {/* Decorative background element */}
         <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-church-vibrant/20 to-transparent"></div>
 
-        <div className="max-w-[1440px] mx-auto relative z-10">
+        <div className="max-w-7xl mx-auto relative z-10">
           <div className="text-center mb-16">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -46,9 +46,9 @@ export default function Services() {
               <div className="w-12 h-12 border-2 border-church-vibrant border-t-transparent rounded-full animate-spin"></div>
             </div>
           ) : (
-            <div className="grid md:grid-cols-2 gap-12 max-w-6xl mx-auto">
+            <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 max-w-7xl mx-auto">
               {services.length === 0 ? (
-                <div className="col-span-2 text-center text-church-muted py-12 font-light italic">
+                <div className="col-span-full text-center text-church-muted py-12 font-light italic">
                   Nenhum horário cadastrado no momento.
                 </div>
               ) : (
@@ -59,28 +59,28 @@ export default function Services() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.8, delay: idx * 0.1 }}
-                    className="bg-white p-10 rounded-[2.5rem] shadow-xl border border-church-vibrant/5 flex flex-col items-start gap-6 hover:shadow-2xl hover:shadow-church-blue/10 hover:-translate-y-2 transition-all duration-500 group h-full relative min-h-[220px]"
+                    className="bg-white p-6 rounded-[2rem] shadow-lg border border-church-vibrant/5 flex flex-col items-start gap-4 hover:shadow-xl hover:shadow-church-blue/10 hover:-translate-y-1 transition-all duration-500 group h-full relative min-h-[180px]"
                   >
                     {service.isLiveStream && (
-                      <div className="absolute top-8 right-8 transform group-hover:scale-110 transition-transform duration-300">
-                        <img src="/botao-de-reproducao-do-youtube-com-renderizacao-3d.png" alt="YouTube Live" className="w-12 h-12 object-contain" title="Com transmissão ao vivo" />
+                      <div className="absolute top-6 right-6 transform group-hover:scale-110 transition-transform duration-300">
+                        <img src="/botao-de-reproducao-do-youtube-com-renderizacao-3d.png" alt="YouTube Live" className="w-8 h-8 object-contain" title="Com transmissão ao vivo" />
                       </div>
                     )}
-                    <div className="space-y-6 w-full pr-12">
-                      <h3 className="text-3xl text-church-blue font-serif italic group-hover:text-church-vibrant transition-colors duration-300">{service.name}</h3>
+                    <div className="space-y-4 w-full pr-8">
+                      <h3 className="text-xl text-church-blue font-serif italic group-hover:text-church-vibrant transition-colors duration-300">{service.name}</h3>
                       
-                      <div className="flex items-center gap-4 text-church-vibrant font-medium tracking-wide">
-                        <div className="w-14 h-14 bg-church-blue/5 rounded-2xl flex items-center justify-center text-church-vibrant group-hover:bg-church-vibrant group-hover:text-pearl group-hover:rotate-6 transition-all duration-500 shrink-0">
-                          <Calendar size={28} strokeWidth={1.5} />
+                      <div className="flex items-center gap-3 text-church-vibrant font-medium tracking-wide">
+                        <div className="w-10 h-10 bg-church-blue/5 rounded-xl flex items-center justify-center text-church-vibrant group-hover:bg-church-vibrant group-hover:text-pearl group-hover:rotate-6 transition-all duration-500 shrink-0">
+                          <Calendar size={20} strokeWidth={1.5} />
                         </div>
-                        <div className="flex flex-col gap-1 transform group-hover:translate-x-1 transition-transform duration-300">
-                          <span className="text-lg leading-none group-hover:text-church-blue transition-colors duration-300">{service.day}</span>
-                          <span className="text-sm opacity-80 flex items-center gap-1 leading-none group-hover:text-church-blue/80 transition-colors duration-300"><Clock size={14} className="group-hover:animate-pulse" /> às {service.time}</span>
+                        <div className="flex flex-col gap-0.5 transform group-hover:translate-x-1 transition-transform duration-300">
+                          <span className="text-base leading-none group-hover:text-church-blue transition-colors duration-300">{service.day}</span>
+                          <span className="text-xs opacity-80 flex items-center gap-1 leading-none group-hover:text-church-blue/80 transition-colors duration-300"><Clock size={12} className="group-hover:animate-pulse" /> às {service.time}</span>
                         </div>
                       </div>
 
                       {service.description && (
-                        <p className="text-church-muted font-light leading-relaxed transform group-hover:translate-x-1 transition-transform duration-300 delay-75">
+                        <p className="text-xs text-church-muted font-light leading-relaxed transform group-hover:translate-x-1 transition-transform duration-300 delay-75 line-clamp-3">
                           {service.description}
                         </p>
                       )}
@@ -100,7 +100,7 @@ export default function Services() {
             <div className="absolute inset-0 bg-gradient-to-br from-church-purple/20 via-transparent to-church-dark/90"></div>
           </div>
 
-          <div className="max-w-[1440px] mx-auto relative z-10">
+          <div className="max-w-7xl mx-auto relative z-10">
             <div className="flex flex-col lg:flex-row items-center gap-16">
               <div className="lg:w-1/2 space-y-8">
                 <motion.div

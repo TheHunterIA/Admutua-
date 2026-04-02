@@ -12,7 +12,7 @@ export default function Congregations() {
       {/* Decorative background element */}
       <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-church-vibrant/20 to-transparent"></div>
 
-      <div className="max-w-[1440px] mx-auto relative z-10">
+      <div className="max-w-7xl mx-auto relative z-10">
         <div className="text-center mb-16">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -33,7 +33,7 @@ export default function Congregations() {
             <div className="w-12 h-12 border-2 border-church-vibrant border-t-transparent rounded-full animate-spin"></div>
           </div>
         ) : (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-12">
+          <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
             {congregations.length === 0 ? (
               <div className="col-span-full text-center text-church-muted py-12 font-light italic">
                 Nenhuma congregação cadastrada no momento.
@@ -47,9 +47,9 @@ export default function Congregations() {
                   whileHover={{ y: -10 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.8, delay: idx * 0.1 }}
-                  className="bg-white rounded-[3rem] shadow-xl border border-church-vibrant/5 overflow-hidden hover:shadow-2xl hover:shadow-church-blue/10 transition-all duration-500 group"
+                  className="bg-white rounded-[2rem] shadow-lg border border-church-vibrant/5 overflow-hidden hover:shadow-2xl hover:shadow-church-blue/10 transition-all duration-500 group"
                 >
-                  <div className="h-64 w-full relative overflow-hidden">
+                  <div className="h-48 w-full relative overflow-hidden">
                     {cong.imageUrl ? (
                       <img 
                         src={cong.imageUrl} 
@@ -59,41 +59,41 @@ export default function Congregations() {
                       />
                     ) : (
                       <div className="absolute inset-0 bg-church-blue/10 flex items-center justify-center">
-                        <MapPin size={48} className="text-church-vibrant/30 transition-transform duration-700 group-hover:scale-110" />
+                        <MapPin size={32} className="text-church-vibrant/30 transition-transform duration-700 group-hover:scale-110" />
                       </div>
                     )}
                     <div className="absolute inset-0 bg-gradient-to-t from-church-blue/60 to-transparent opacity-80 group-hover:opacity-100 transition-opacity duration-500"></div>
                   </div>
-                  <div className="p-10">
-                    <h3 className="text-2xl text-church-blue mb-6 font-serif italic group-hover:text-church-vibrant transition-colors duration-300">{cong.name}</h3>
-                    <div className="w-12 group-hover:w-24 h-px bg-church-vibrant/30 transition-all duration-500 mb-8"></div>
-                    <ul className="space-y-6">
-                      <li className="flex items-start gap-4 text-church-muted group/item">
-                        <div className="w-10 h-10 bg-church-blue/5 rounded-xl flex items-center justify-center text-church-vibrant shrink-0 group-hover/item:bg-church-vibrant group-hover/item:text-white transition-colors duration-300">
-                          <User size={20} strokeWidth={1.5} />
+                  <div className="p-6">
+                    <h3 className="text-lg text-church-blue mb-4 font-serif italic group-hover:text-church-vibrant transition-colors duration-300">{cong.name}</h3>
+                    <div className="w-8 group-hover:w-16 h-px bg-church-vibrant/30 transition-all duration-500 mb-6"></div>
+                    <ul className="space-y-4">
+                      <li className="flex items-start gap-3 text-church-muted group/item">
+                        <div className="w-8 h-8 bg-church-blue/5 rounded-lg flex items-center justify-center text-church-vibrant shrink-0 group-hover/item:bg-church-vibrant group-hover/item:text-white transition-colors duration-300">
+                          <User size={16} strokeWidth={1.5} />
                         </div>
                         <div>
-                          <p className="text-[10px] font-semibold tracking-[0.2em] uppercase text-church-vibrant mb-1">Dirigente</p>
-                          <p className="text-lg text-church-blue font-light">{cong.pastor}</p>
+                          <p className="text-[8px] font-semibold tracking-[0.2em] uppercase text-church-vibrant mb-0.5">Dirigente</p>
+                          <p className="text-sm text-church-blue font-light">{cong.pastor}</p>
                         </div>
                       </li>
-                      <li className="flex items-start gap-4 text-church-muted group/item">
-                        <div className="w-10 h-10 bg-church-blue/5 rounded-xl flex items-center justify-center text-church-vibrant shrink-0 group-hover/item:bg-church-vibrant group-hover/item:text-white transition-colors duration-300">
-                          <MapPin size={20} strokeWidth={1.5} />
+                      <li className="flex items-start gap-3 text-church-muted group/item">
+                        <div className="w-8 h-8 bg-church-blue/5 rounded-lg flex items-center justify-center text-church-vibrant shrink-0 group-hover/item:bg-church-vibrant group-hover/item:text-white transition-colors duration-300">
+                          <MapPin size={16} strokeWidth={1.5} />
                         </div>
                         <div>
-                          <p className="text-[10px] font-semibold tracking-[0.2em] uppercase text-church-vibrant mb-1">Endereço</p>
-                          <p className="text-lg text-church-blue font-light leading-relaxed group-hover/item:text-church-vibrant transition-colors duration-300">{cong.address}</p>
+                          <p className="text-[8px] font-semibold tracking-[0.2em] uppercase text-church-vibrant mb-0.5">Endereço</p>
+                          <p className="text-sm text-church-blue font-light leading-relaxed group-hover/item:text-church-vibrant transition-colors duration-300">{cong.address}</p>
                         </div>
                       </li>
                       {cong.phone && (
-                        <li className="flex items-start gap-4 text-church-muted group/item">
-                          <div className="w-10 h-10 bg-church-blue/5 rounded-xl flex items-center justify-center text-church-vibrant shrink-0 group-hover/item:bg-church-vibrant group-hover/item:text-white transition-colors duration-300">
-                            <Phone size={20} strokeWidth={1.5} />
+                        <li className="flex items-start gap-3 text-church-muted group/item">
+                          <div className="w-8 h-8 bg-church-blue/5 rounded-lg flex items-center justify-center text-church-vibrant shrink-0 group-hover/item:bg-church-vibrant group-hover/item:text-white transition-colors duration-300">
+                            <Phone size={16} strokeWidth={1.5} />
                           </div>
                           <div>
-                            <p className="text-[10px] font-semibold tracking-[0.2em] uppercase text-church-vibrant mb-1">Contato</p>
-                            <p className="text-lg text-church-blue font-light">{cong.phone}</p>
+                            <p className="text-[8px] font-semibold tracking-[0.2em] uppercase text-church-vibrant mb-0.5">Contato</p>
+                            <p className="text-sm text-church-blue font-light">{cong.phone}</p>
                           </div>
                         </li>
                       )}
