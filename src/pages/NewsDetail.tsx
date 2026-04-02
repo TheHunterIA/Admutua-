@@ -13,8 +13,8 @@ export default function NewsDetail() {
   return (
     <div className="bg-pearl min-h-screen py-20 px-4">
       <div className="max-w-4xl mx-auto">
-        <Link to="/" className="flex items-center text-church-vibrant mb-8 hover:underline">
-          <ArrowLeft className="w-4 h-4 mr-2" /> Voltar para o início
+        <Link to="/" className="inline-flex items-center text-church-vibrant mb-8 hover:text-church-blue transition-colors duration-300 group">
+          <ArrowLeft className="w-4 h-4 mr-2 transform group-hover:-translate-x-1 transition-transform duration-300" /> Voltar para o início
         </Link>
         
         <header className="mb-10">
@@ -25,8 +25,8 @@ export default function NewsDetail() {
           </div>
         </header>
 
-        <div className="aspect-video rounded-3xl overflow-hidden mb-10">
-          <img src={news.imageUrl} alt={news.title} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+        <div className="aspect-video rounded-3xl overflow-hidden mb-10 shadow-xl group">
+          <img src={news.imageUrl} alt={news.title} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" referrerPolicy="no-referrer" />
         </div>
 
         <div className="prose prose-lg max-w-none text-church-muted">
@@ -40,8 +40,8 @@ export default function NewsDetail() {
               <>
                 <p className="whitespace-pre-wrap mb-4">{firstPart}</p>
                 {news.secondaryImageUrl && (
-                  <div className="float-right ml-6 mb-6 w-full md:w-1/2 rounded-2xl overflow-hidden">
-                    <img src={news.secondaryImageUrl} alt="Detalhe da notícia" className="w-full h-auto" referrerPolicy="no-referrer" />
+                  <div className="float-right ml-6 mb-6 w-full md:w-1/2 rounded-2xl overflow-hidden shadow-lg group">
+                    <img src={news.secondaryImageUrl} alt="Detalhe da notícia" className="w-full h-auto transition-transform duration-1000 group-hover:scale-105" referrerPolicy="no-referrer" />
                   </div>
                 )}
                 <p className="whitespace-pre-wrap">{secondPart}</p>

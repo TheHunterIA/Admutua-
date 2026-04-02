@@ -149,13 +149,13 @@ export default function Admin() {
           <button
             onClick={handleLogin}
             disabled={loginLoading}
-            className={`w-full bg-church-blue-light text-pearl px-8 py-4 rounded-2xl font-bold tracking-widest uppercase text-[10px] transition-all duration-500 flex items-center justify-center gap-3 shadow-2xl shadow-black/20 border border-white/5 ${loginLoading ? 'opacity-70 cursor-not-allowed' : 'hover:bg-church-vibrant hover:text-church-blue hover:shadow-church-vibrant/30'}`}
+            className={`w-full bg-church-purple text-white px-8 py-4 rounded-2xl font-bold tracking-widest uppercase text-[10px] transition-all duration-500 flex items-center justify-center gap-3 shadow-2xl shadow-church-purple/20 border border-white/10 group ${loginLoading ? 'opacity-70 cursor-not-allowed' : 'hover:bg-church-purple-deep hover:shadow-church-purple/40 hover:-translate-y-1'}`}
           >
             {loginLoading ? (
-              <div className="w-5 h-5 border-2 border-pearl border-t-transparent rounded-full animate-spin"></div>
+              <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
             ) : (
               <>
-                <Star size={16} className="text-church-vibrant group-hover:text-church-blue" />
+                <Star size={16} className="text-church-vibrant group-hover:text-white transition-colors duration-300 group-hover:rotate-180" />
                 <span>Entrar com Google</span>
               </>
             )}
@@ -239,9 +239,9 @@ export default function Admin() {
                 setIsMobileMenuOpen(false);
               }}
               disabled={isSeeding}
-              className="w-full flex items-center gap-4 px-6 py-5 rounded-2xl text-pearl/60 hover:bg-white/5 hover:text-pearl transition-all font-medium disabled:opacity-50 group border border-transparent hover:border-church-vibrant/10"
+              className="w-full flex items-center gap-4 px-6 py-5 rounded-2xl text-pearl/60 hover:bg-white/10 hover:text-pearl transition-all font-medium disabled:opacity-50 group border border-transparent hover:border-church-purple/20 hover:-translate-y-1"
             >
-              <div className="w-10 h-10 rounded-xl bg-church-vibrant/10 flex items-center justify-center text-church-vibrant group-hover:scale-110 transition-transform shadow-sm">
+              <div className="w-10 h-10 rounded-xl bg-church-purple/10 flex items-center justify-center text-church-purple group-hover:scale-110 group-hover:rotate-12 transition-transform shadow-sm">
                 <Database size={20} strokeWidth={1.5} />
               </div>
               <span className="text-xs font-bold uppercase tracking-widest">{isSeeding ? 'Carregando...' : 'Dados Iniciais'}</span>
@@ -253,9 +253,9 @@ export default function Admin() {
                 setIsMobileMenuOpen(false);
               }}
               disabled={isSeeding}
-              className="w-full flex items-center gap-4 px-6 py-5 rounded-2xl text-red-400/60 hover:bg-red-500/10 hover:text-red-400 transition-all font-medium disabled:opacity-50 group border border-transparent hover:border-red-500/10"
+              className="w-full flex items-center gap-4 px-6 py-5 rounded-2xl text-red-400/60 hover:bg-red-500/10 hover:text-red-400 transition-all font-medium disabled:opacity-50 group border border-transparent hover:border-red-500/10 hover:-translate-y-1"
             >
-              <div className="w-10 h-10 rounded-xl bg-red-500/10 flex items-center justify-center text-red-400 group-hover:scale-110 transition-transform shadow-sm">
+              <div className="w-10 h-10 rounded-xl bg-red-500/10 flex items-center justify-center text-red-400 group-hover:scale-110 group-hover:rotate-12 transition-transform shadow-sm">
                 <Trash2 size={20} strokeWidth={1.5} />
               </div>
               <span className="text-xs font-bold uppercase tracking-widest">{isSeeding ? 'Limpando...' : 'Remover Exemplo'}</span>
@@ -279,9 +279,9 @@ export default function Admin() {
               logout();
               setIsMobileMenuOpen(false);
             }}
-            className="w-full flex items-center justify-center gap-3 px-6 py-4 text-red-400 hover:bg-red-500/10 rounded-2xl transition-all font-semibold text-sm border border-red-500/20"
+            className="w-full flex items-center justify-center gap-3 px-6 py-4 text-red-400 hover:bg-red-500/10 hover:text-red-500 rounded-2xl transition-all font-semibold text-sm border border-red-500/20 hover:border-red-500/40 group hover:-translate-y-1"
           >
-            <LogOut size={18} strokeWidth={2} />
+            <LogOut size={18} strokeWidth={2} className="group-hover:-translate-x-1 transition-transform" />
             <span>Encerrar Sessão</span>
           </button>
         </div>
@@ -346,13 +346,13 @@ export default function Admin() {
                   <>
                     <button 
                       onClick={modal.onConfirm}
-                      className="flex-1 bg-church-blue text-pearl py-4 rounded-2xl font-bold hover:bg-church-vibrant transition-all shadow-lg shadow-church-blue/20"
+                      className="flex-1 bg-church-blue text-pearl py-4 rounded-2xl font-bold hover:bg-church-vibrant transition-all shadow-lg shadow-church-blue/20 hover:-translate-y-1 hover:shadow-2xl hover:shadow-church-vibrant/30"
                     >
                       Confirmar
                     </button>
                     <button 
                       onClick={() => setModal(null)}
-                      className="flex-1 bg-pearl text-church-blue py-4 rounded-2xl font-bold hover:bg-church-vibrant/10 transition-all border border-church-vibrant/20"
+                      className="flex-1 bg-pearl text-church-blue py-4 rounded-2xl font-bold hover:bg-church-vibrant/10 transition-all border border-church-vibrant/20 hover:-translate-y-1 hover:shadow-md"
                     >
                       Cancelar
                     </button>
@@ -360,7 +360,7 @@ export default function Admin() {
                 ) : (
                   <button 
                     onClick={() => setModal(null)}
-                    className="flex-1 bg-church-blue text-pearl py-4 rounded-2xl font-bold hover:bg-church-vibrant transition-all shadow-lg shadow-church-blue/20"
+                    className="flex-1 bg-church-blue text-pearl py-4 rounded-2xl font-bold hover:bg-church-vibrant transition-all shadow-lg shadow-church-blue/20 hover:-translate-y-1 hover:shadow-2xl hover:shadow-church-vibrant/30"
                   >
                     Entendido
                   </button>
@@ -380,8 +380,8 @@ function TabButton({ active, onClick, icon, label }: { active: boolean, onClick:
       onClick={onClick}
       className={`w-full flex items-center text-left gap-5 px-6 py-5 rounded-2xl transition-all duration-500 font-medium group relative overflow-hidden ${
         active 
-          ? 'bg-church-blue-light text-church-vibrant shadow-[0_10px_30px_rgba(0,0,0,0.3)] scale-[1.02] border border-white/5' 
-          : 'text-pearl/40 hover:bg-white/5 hover:text-pearl'
+          ? 'bg-church-purple text-white shadow-[0_10px_30px_rgba(79,70,229,0.3)] scale-[1.02] border border-white/10' 
+          : 'text-pearl/40 hover:bg-white/10 hover:text-pearl hover:translate-x-1'
       }`}
     >
       {active && (
@@ -778,7 +778,7 @@ function HomeEditor({ setModal }: { setModal: (m: any) => void }) {
                   const id = (match && match[2].length === 11) ? match[2] : val;
                   setFormData({...formData, liveVideoId: id});
                 }}
-                className="w-full px-6 py-4 rounded-2xl border border-church-vibrant/10 focus:ring-2 focus:ring-church-vibrant outline-none bg-pearl/30 text-church-blue font-light"
+                className="w-full px-6 py-4 rounded-2xl border border-church-vibrant/10 focus:ring-2 focus:ring-church-vibrant outline-none bg-pearl/30 text-church-blue font-light hover:bg-white hover:border-church-vibrant/30 transition-all"
                 placeholder="Cole a URL do vídeo ou apenas o ID (Ex: ABC123XYZ)"
               />
               <p className="mt-2 text-[10px] text-church-muted uppercase tracking-wider">
@@ -798,7 +798,7 @@ function HomeEditor({ setModal }: { setModal: (m: any) => void }) {
         <div className="pt-6">
           <button 
             onClick={handleSave}
-            className="bg-church-blue text-pearl px-10 py-4 rounded-2xl font-bold hover:bg-church-vibrant transition-all flex items-center gap-3 shadow-xl shadow-church-blue/20"
+            className="bg-church-blue text-pearl px-10 py-4 rounded-2xl font-bold hover:bg-church-vibrant transition-all flex items-center gap-3 shadow-xl shadow-church-blue/20 hover:-translate-y-1 hover:shadow-2xl hover:shadow-church-vibrant/30"
           >
             <Save size={20} strokeWidth={1.5} />
             Salvar Todas as Alterações
@@ -875,7 +875,7 @@ function AboutEditor({ setModal }: { setModal: (m: any) => void }) {
         <div className="pt-6">
           <button 
             onClick={handleSave}
-            className="bg-church-blue text-pearl px-10 py-4 rounded-2xl font-bold hover:bg-church-vibrant transition-all flex items-center gap-3 shadow-xl shadow-church-blue/20"
+            className="bg-church-blue text-pearl px-10 py-4 rounded-2xl font-bold hover:bg-church-vibrant transition-all flex items-center gap-3 shadow-xl shadow-church-blue/20 hover:-translate-y-1 hover:shadow-2xl hover:shadow-church-vibrant/30"
           >
             <Save size={20} strokeWidth={1.5} />
             Salvar Alterações
@@ -947,7 +947,7 @@ function LeadershipEditor({ setModal }: { setModal: (m: any) => void }) {
         <div className="pt-6 relative z-10">
           <button 
             onClick={handleSave}
-            className="bg-church-blue text-pearl px-10 py-4 rounded-2xl font-bold hover:bg-church-vibrant transition-all flex items-center gap-3 shadow-xl shadow-church-blue/20"
+            className="bg-church-blue text-pearl px-10 py-4 rounded-2xl font-bold hover:bg-church-vibrant transition-all flex items-center gap-3 shadow-xl shadow-church-blue/20 hover:-translate-y-1 hover:shadow-2xl hover:shadow-church-vibrant/30"
           >
             <Save size={20} strokeWidth={1.5} />
             Salvar Liderança
@@ -1038,9 +1038,9 @@ function ListEditor({ collectionPath, title, setModal }: { collectionPath: strin
         </div>
         <button 
           onClick={handleAdd}
-          className="bg-church-blue text-pearl px-10 py-5 rounded-2xl font-bold hover:bg-church-vibrant transition-all flex items-center gap-3 shadow-xl shadow-church-blue/20 group"
+          className="bg-church-blue text-pearl px-10 py-5 rounded-2xl font-bold hover:bg-church-vibrant transition-all flex items-center gap-3 shadow-xl shadow-church-blue/20 group hover:-translate-y-1 hover:shadow-2xl hover:shadow-church-vibrant/30"
         >
-          <div className="w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
+          <div className="w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center group-hover:scale-110 group-hover:rotate-90 transition-transform duration-300">
             <Plus size={20} strokeWidth={1.5} />
           </div>
           <span className="uppercase tracking-widest text-xs">Adicionar Novo</span>
@@ -1081,14 +1081,14 @@ function ListEditor({ collectionPath, title, setModal }: { collectionPath: strin
             <div className="flex items-center gap-4 relative z-10">
               <button 
                 onClick={() => handleEdit(item)} 
-                className="p-4 text-church-blue hover:bg-church-blue hover:text-pearl rounded-2xl transition-all duration-300 border border-church-blue/10 shadow-sm"
+                className="p-4 text-church-blue hover:bg-church-blue hover:text-pearl rounded-2xl transition-all duration-300 border border-church-blue/10 shadow-sm hover:-translate-y-1 hover:shadow-md"
                 title="Editar"
               >
                 <Edit2 size={20} strokeWidth={1.5} />
               </button>
               <button 
                 onClick={() => handleDelete(item.id)} 
-                className="p-4 text-red-400 hover:bg-red-500 hover:text-white rounded-2xl transition-all duration-300 border border-red-100 shadow-sm"
+                className="p-4 text-red-400 hover:bg-red-500 hover:text-white rounded-2xl transition-all duration-300 border border-red-100 shadow-sm hover:-translate-y-1 hover:shadow-md"
                 title="Excluir"
               >
                 <Trash2 size={20} strokeWidth={1.5} />
@@ -1114,7 +1114,7 @@ function ListEditor({ collectionPath, title, setModal }: { collectionPath: strin
                     {editingId === 'new' ? 'Adicionar Registro' : 'Editar Registro'}
                   </h2>
                 </div>
-                <button onClick={() => setEditingId(null)} className="p-3 hover:bg-church-blue/5 rounded-full text-church-blue transition-colors"><X size={28} /></button>
+                <button onClick={() => setEditingId(null)} className="p-3 hover:bg-church-blue/5 rounded-full text-church-blue transition-all hover:rotate-90 hover:scale-110"><X size={28} /></button>
               </div>
 
               <div className="space-y-8">
@@ -1179,7 +1179,7 @@ function ListEditor({ collectionPath, title, setModal }: { collectionPath: strin
                         ))}
                         <button 
                           onClick={() => setFormData({...formData, additionalImages: [...(formData.additionalImages || []), '']})}
-                          className="border-2 border-dashed border-church-vibrant/20 rounded-3xl p-6 hover:border-church-vibrant hover:bg-church-vibrant/5 transition-all flex flex-col items-center justify-center min-h-[180px] bg-pearl/30 text-church-muted group"
+                          className="border-2 border-dashed border-church-vibrant/20 rounded-3xl p-6 hover:border-church-vibrant hover:bg-church-vibrant/5 transition-all flex flex-col items-center justify-center min-h-[180px] bg-pearl/30 text-church-muted group hover:-translate-y-1 hover:shadow-md"
                         >
                           <Plus size={32} className="group-hover:scale-110 transition-transform" />
                           <span className="text-[10px] font-bold mt-3 uppercase tracking-widest">Adicionar Foto</span>
@@ -1202,7 +1202,7 @@ function ListEditor({ collectionPath, title, setModal }: { collectionPath: strin
                       <select 
                         value={formData.subject || ''} 
                         onChange={e => setFormData({...formData, subject: e.target.value})}
-                        className="w-full px-6 py-4 rounded-2xl border border-church-vibrant/10 focus:ring-2 focus:ring-church-vibrant outline-none bg-pearl/30 text-church-blue font-light"
+                        className="w-full px-6 py-4 rounded-2xl border border-church-vibrant/10 focus:ring-2 focus:ring-church-vibrant outline-none bg-pearl/30 text-church-blue font-light hover:bg-white hover:border-church-vibrant/30 transition-all"
                       >
                         <option value="">Selecione um assunto</option>
                         <option value="EBD">EBD</option>
@@ -1325,14 +1325,14 @@ function ListEditor({ collectionPath, title, setModal }: { collectionPath: strin
               <div className="mt-16 flex gap-6">
                 <button 
                   onClick={handleSave}
-                  className="flex-1 bg-church-blue text-pearl py-5 rounded-2xl font-bold hover:bg-church-vibrant transition-all shadow-xl shadow-church-blue/20 flex items-center justify-center gap-3"
+                  className="flex-1 bg-church-blue text-pearl py-5 rounded-2xl font-bold hover:bg-church-vibrant transition-all shadow-xl shadow-church-blue/20 flex items-center justify-center gap-3 hover:-translate-y-1 hover:shadow-2xl hover:shadow-church-vibrant/30"
                 >
                   <Save size={24} strokeWidth={1.5} />
                   Salvar Registro
                 </button>
                 <button 
                   onClick={() => setEditingId(null)}
-                  className="flex-1 bg-pearl text-church-blue py-5 rounded-2xl font-bold hover:bg-church-vibrant/10 transition-all border border-church-vibrant/20"
+                  className="flex-1 bg-pearl text-church-blue py-5 rounded-2xl font-bold hover:bg-church-vibrant/10 transition-all border border-church-vibrant/20 hover:-translate-y-1 hover:shadow-md"
                 >
                   Cancelar
                 </button>
@@ -1394,7 +1394,7 @@ function ContactEditor({ setModal }: { setModal: (m: any) => void }) {
         <div className="pt-6">
           <button 
             onClick={handleSave}
-            className="bg-church-blue text-pearl px-10 py-4 rounded-2xl font-bold hover:bg-church-vibrant transition-all flex items-center gap-3 shadow-xl shadow-church-blue/20"
+            className="bg-church-blue text-pearl px-10 py-4 rounded-2xl font-bold hover:bg-church-vibrant transition-all flex items-center gap-3 shadow-xl shadow-church-blue/20 hover:-translate-y-1 hover:shadow-2xl hover:shadow-church-vibrant/30"
           >
             <Save size={20} strokeWidth={1.5} />
             Salvar Informações
@@ -1478,7 +1478,7 @@ function SubmissionsViewer({ setModal }: { setModal: (m: any) => void }) {
                   </span>
                   <button 
                     onClick={() => handleDelete(sub.id)} 
-                    className="p-4 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-2xl transition-all duration-300 border border-transparent hover:border-red-100"
+                    className="p-4 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-2xl transition-all duration-300 border border-transparent hover:border-red-100 hover:-translate-y-1 hover:shadow-md"
                     title="Excluir mensagem"
                   >
                     <Trash2 size={20} strokeWidth={1.5} />
@@ -1565,8 +1565,8 @@ function HistoryManager({ setModal }: { setModal: (m: any) => void }) {
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-serif italic text-church-blue">Momentos Históricos</h2>
         {!editingId && (
-          <button onClick={handleAdd} className="bg-church-blue text-white px-6 py-3 rounded-2xl flex items-center gap-2 hover:bg-church-blue-light transition-colors shadow-lg">
-            <Plus size={20} /> Adicionar Momento
+          <button onClick={handleAdd} className="bg-church-blue text-white px-6 py-3 rounded-2xl flex items-center gap-2 hover:bg-church-blue-light transition-all shadow-lg hover:-translate-y-1 hover:shadow-xl group">
+            <Plus size={20} className="group-hover:rotate-90 transition-transform" /> Adicionar Momento
           </button>
         )}
       </div>
@@ -1597,10 +1597,10 @@ function HistoryManager({ setModal }: { setModal: (m: any) => void }) {
               <ImageUploadField value={formData.imageUrl} onChange={v => setFormData({...formData, imageUrl: v})} />
             </div>
             <div className="flex gap-4 pt-4 border-t border-church-vibrant/10">
-              <button onClick={handleSave} className="flex-1 bg-church-blue text-white px-6 py-4 rounded-2xl font-bold hover:bg-church-blue-light transition-colors flex items-center justify-center gap-2">
+              <button onClick={handleSave} className="flex-1 bg-church-blue text-white px-6 py-4 rounded-2xl font-bold hover:bg-church-blue-light transition-all flex items-center justify-center gap-2 hover:-translate-y-1 hover:shadow-lg">
                 <Save size={20} /> Salvar
               </button>
-              <button onClick={() => setEditingId(null)} className="px-6 py-4 rounded-2xl font-bold text-church-blue hover:bg-pearl transition-colors border border-church-vibrant/20">
+              <button onClick={() => setEditingId(null)} className="px-6 py-4 rounded-2xl font-bold text-church-blue hover:bg-pearl transition-all border border-church-vibrant/20 hover:-translate-y-1 hover:shadow-md">
                 Cancelar
               </button>
             </div>
@@ -1609,25 +1609,25 @@ function HistoryManager({ setModal }: { setModal: (m: any) => void }) {
       ) : (
         <div className="grid gap-4">
           {history.map((item: any) => (
-            <motion.div key={item.id} layout initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="bg-white p-6 rounded-3xl shadow-sm border border-church-vibrant/10 flex items-center gap-6 group hover:shadow-md transition-all">
+            <motion.div key={item.id} layout initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="bg-white p-6 rounded-3xl shadow-sm border border-church-vibrant/10 flex items-center gap-6 group hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
               {item.imageUrl && (
                 <div className="w-24 h-24 rounded-2xl overflow-hidden flex-shrink-0">
-                  <img src={item.imageUrl} alt={item.title} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                  <img src={item.imageUrl} alt={item.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" referrerPolicy="no-referrer" />
                 </div>
               )}
               <div className="flex-1">
                 <div className="flex items-center gap-2 text-church-vibrant mb-1">
-                  <Calendar size={14} />
+                  <Calendar size={14} className="group-hover:text-church-blue transition-colors" />
                   <span className="text-xs font-bold">{item.date}</span>
                 </div>
-                <h3 className="font-bold text-church-blue text-lg mb-1">{item.title}</h3>
+                <h3 className="font-bold text-church-blue text-lg mb-1 group-hover:text-church-vibrant transition-colors">{item.title}</h3>
                 <p className="text-sm text-church-text/70 line-clamp-2">{item.description}</p>
               </div>
               <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                <button onClick={() => handleEdit(item)} className="p-3 text-church-blue hover:bg-pearl rounded-xl transition-colors">
+                <button onClick={() => handleEdit(item)} className="p-3 text-church-blue hover:bg-pearl rounded-xl transition-colors hover:-translate-y-1 hover:shadow-md">
                   <Edit2 size={20} />
                 </button>
-                <button onClick={() => handleDelete(item.id)} className="p-3 text-red-500 hover:bg-red-50 rounded-xl transition-colors">
+                <button onClick={() => handleDelete(item.id)} className="p-3 text-red-500 hover:bg-red-50 rounded-xl transition-colors hover:-translate-y-1 hover:shadow-md">
                   <Trash2 size={20} />
                 </button>
               </div>
@@ -1667,7 +1667,7 @@ function ImageUploadField({ value, onChange }: { value: string, onChange: (v: st
     <div className="space-y-4">
       <div 
         onClick={() => fileInputRef.current?.click()}
-        className="relative group cursor-pointer border-2 border-dashed border-church-vibrant/20 rounded-[2rem] p-6 hover:border-church-vibrant transition-all flex flex-col items-center justify-center min-h-[180px] bg-pearl/30 overflow-hidden shadow-inner"
+        className="relative group cursor-pointer border-2 border-dashed border-church-vibrant/20 rounded-[2rem] p-6 hover:border-church-vibrant transition-all flex flex-col items-center justify-center min-h-[180px] bg-pearl/30 overflow-hidden shadow-inner hover:shadow-lg hover:-translate-y-0.5"
       >
         {value ? (
           <>
@@ -1707,7 +1707,7 @@ function ImageUploadField({ value, onChange }: { value: string, onChange: (v: st
         <div className="flex items-center justify-end">
           <button 
             onClick={() => onChange('')}
-            className="flex items-center gap-2 px-4 py-2 text-sm text-red-500 hover:bg-red-50 rounded-xl transition-colors border border-red-100"
+            className="flex items-center gap-2 px-4 py-2 text-sm text-red-500 hover:bg-red-50 rounded-xl transition-all border border-red-100 hover:-translate-y-1 hover:shadow-sm"
             title="Remover imagem"
           >
             <Trash2 size={16} strokeWidth={1.5} />
@@ -1727,13 +1727,13 @@ function EbdAdmin({ setModal }: { setModal: (m: any) => void }) {
       <div className="flex items-center gap-4 border-b border-church-vibrant/10 pb-4">
         <button 
           onClick={() => setActiveSubTab('lessons')}
-          className={`px-6 py-3 rounded-2xl font-bold text-sm transition-all ${activeSubTab === 'lessons' ? 'bg-church-blue text-white shadow-md' : 'text-church-blue hover:bg-church-blue/5'}`}
+          className={`px-6 py-3 rounded-2xl font-bold text-sm transition-all hover:-translate-y-1 ${activeSubTab === 'lessons' ? 'bg-church-blue text-white shadow-md' : 'text-church-blue hover:bg-church-blue/5'}`}
         >
           Lições
         </button>
         <button 
           onClick={() => setActiveSubTab('classes')}
-          className={`px-6 py-3 rounded-2xl font-bold text-sm transition-all ${activeSubTab === 'classes' ? 'bg-church-blue text-white shadow-md' : 'text-church-blue hover:bg-church-blue/5'}`}
+          className={`px-6 py-3 rounded-2xl font-bold text-sm transition-all hover:-translate-y-1 ${activeSubTab === 'classes' ? 'bg-church-blue text-white shadow-md' : 'text-church-blue hover:bg-church-blue/5'}`}
         >
           Classes
         </button>
@@ -1830,7 +1830,7 @@ function EbdLessonEditor({ setModal }: { setModal: (m: any) => void }) {
           </div>
           <button 
             onClick={() => setEditingId(null)}
-            className="w-12 h-12 rounded-full bg-pearl flex items-center justify-center text-church-blue hover:bg-church-vibrant hover:text-white transition-all shadow-md"
+            className="w-12 h-12 rounded-full bg-pearl flex items-center justify-center text-church-blue hover:bg-church-vibrant hover:text-white transition-all shadow-md hover:-translate-y-1 hover:shadow-lg hover:rotate-90"
           >
             <X size={24} strokeWidth={1.5} />
           </button>
@@ -1856,7 +1856,7 @@ function EbdLessonEditor({ setModal }: { setModal: (m: any) => void }) {
           <div className="pt-6">
             <button 
               onClick={handleSave}
-              className="bg-church-blue text-pearl px-10 py-4 rounded-2xl font-bold hover:bg-church-vibrant transition-all flex items-center gap-3 shadow-xl shadow-church-blue/20"
+              className="bg-church-purple text-white px-10 py-4 rounded-2xl font-bold hover:bg-church-purple-deep transition-all flex items-center gap-3 shadow-xl shadow-church-purple/20 hover:-translate-y-1 hover:shadow-2xl hover:shadow-church-purple/30"
             >
               <Save size={20} strokeWidth={1.5} />
               Salvar Lição
@@ -1877,7 +1877,7 @@ function EbdLessonEditor({ setModal }: { setModal: (m: any) => void }) {
         </div>
         <button 
           onClick={handleAdd}
-          className="bg-church-vibrant text-white px-8 py-4 rounded-2xl font-bold hover:bg-church-blue transition-all flex items-center gap-3 shadow-xl shadow-church-vibrant/20"
+          className="bg-church-purple text-white px-8 py-4 rounded-2xl font-bold hover:bg-church-purple-deep transition-all flex items-center gap-3 shadow-xl shadow-church-purple/20 hover:-translate-y-1 hover:shadow-2xl hover:shadow-church-purple/30"
         >
           <Plus size={20} strokeWidth={2} />
           Nova Lição
@@ -1886,19 +1886,19 @@ function EbdLessonEditor({ setModal }: { setModal: (m: any) => void }) {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {lessons.map((item: any) => (
-          <div key={item.id} className="bg-white p-8 rounded-[2rem] shadow-sm border border-church-vibrant/5 group relative overflow-hidden">
+          <div key={item.id} className="bg-white p-8 rounded-[2rem] shadow-sm border border-church-vibrant/5 group relative overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
             <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-              <button onClick={() => handleEdit(item)} className="w-10 h-10 rounded-xl bg-church-blue/5 flex items-center justify-center text-church-blue hover:bg-church-blue hover:text-white transition-all">
+              <button onClick={() => handleEdit(item)} className="w-10 h-10 rounded-xl bg-church-blue/5 flex items-center justify-center text-church-blue hover:bg-church-blue hover:text-white transition-all hover:-translate-y-1 hover:shadow-md">
                 <Edit2 size={16} strokeWidth={2} />
               </button>
-              <button onClick={() => handleDelete(item.id)} className="w-10 h-10 rounded-xl bg-red-500/10 flex items-center justify-center text-red-500 hover:bg-red-500 hover:text-white transition-all">
+              <button onClick={() => handleDelete(item.id)} className="w-10 h-10 rounded-xl bg-red-500/10 flex items-center justify-center text-red-500 hover:bg-red-500 hover:text-white transition-all hover:-translate-y-1 hover:shadow-md">
                 <Trash2 size={16} strokeWidth={2} />
               </button>
             </div>
-            <div className="w-12 h-12 rounded-2xl bg-church-blue/5 flex items-center justify-center text-church-blue mb-6">
+            <div className="w-12 h-12 rounded-2xl bg-church-blue/5 flex items-center justify-center text-church-blue mb-6 group-hover:scale-110 group-hover:bg-church-vibrant group-hover:text-white transition-all duration-300">
               <BookOpen size={24} strokeWidth={1.5} />
             </div>
-            <h3 className="text-xl font-serif italic text-church-blue mb-2">{item.lessonTitle}</h3>
+            <h3 className="text-xl font-serif italic text-church-blue mb-2 group-hover:text-church-vibrant transition-colors">{item.lessonTitle}</h3>
             <p className="text-[10px] font-bold uppercase tracking-widest text-church-vibrant mb-2">{item.quarterNumber} • {item.lessonNumber}</p>
             <p className="text-church-muted text-sm line-clamp-2">{item.magazineTitle}</p>
           </div>
@@ -1994,7 +1994,7 @@ function EbdClassEditor({ setModal }: { setModal: (m: any) => void }) {
           </div>
           <button 
             onClick={() => setEditingId(null)}
-            className="w-12 h-12 rounded-full bg-pearl flex items-center justify-center text-church-blue hover:bg-church-vibrant hover:text-white transition-all shadow-md"
+            className="w-12 h-12 rounded-full bg-pearl flex items-center justify-center text-church-blue hover:bg-church-vibrant hover:text-white transition-all shadow-md hover:-translate-y-1 hover:shadow-lg hover:rotate-90"
           >
             <X size={24} strokeWidth={1.5} />
           </button>
@@ -2019,7 +2019,7 @@ function EbdClassEditor({ setModal }: { setModal: (m: any) => void }) {
           <div className="pt-6">
             <button 
               onClick={handleSave}
-              className="bg-church-blue text-pearl px-10 py-4 rounded-2xl font-bold hover:bg-church-vibrant transition-all flex items-center gap-3 shadow-xl shadow-church-blue/20"
+              className="bg-church-purple text-white px-10 py-4 rounded-2xl font-bold hover:bg-church-purple-deep transition-all flex items-center gap-3 shadow-xl shadow-church-purple/20 hover:-translate-y-1 hover:shadow-2xl hover:shadow-church-purple/30"
             >
               <Save size={20} strokeWidth={1.5} />
               Salvar Classe
@@ -2040,7 +2040,7 @@ function EbdClassEditor({ setModal }: { setModal: (m: any) => void }) {
         </div>
         <button 
           onClick={handleAdd}
-          className="bg-church-vibrant text-white px-8 py-4 rounded-2xl font-bold hover:bg-church-blue transition-all flex items-center gap-3 shadow-xl shadow-church-vibrant/20"
+          className="bg-church-purple text-white px-8 py-4 rounded-2xl font-bold hover:bg-church-purple-deep transition-all flex items-center gap-3 shadow-xl shadow-church-purple/20 hover:-translate-y-1 hover:shadow-2xl hover:shadow-church-purple/30"
         >
           <Plus size={20} strokeWidth={2} />
           Nova Classe
@@ -2049,23 +2049,23 @@ function EbdClassEditor({ setModal }: { setModal: (m: any) => void }) {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {classes.map((item: any) => (
-          <div key={item.id} className="bg-white p-8 rounded-[2rem] shadow-sm border border-church-vibrant/5 group relative overflow-hidden">
+          <div key={item.id} className="bg-white p-8 rounded-[2rem] shadow-sm border border-church-vibrant/5 group relative overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
             <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-              <button onClick={() => handleEdit(item)} className="w-10 h-10 rounded-xl bg-church-blue/5 flex items-center justify-center text-church-blue hover:bg-church-blue hover:text-white transition-all">
+              <button onClick={() => handleEdit(item)} className="w-10 h-10 rounded-xl bg-church-blue/5 flex items-center justify-center text-church-blue hover:bg-church-blue hover:text-white transition-all hover:-translate-y-1 hover:shadow-md">
                 <Edit2 size={16} strokeWidth={2} />
               </button>
-              <button onClick={() => handleDelete(item.id)} className="w-10 h-10 rounded-xl bg-red-500/10 flex items-center justify-center text-red-500 hover:bg-red-500 hover:text-white transition-all">
+              <button onClick={() => handleDelete(item.id)} className="w-10 h-10 rounded-xl bg-red-500/10 flex items-center justify-center text-red-500 hover:bg-red-500 hover:text-white transition-all hover:-translate-y-1 hover:shadow-md">
                 <Trash2 size={16} strokeWidth={2} />
               </button>
             </div>
-            <div className="w-12 h-12 rounded-2xl bg-church-blue/5 flex items-center justify-center text-church-blue mb-6">
+            <div className="w-12 h-12 rounded-2xl bg-church-blue/5 flex items-center justify-center text-church-blue mb-6 group-hover:scale-110 group-hover:bg-church-vibrant group-hover:text-white transition-all duration-300">
               {item.imageUrl ? (
                 <img src={item.imageUrl} alt={item.name} className="w-full h-full object-cover rounded-2xl" />
               ) : (
                 <Users size={24} strokeWidth={1.5} />
               )}
             </div>
-            <h3 className="text-xl font-serif italic text-church-blue mb-2">{item.name}</h3>
+            <h3 className="text-xl font-serif italic text-church-blue mb-2 group-hover:text-church-vibrant transition-colors">{item.name}</h3>
             <p className="text-[10px] font-bold uppercase tracking-widest text-church-vibrant mb-2">{item.teacher}</p>
             <p className="text-church-muted text-sm line-clamp-2">{item.description}</p>
           </div>
@@ -2091,7 +2091,7 @@ function Field({ label, value, onChange, type = "text", isTextArea = false, plac
           onChange={e => onChange(e.target.value)}
           rows={4}
           placeholder={placeholder}
-          className="w-full px-6 py-4 rounded-2xl border border-church-vibrant/10 focus:ring-2 focus:ring-church-vibrant outline-none bg-pearl/30 text-church-blue font-light leading-relaxed transition-all focus:bg-white"
+          className="w-full px-6 py-4 rounded-2xl border border-church-vibrant/10 focus:ring-2 focus:ring-church-vibrant outline-none bg-pearl/30 text-church-blue font-light leading-relaxed transition-all focus:bg-white hover:bg-white hover:border-church-vibrant/30"
         />
       ) : (
         <input 
@@ -2099,7 +2099,7 @@ function Field({ label, value, onChange, type = "text", isTextArea = false, plac
           value={value || ''} 
           onChange={e => onChange(e.target.value)}
           placeholder={placeholder}
-          className="w-full px-6 py-4 rounded-2xl border border-church-vibrant/10 focus:ring-2 focus:ring-church-vibrant outline-none bg-pearl/30 text-church-blue font-light transition-all focus:bg-white"
+          className="w-full px-6 py-4 rounded-2xl border border-church-vibrant/10 focus:ring-2 focus:ring-church-vibrant outline-none bg-pearl/30 text-church-blue font-light transition-all focus:bg-white hover:bg-white hover:border-church-vibrant/30"
         />
       )}
     </div>

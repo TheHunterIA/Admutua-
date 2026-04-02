@@ -45,7 +45,7 @@ export default function EBD() {
       {/* Lesson of the Week Section (Now the Hero/Top Section) */}
       {currentLesson && currentLesson.content ? (
         <section className="relative pt-8 pb-16 bg-white border-b border-church-blue/5">
-          <div className="max-w-7xl mx-auto px-6 md:px-12">
+          <div className="max-w-[1440px] mx-auto px-6 md:px-12">
             <div className="mb-8">
               <motion.div 
                 initial={{ opacity: 0, y: 20 }}
@@ -114,7 +114,7 @@ export default function EBD() {
         </section>
       ) : (
         <section className="relative pt-8 pb-16 bg-white border-b border-church-blue/5">
-          <div className="max-w-7xl mx-auto px-6 md:px-12">
+          <div className="max-w-[1440px] mx-auto px-6 md:px-12">
             <div className="mb-8">
               <motion.div 
                 initial={{ opacity: 0, y: 20 }}
@@ -155,25 +155,25 @@ export default function EBD() {
                 <button
                   key={lesson.id}
                   onClick={() => setSelectedLessonId(lesson.id)}
-                  className="bg-white p-6 rounded-3xl shadow-sm border border-church-blue/5 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 text-left group flex flex-col h-full"
+                  className="bg-white p-6 rounded-3xl shadow-sm border border-church-blue/5 hover:shadow-2xl hover:shadow-church-blue/10 hover:-translate-y-2 transition-all duration-500 text-left group flex flex-col h-full"
                 >
                   <div className="flex-1">
-                    <p className="text-[10px] font-bold uppercase tracking-widest text-church-vibrant mb-2">{lesson.quarterNumber} • {lesson.lessonNumber}</p>
-                    <h4 className="text-lg font-serif italic text-church-blue mb-2 group-hover:text-church-vibrant transition-colors">{lesson.lessonTitle}</h4>
-                    <p className="text-church-muted text-sm line-clamp-2">{lesson.magazineTitle}</p>
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-church-vibrant mb-2 transform group-hover:translate-x-1 transition-transform duration-300">{lesson.quarterNumber} • {lesson.lessonNumber}</p>
+                    <h4 className="text-lg font-serif italic text-church-blue mb-2 group-hover:text-church-vibrant transition-colors duration-300 transform group-hover:translate-x-1">{lesson.lessonTitle}</h4>
+                    <p className="text-church-muted text-sm line-clamp-2 transform group-hover:translate-x-1 transition-transform duration-300 delay-75">{lesson.magazineTitle}</p>
                   </div>
                   <div className="mt-6 pt-4 border-t border-church-blue/5 flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       {lesson.authorPhotoUrl ? (
-                        <img src={lesson.authorPhotoUrl} alt={lesson.authorName} className="w-6 h-6 rounded-full object-cover" />
+                        <img src={lesson.authorPhotoUrl} alt={lesson.authorName} className="w-6 h-6 rounded-full object-cover transform group-hover:scale-110 transition-transform duration-300" />
                       ) : (
-                        <div className="w-6 h-6 rounded-full bg-church-blue/5 flex items-center justify-center text-church-blue/40">
+                        <div className="w-6 h-6 rounded-full bg-church-blue/5 flex items-center justify-center text-church-blue/40 transform group-hover:scale-110 group-hover:bg-church-vibrant group-hover:text-white transition-all duration-300">
                           <Users size={12} />
                         </div>
                       )}
-                      <span className="text-xs text-church-muted font-medium">{lesson.authorName}</span>
+                      <span className="text-xs text-church-muted font-medium group-hover:text-church-blue transition-colors duration-300">{lesson.authorName}</span>
                     </div>
-                    <ChevronRight size={16} className="text-church-vibrant opacity-0 group-hover:opacity-100 transition-opacity -translate-x-2 group-hover:translate-x-0" />
+                    <ChevronRight size={16} className="text-church-vibrant opacity-0 group-hover:opacity-100 transition-all duration-300 -translate-x-4 group-hover:translate-x-0" />
                   </div>
                 </button>
               ))}
@@ -184,7 +184,7 @@ export default function EBD() {
 
       {/* Classes Section */}
       <section className="section-padding bg-pearl relative">
-        <div className="max-w-7xl mx-auto px-6 md:px-12">
+        <div className="max-w-[1440px] mx-auto px-6 md:px-12">
           <div className="text-center max-w-3xl mx-auto mb-12">
             <h2 className="text-4xl md:text-6xl font-serif italic text-church-blue mb-6">
               Classes para <span className="text-church-vibrant">Todas as Idades</span>
@@ -201,9 +201,10 @@ export default function EBD() {
                 key={cls.id}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
+                whileHover={{ y: -10 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
-                className="relative p-8 rounded-[2rem] shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group overflow-hidden min-h-[360px] flex flex-col justify-end border border-church-blue/5"
+                className="relative p-8 rounded-[2rem] shadow-sm hover:shadow-2xl hover:shadow-church-blue/20 transition-all duration-500 group overflow-hidden min-h-[360px] flex flex-col justify-end border border-church-blue/5"
               >
                 {/* Background Image & Overlay */}
                 {cls.imageUrl ? (
@@ -211,32 +212,32 @@ export default function EBD() {
                     <img 
                       src={cls.imageUrl} 
                       alt={cls.name} 
-                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110 group-hover:rotate-1"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-church-blue/95 via-church-blue/70 to-church-blue/10"></div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-church-blue/95 via-church-blue/70 to-church-blue/10 opacity-90 group-hover:opacity-100 transition-opacity duration-500"></div>
                   </>
                 ) : (
                   <div className="absolute inset-0 bg-church-blue overflow-hidden">
-                    <Users size={160} className="absolute -right-8 -bottom-8 text-white/5 transition-transform duration-700 group-hover:scale-110 group-hover:-rotate-12" />
+                    <Users size={160} className="absolute -right-8 -bottom-8 text-white/5 transition-transform duration-1000 group-hover:scale-125 group-hover:-rotate-12" />
                     <div className="absolute inset-0 bg-gradient-to-t from-church-blue via-church-blue/80 to-transparent"></div>
                   </div>
                 )}
 
                 {/* Content */}
                 <div className="relative z-10">
-                  <h3 className="text-2xl font-serif italic text-white mb-2">{cls.name}</h3>
-                  <p className="text-[10px] font-bold uppercase tracking-widest text-church-vibrant mb-4">{cls.teacher}</p>
-                  <p className="text-white/80 leading-relaxed text-sm mb-6 line-clamp-3">
+                  <h3 className="text-2xl font-serif italic text-white mb-2 transform group-hover:-translate-y-1 transition-transform duration-300">{cls.name}</h3>
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-church-vibrant mb-4 transform group-hover:-translate-y-1 transition-transform duration-300 delay-75">{cls.teacher}</p>
+                  <p className="text-white/80 leading-relaxed text-sm mb-6 line-clamp-3 transform group-hover:-translate-y-1 transition-transform duration-300 delay-100">
                     {cls.description}
                   </p>
-                  <div className="pt-4 border-t border-white/10 flex flex-col gap-2 text-xs text-white/70">
-                    <div className="flex items-center gap-2">
-                      <MapPin size={14} className="text-church-vibrant/80" />
-                      {cls.location}
+                  <div className="pt-4 border-t border-white/10 flex flex-col gap-2 text-xs text-white/70 transform group-hover:-translate-y-1 transition-transform duration-300 delay-150">
+                    <div className="flex items-center gap-2 group/item">
+                      <MapPin size={14} className="text-church-vibrant/80 group-hover/item:text-church-vibrant transition-colors duration-300" />
+                      <span className="group-hover/item:text-white transition-colors duration-300">{cls.location}</span>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <Clock size={14} className="text-church-vibrant/80" />
-                      {cls.schedule}
+                    <div className="flex items-center gap-2 group/item">
+                      <Clock size={14} className="text-church-vibrant/80 group-hover/item:text-church-vibrant transition-colors duration-300" />
+                      <span className="group-hover/item:text-white transition-colors duration-300">{cls.schedule}</span>
                     </div>
                   </div>
                 </div>
@@ -254,7 +255,7 @@ export default function EBD() {
       {/* News Section */}
       {news.length > 0 && (
         <section className="py-12 bg-white border-t border-church-blue/5">
-          <div className="max-w-7xl mx-auto px-6 md:px-12">
+          <div className="max-w-[1440px] mx-auto px-6 md:px-12">
             <h3 className="text-2xl font-serif italic text-church-blue mb-8 flex items-center gap-3">
               <Newspaper size={24} className="text-church-vibrant" />
               Notícias da EBD
@@ -289,7 +290,7 @@ export default function EBD() {
                       >
                         <Link 
                           to={`/noticias/${item.id}`} 
-                          className="group relative aspect-[4/3] rounded-[3rem] overflow-hidden shadow-[0_40px_80px_-15px_rgba(0,0,0,0.3)] bg-pearl border border-white/10 block"
+                          className="group relative aspect-[4/3] rounded-[3rem] overflow-hidden shadow-[0_40px_80px_-15px_rgba(0,0,0,0.3)] bg-pearl border border-white/10 block hover:shadow-[0_40px_80px_-15px_rgba(0,0,0,0.5)] transition-shadow duration-500"
                           onClick={(e) => {
                             if (position !== 0) e.preventDefault();
                           }}
@@ -297,16 +298,16 @@ export default function EBD() {
                           <img 
                             src={item.imageUrl} 
                             alt={item.title} 
-                            className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+                            className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110 group-hover:rotate-1"
                             referrerPolicy="no-referrer"
                           />
-                          <div className="absolute inset-0 bg-gradient-to-t from-church-blue via-church-blue/20 to-transparent opacity-80"></div>
+                          <div className="absolute inset-0 bg-gradient-to-t from-church-blue via-church-blue/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-500"></div>
                           
                           <div className="absolute inset-0 p-8 flex flex-col justify-end">
-                            <span className="text-church-vibrant text-[9px] font-bold tracking-[0.3em] uppercase mb-3 block">
+                            <span className="text-church-vibrant text-[9px] font-bold tracking-[0.3em] uppercase mb-3 block transform group-hover:-translate-y-1 transition-transform duration-300">
                               {item.date}
                             </span>
-                            <h3 className="text-2xl text-white font-serif italic leading-tight mb-4">
+                            <h3 className="text-2xl text-white font-serif italic leading-tight mb-4 transform group-hover:-translate-y-1 transition-transform duration-300 delay-75">
                               {item.title}
                             </h3>
                             
@@ -316,10 +317,10 @@ export default function EBD() {
                                 animate={{ opacity: 1, y: 0 }}
                                 className="space-y-6"
                               >
-                                <p className="text-pearl/70 text-sm font-light italic line-clamp-2">
+                                <p className="text-pearl/70 text-sm font-light italic line-clamp-2 transform group-hover:-translate-y-1 transition-transform duration-300 delay-100">
                                   {item.description}
                                 </p>
-                                <div className="w-full h-12 rounded-2xl bg-church-vibrant text-church-blue font-bold text-[10px] uppercase tracking-widest flex items-center justify-center hover:bg-white transition-all duration-500">
+                                <div className="w-full h-12 rounded-2xl bg-church-vibrant text-church-blue font-bold text-[10px] uppercase tracking-widest flex items-center justify-center hover:bg-white transition-all duration-500 transform group-hover:-translate-y-1 delay-150">
                                   Ler Notícia
                                 </div>
                               </motion.div>

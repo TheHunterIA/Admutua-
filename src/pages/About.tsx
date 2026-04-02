@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Calendar, ChevronRight, X } from 'lucide-react';
+import { Calendar, ChevronRight, X, ZoomIn } from 'lucide-react';
 import { useFirestoreCollection, useFirestoreDoc } from '../hooks/useFirestore';
 import { orderBy } from 'firebase/firestore';
 
@@ -26,7 +26,7 @@ export default function About() {
         <div className="absolute top-0 right-0 w-1/2 h-full bg-church-blue/[0.02] -skew-x-12 translate-x-1/4"></div>
         <div className="absolute bottom-0 left-0 w-64 h-64 bg-church-blue/[0.03] rounded-full blur-3xl -translate-x-1/2 translate-y-1/2"></div>
         
-        <div className="max-w-7xl mx-auto relative z-10">
+        <div className="max-w-[1440px] mx-auto relative z-10">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <motion.div
               initial={{ opacity: 0, x: -30 }}
@@ -51,23 +51,27 @@ export default function About() {
               transition={{ duration: 1.2 }}
               className="relative"
             >
-              <div className="aspect-[4/5] rounded-[3rem] overflow-hidden shadow-2xl relative z-10 border border-church-blue/5">
+              <div className="aspect-[4/5] rounded-[3rem] overflow-hidden shadow-2xl relative z-10 border border-church-blue/5 group">
                 <img 
                   src={aboutData.imageUrl} 
                   alt="Interior da Igreja" 
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000"
                   referrerPolicy="no-referrer"
                 />
-                <div className="absolute inset-0 bg-church-blue/10 mix-blend-multiply"></div>
+                <div className="absolute inset-0 bg-church-blue/10 mix-blend-multiply group-hover:bg-church-blue/5 transition-colors duration-500"></div>
               </div>
               
               {/* Floating accent element */}
               {aboutData.quote && (
-                <div className="absolute -bottom-10 -left-10 w-48 h-48 bg-church-blue rounded-[2rem] z-20 flex items-center justify-center p-8 shadow-2xl shadow-church-blue/30 border border-white/5">
+                <motion.div 
+                  animate={{ y: [0, -15, 0] }}
+                  transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+                  className="absolute -bottom-10 -left-10 w-48 h-48 bg-church-blue rounded-[2rem] z-20 flex items-center justify-center p-8 shadow-2xl shadow-church-blue/30 border border-white/5"
+                >
                   <p className="text-pearl text-center font-serif italic text-xl leading-tight">
                     {aboutData.quote}
                   </p>
-                </div>
+                </motion.div>
               )}
             </motion.div>
           </div>
@@ -76,7 +80,7 @@ export default function About() {
 
       {/* Historical Gallery Section */}
       <section className="section-padding bg-white relative">
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-[1440px] mx-auto">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -98,31 +102,40 @@ export default function About() {
                 key={moment.id}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
+                whileHover={{ y: -10 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
-                className="group relative aspect-square rounded-3xl overflow-hidden cursor-pointer"
+                className="group relative aspect-square rounded-3xl overflow-hidden cursor-pointer shadow-lg hover:shadow-2xl hover:shadow-church-blue/20 transition-all duration-500"
                 onClick={() => setSelectedImage(moment)}
               >
                 <img 
                   src={moment.imageUrl} 
                   alt={moment.title}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 group-hover:rotate-1"
                   referrerPolicy="no-referrer"
                 />
                 
                 {/* Gradient Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-church-blue/90 via-church-blue/40 to-transparent opacity-80 transition-opacity duration-500 group-hover:opacity-95"></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-church-blue/95 via-church-blue/50 to-transparent opacity-70 transition-opacity duration-500 group-hover:opacity-90"></div>
                 
+                {/* Zoom Icon */}
+                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 transform scale-50 group-hover:scale-100 z-10">
+                  <div className="w-16 h-16 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center text-white border border-white/20 shadow-2xl">
+                    <ZoomIn className="w-8 h-8" strokeWidth={1.5} />
+                  </div>
+                </div>
+
                 {/* Content */}
-                <div className="absolute inset-0 p-8 flex flex-col justify-end transform transition-transform duration-500">
-                  <div className="flex items-center gap-2 text-church-vibrant mb-3 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                <div className="absolute inset-0 p-8 flex flex-col justify-end transform transition-transform duration-500 z-20">
+                  <div className="flex items-center gap-2 text-church-vibrant mb-3 transform translate-y-8 group-hover:translate-y-0 transition-transform duration-500 ease-out">
                     <Calendar className="w-4 h-4" />
                     <span className="text-sm font-medium tracking-wider">{moment.date}</span>
                   </div>
-                  <h3 className="text-2xl text-white font-serif italic mb-2 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-75">
+                  <h3 className="text-2xl text-white font-serif italic mb-2 transform translate-y-8 group-hover:translate-y-0 transition-transform duration-500 delay-75 ease-out">
                     {moment.title}
                   </h3>
-                  <p className="text-white/80 text-sm line-clamp-2 transform translate-y-8 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 delay-100">
+                  <div className="w-0 group-hover:w-12 h-px bg-church-vibrant transition-all duration-500 delay-100 mb-3"></div>
+                  <p className="text-white/80 text-sm line-clamp-2 transform translate-y-8 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 delay-150 ease-out">
                     {moment.description}
                   </p>
                 </div>
@@ -142,12 +155,12 @@ export default function About() {
             className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-church-blue/95 backdrop-blur-sm"
             onClick={() => setSelectedImage(null)}
           >
-            <button 
-              className="absolute top-6 right-6 text-white/70 hover:text-white transition-colors"
-              onClick={() => setSelectedImage(null)}
-            >
-              <X className="w-8 h-8" />
-            </button>
+              <button 
+                className="absolute top-6 right-6 text-white/70 hover:text-white hover:rotate-90 transition-all duration-300"
+                onClick={() => setSelectedImage(null)}
+              >
+                <X className="w-8 h-8" />
+              </button>
 
             <motion.div
               initial={{ scale: 0.9, opacity: 0 }}
@@ -157,11 +170,11 @@ export default function About() {
               className="bg-white rounded-3xl overflow-hidden max-w-6xl w-full max-h-[90vh] shadow-2xl flex flex-col md:flex-row"
               onClick={e => e.stopPropagation()}
             >
-              <div className="md:w-3/5 lg:w-2/3 aspect-video md:aspect-auto relative min-h-[300px] md:min-h-[600px]">
+              <div className="md:w-3/5 lg:w-2/3 aspect-video md:aspect-auto relative min-h-[300px] md:min-h-[600px] group">
                 <img 
                   src={selectedImage.imageUrl} 
                   alt={selectedImage.title}
-                  className="w-full h-full object-cover absolute inset-0"
+                  className="w-full h-full object-cover absolute inset-0 group-hover:scale-105 transition-transform duration-1000"
                   referrerPolicy="no-referrer"
                 />
               </div>

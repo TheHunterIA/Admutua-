@@ -12,7 +12,7 @@ export default function Departments() {
       {/* Decorative background element */}
       <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-church-vibrant/20 to-transparent"></div>
 
-      <div className="max-w-7xl mx-auto relative z-10">
+      <div className="max-w-[1440px] mx-auto relative z-10">
         <div className="text-center mb-16">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -46,42 +46,42 @@ export default function Departments() {
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.8, delay: idx * 0.05 }}
-                  className="bg-white rounded-[2.5rem] shadow-xl border border-church-vibrant/5 overflow-hidden hover:shadow-2xl transition-all duration-500 group flex flex-col"
+                  className="bg-white rounded-[2.5rem] shadow-xl border border-church-vibrant/5 overflow-hidden hover:shadow-2xl hover:shadow-church-blue/10 hover:-translate-y-2 transition-all duration-500 group flex flex-col"
                 >
                   <div className="h-48 w-full relative overflow-hidden">
                     {dept.imageUrl ? (
                       <img 
                         src={dept.imageUrl} 
                         alt={dept.name} 
-                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110 group-hover:rotate-1"
                         referrerPolicy="no-referrer"
                       />
                     ) : (
                       <div className="absolute inset-0 bg-church-blue/10 flex items-center justify-center">
-                        <Users size={40} className="text-church-vibrant/30" />
+                        <Users size={40} className="text-church-vibrant/30 group-hover:scale-110 transition-transform duration-500" />
                       </div>
                     )}
-                    <div className="absolute inset-0 bg-gradient-to-t from-church-blue/60 to-transparent"></div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-church-blue/60 to-transparent group-hover:opacity-80 transition-opacity duration-500"></div>
                   </div>
-                  <div className="p-8 flex-1 flex flex-col">
-                    <div className="flex items-center gap-3 mb-6">
-                      <div className="w-8 h-8 bg-church-blue/5 rounded-lg flex items-center justify-center text-church-vibrant group-hover:bg-church-vibrant group-hover:text-pearl transition-colors duration-500">
+                  <div className="p-8 flex-1 flex flex-col relative">
+                    <div className="flex items-center gap-3 mb-6 transform group-hover:translate-x-1 transition-transform duration-300">
+                      <div className="w-8 h-8 bg-church-blue/5 rounded-lg flex items-center justify-center text-church-vibrant group-hover:bg-church-vibrant group-hover:text-pearl group-hover:rotate-12 transition-all duration-500">
                         <Users size={16} strokeWidth={1.5} />
                       </div>
-                      <h3 className="text-xl text-church-blue font-serif italic leading-tight">{dept.name}</h3>
+                      <h3 className="text-xl text-church-blue font-serif italic leading-tight group-hover:text-church-vibrant transition-colors duration-300">{dept.name}</h3>
                     </div>
                     
                     <div className="space-y-6 flex-1">
-                      <div className="flex items-start gap-4 text-church-muted">
-                        <User size={18} className="text-church-vibrant shrink-0 mt-1" strokeWidth={1.5} />
+                      <div className="flex items-start gap-4 text-church-muted transform group-hover:translate-x-1 transition-transform duration-300 delay-75">
+                        <User size={18} className="text-church-vibrant shrink-0 mt-1 group-hover:scale-110 transition-transform duration-300" strokeWidth={1.5} />
                         <div>
                           <p className="text-[10px] font-semibold tracking-[0.2em] uppercase text-church-vibrant mb-1">Liderança</p>
-                          <p className="text-sm text-church-blue font-light">{dept.pastor || 'Não informado'}</p>
+                          <p className="text-sm text-church-blue font-light group-hover:text-church-vibrant transition-colors duration-300">{dept.pastor || 'Não informado'}</p>
                         </div>
                       </div>
                       
-                      <div className="flex items-start gap-4 text-church-muted">
-                        <Info size={18} className="text-church-vibrant shrink-0 mt-1" strokeWidth={1.5} />
+                      <div className="flex items-start gap-4 text-church-muted transform group-hover:translate-x-1 transition-transform duration-300 delay-150">
+                        <Info size={18} className="text-church-vibrant shrink-0 mt-1 group-hover:scale-110 transition-transform duration-300" strokeWidth={1.5} />
                         <p className="text-sm text-church-text/80 font-light leading-relaxed">{dept.description}</p>
                       </div>
                     </div>

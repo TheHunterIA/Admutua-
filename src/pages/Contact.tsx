@@ -46,7 +46,7 @@ export default function Contact() {
       <div className="absolute top-0 right-0 w-full h-px bg-gradient-to-r from-transparent via-church-blue/20 to-transparent"></div>
       <div className="absolute -bottom-20 -left-20 w-96 h-96 bg-church-blue/[0.03] rounded-full blur-3xl"></div>
 
-      <div className="max-w-7xl mx-auto relative z-10">
+      <div className="max-w-[1440px] mx-auto relative z-10">
         <div className="text-center mb-16">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -69,7 +69,7 @@ export default function Contact() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 1 }}
-            className="bg-white p-10 rounded-[3.5rem] shadow-2xl border border-church-blue/5"
+            className="bg-white p-10 rounded-[3.5rem] shadow-xl border border-church-blue/5 hover:shadow-2xl hover:shadow-church-blue/10 transition-shadow duration-500"
           >
             <h3 className="text-2xl text-church-blue mb-8 font-serif italic">Envie sua Mensagem</h3>
             
@@ -149,10 +149,10 @@ export default function Contact() {
                 <button 
                   type="submit"
                   disabled={isSubmitting}
-                  className={`btn-minimal w-full bg-church-blue text-pearl border-none py-5 text-lg shadow-xl shadow-church-blue/20 hover:bg-church-blue-light ${isSubmitting ? 'opacity-70 cursor-not-allowed' : ''}`}
+                  className={`btn-minimal w-full bg-church-blue text-pearl border-none py-5 text-lg shadow-xl shadow-church-blue/20 hover:bg-church-vibrant hover:-translate-y-1 transition-all duration-300 group ${isSubmitting ? 'opacity-70 cursor-not-allowed' : ''}`}
                 >
                   <span>{isSubmitting ? 'Enviando...' : 'Enviar Mensagem'}</span>
-                  {!isSubmitting && <Send size={18} className="ml-3 inline" />}
+                  {!isSubmitting && <Send size={18} className="ml-3 inline group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />}
                 </button>
               </form>
             )}
@@ -166,34 +166,34 @@ export default function Contact() {
             transition={{ duration: 1 }}
             className="space-y-8"
           >
-            <div className="bg-white p-10 rounded-[3.5rem] shadow-2xl border border-church-blue/5">
+            <div className="bg-white p-10 rounded-[3.5rem] shadow-xl border border-church-blue/5 hover:shadow-2xl hover:shadow-church-blue/10 transition-shadow duration-500">
               <h3 className="text-2xl text-church-blue mb-8 font-serif italic">Informações de Contato</h3>
               <ul className="space-y-8">
-                <li className="flex items-start gap-6 text-church-muted group">
-                  <div className="w-14 h-14 bg-church-blue text-pearl rounded-2xl flex items-center justify-center shadow-lg shadow-church-blue/20 group-hover:scale-110 transition-transform duration-500">
+                <li className="flex items-start gap-6 text-church-muted group/item cursor-pointer">
+                  <div className="w-14 h-14 bg-church-blue text-pearl rounded-2xl flex items-center justify-center shadow-lg shadow-church-blue/20 group-hover/item:bg-church-vibrant group-hover/item:scale-110 transition-all duration-500">
                     <MapPin size={24} strokeWidth={1.5} />
                   </div>
                   <div>
                     <p className="text-[10px] font-semibold tracking-[0.2em] uppercase text-church-vibrant mb-1">Endereço</p>
-                    <p className="text-lg text-church-blue font-light leading-relaxed">{address}</p>
+                    <p className="text-lg text-church-blue font-light leading-relaxed group-hover/item:text-church-vibrant transition-colors duration-300">{address}</p>
                   </div>
                 </li>
-                <li className="flex items-start gap-6 text-church-muted group">
-                  <div className="w-14 h-14 bg-church-blue text-pearl rounded-2xl flex items-center justify-center shadow-lg shadow-church-blue/20 group-hover:scale-110 transition-transform duration-500">
+                <li className="flex items-start gap-6 text-church-muted group/item cursor-pointer">
+                  <div className="w-14 h-14 bg-church-blue text-pearl rounded-2xl flex items-center justify-center shadow-lg shadow-church-blue/20 group-hover/item:bg-church-vibrant group-hover/item:scale-110 transition-all duration-500">
                     <Phone size={24} strokeWidth={1.5} />
                   </div>
                   <div>
                     <p className="text-[10px] font-semibold tracking-[0.2em] uppercase text-church-vibrant mb-1">Telefone</p>
-                    <p className="text-lg text-church-blue font-light leading-relaxed">{phone}</p>
+                    <p className="text-lg text-church-blue font-light leading-relaxed group-hover/item:text-church-vibrant transition-colors duration-300">{phone}</p>
                   </div>
                 </li>
-                <li className="flex items-start gap-6 text-church-muted group">
-                  <div className="w-14 h-14 bg-church-blue text-pearl rounded-2xl flex items-center justify-center shadow-lg shadow-church-blue/20 group-hover:scale-110 transition-transform duration-500">
+                <li className="flex items-start gap-6 text-church-muted group/item cursor-pointer">
+                  <div className="w-14 h-14 bg-church-blue text-pearl rounded-2xl flex items-center justify-center shadow-lg shadow-church-blue/20 group-hover/item:bg-church-vibrant group-hover/item:scale-110 transition-all duration-500">
                     <Mail size={24} strokeWidth={1.5} />
                   </div>
                   <div>
                     <p className="text-[10px] font-semibold tracking-[0.2em] uppercase text-church-vibrant mb-1">E-mail</p>
-                    <p className="text-lg text-church-blue font-light leading-relaxed">{email}</p>
+                    <p className="text-lg text-church-blue font-light leading-relaxed group-hover/item:text-church-vibrant transition-colors duration-300">{email}</p>
                   </div>
                 </li>
               </ul>
@@ -215,7 +215,7 @@ export default function Contact() {
             </div>
 
             {/* Mapa */}
-            <div className="bg-white p-3 rounded-[3rem] shadow-2xl border border-church-vibrant/5 h-[350px] overflow-hidden relative group">
+            <div className="bg-white p-3 rounded-[3rem] shadow-xl border border-church-vibrant/5 h-[350px] overflow-hidden relative group hover:shadow-2xl hover:shadow-church-blue/10 transition-shadow duration-500">
               <iframe 
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3676.845873215278!2d-43.0566378!3d-22.8451999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x99906669869697%3A0x698696986969869!2sR.%20Dr.%20Cumplido%20de%20Santana%2C%2042%20-%20Mutu%C3%A1%2C%20S%C3%A3o%20Gon%C3%A7alo%20-%20RJ%2C%2024460-000!5e0!3m2!1spt-BR!2sbr!4v1711750000000!5m2!1spt-BR!2sbr" 
                 width="100%" 

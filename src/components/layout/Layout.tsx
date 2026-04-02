@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, MapPin, Phone, LayoutDashboard, Maximize2, Minimize2, PictureInPicture2, ExternalLink } from 'lucide-react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Menu, X, MapPin, Phone, LayoutDashboard, Maximize2, Minimize2, PictureInPicture2, ExternalLink, ArrowLeft } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
 import { useFirestoreDoc } from '../../hooks/useFirestore';
@@ -29,6 +29,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const [isMiniPlayerOpen, setIsMiniPlayerOpen] = useState(false);
   const [isMiniPlayerExpanded, setIsMiniPlayerExpanded] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
   const { data: contactConfig } = useFirestoreDoc<any>('config', 'contact');
   const { data: siteConfig } = useFirestoreDoc<any>('config', 'site');
 
@@ -126,10 +127,14 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   if (isAdminPage) {
     return (
       <div className="h-screen flex flex-col bg-pearl font-sans text-church-text overflow-hidden">
-        <header className="h-24 md:h-28 flex-shrink-0 flex items-center justify-end px-6 md:px-12 border-b border-church-blue/5">
+          <header className="h-24 md:h-28 flex-shrink-0 flex items-center justify-between px-6 md:px-12 border-b border-church-blue/5">
+          <Link to="/" className="text-[10px] font-bold uppercase tracking-[0.2em] text-church-blue/60 hover:text-church-purple transition-all flex items-center gap-2">
+            <ArrowLeft size={14} />
+            Voltar ao Site
+          </Link>
           <button 
             onClick={() => setIsMenuOpen(true)} 
-            className="bg-church-blue text-pearl p-3 rounded-2xl hover:bg-church-blue-light transition-all shadow-lg shadow-church-blue/20"
+            className="bg-church-purple text-white p-3 rounded-2xl hover:bg-church-purple-deep transition-all shadow-lg shadow-church-purple/20"
           >
             <Menu size={24} strokeWidth={1.5} />
           </button>
@@ -198,14 +203,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               </React.Fragment>
             ))}
             <div className="pt-12 space-y-6">
-              <Link 
-                to="/admin"
-                onClick={() => setIsMenuOpen(false)}
-                className="w-full flex items-center justify-center gap-3 text-[10px] font-semibold tracking-[0.3em] uppercase text-pearl/40 hover:text-pearl transition-colors"
-              >
-                <LayoutDashboard size={16} />
-                Painel Admin
-              </Link>
             </div>
           </div>
         </div>
@@ -233,10 +230,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         )}
 
         <div className="bg-pearl/90 backdrop-blur-md border-b border-church-blue/5">
-          <div className="px-6 md:px-12">
+          <div className="w-full px-6 md:px-12 lg:px-16">
             <div className="flex justify-between items-center h-24 md:h-28">
               
-              {/* Logo */}
+              {/* Logo - Fixed to left */}
               <Link to="/" className="flex-shrink-0 flex items-center gap-4 group">
                 <div className="relative">
                   <img 
@@ -252,11 +249,39 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 </div>
               </Link>
 
-              {/* Menu Button */}
-              <div className="flex items-center gap-8">
+              {/* Desktop Navigation - Pushed to right for better distribution with logo on left */}
+              <div className="hidden lg:flex items-center gap-8 xl:gap-12 ml-auto">
+                <nav className="flex items-center gap-2 xl:gap-4">
+                  {navLinks.map((link) => (
+                    <Link 
+                      key={link.name}
+                      to={link.href}
+                      className={`px-5 py-2 rounded-full text-[10px] xl:text-[11px] font-bold uppercase tracking-[0.25em] transition-all duration-500 relative group ${
+                        location.pathname === link.href 
+                          ? 'text-church-vibrant' 
+                          : 'text-church-dark-deep hover:text-church-purple'
+                      }`}
+                    >
+                      <span className="relative z-10">{link.name}</span>
+                      
+                      {/* Gold Accent Dot */}
+                      {location.pathname === link.href && (
+                        <motion.div 
+                          layoutId="header-active-dot"
+                          className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-church-vibrant rounded-full shadow-[0_0_8px_rgba(217,119,6,0.8)]"
+                          transition={{ type: "spring", bounce: 0.3, duration: 0.6 }}
+                        />
+                      )}
+                    </Link>
+                  ))}
+                </nav>
+              </div>
+
+              {/* Menu Button (Mobile/Tablet) */}
+              <div className="flex items-center gap-4">
                 <button 
                   onClick={() => setIsMenuOpen(true)} 
-                  className="bg-church-blue text-pearl p-3 rounded-2xl hover:bg-church-blue-light transition-all shadow-lg shadow-church-blue/20"
+                  className="lg:hidden bg-church-purple text-white p-3 rounded-2xl hover:bg-church-purple-deep transition-all shadow-lg shadow-church-purple/20"
                 >
                   <Menu size={24} strokeWidth={1.5} />
                 </button>
@@ -303,7 +328,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 className={`block text-xl font-serif tracking-tight transition-all duration-500 hover:pl-4 ${
                   location.pathname === link.href 
                     ? 'text-church-vibrant italic' 
-                    : 'text-pearl/80 hover:text-pearl'
+                    : 'text-pearl/80 hover:text-church-vibrant'
                 }`}
               >
                 {link.name}
@@ -314,14 +339,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             </React.Fragment>
           ))}
           <div className="pt-12 space-y-6">
-            <Link 
-              to="/admin"
-              onClick={() => setIsMenuOpen(false)}
-              className="w-full flex items-center justify-center gap-3 text-[10px] font-semibold tracking-[0.3em] uppercase text-pearl/40 hover:text-pearl transition-colors"
-            >
-              <LayoutDashboard size={16} />
-              Painel Admin
-            </Link>
           </div>
         </div>
       </div>
@@ -400,7 +417,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       {!isAdminPage && (
         <footer className="bg-church-blue text-pearl pt-20 pb-12 mt-auto overflow-hidden relative">
           
-          <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-24 relative z-10">
+          <div className="max-w-[1440px] mx-auto px-6 md:px-12 lg:px-24 relative z-10">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-20 mb-16">
               
               {/* Coluna 1: Info */}
@@ -409,8 +426,13 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                   <img 
                     src={siteConfig?.footerBannerUrl || "/banner.png"} 
                     alt="AD Mutuá Banner" 
-                    className="h-32 w-auto object-contain" 
+                    className="h-32 w-auto object-contain cursor-default select-none" 
                     referrerPolicy="no-referrer"
+                    onClick={(e) => {
+                      if (e.detail === 3) {
+                        navigate('/admin');
+                      }
+                    }}
                   />
                   <h4 className="text-2xl font-serif italic tracking-tight">AD Mutuá</h4>
                 </div>
@@ -440,7 +462,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 <ul className="grid grid-cols-2 gap-y-4 gap-x-8">
                   {navLinks.map(link => (
                     <li key={link.name}>
-                      <Link to={link.href} className="text-pearl/60 hover:text-pearl transition-colors text-sm font-light">
+                      <Link to={link.href} className="text-pearl/60 hover:text-church-vibrant transition-colors text-sm font-light flex items-center gap-2 group">
+                        <span className="w-0 h-px bg-church-vibrant transition-all duration-300 group-hover:w-2"></span>
                         {link.name}
                       </Link>
                     </li>

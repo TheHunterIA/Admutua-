@@ -195,11 +195,11 @@ export default function Home() {
             className="w-full h-full object-cover scale-105"
             referrerPolicy="no-referrer"
           />
-          <div className="absolute inset-0 bg-church-blue/70 backdrop-blur-[2px]"></div>
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-church-blue/20 to-church-blue/90"></div>
+          <div className="absolute inset-0 bg-church-dark/80 backdrop-blur-[2px]"></div>
+          <div className="absolute inset-0 bg-gradient-to-b from-church-purple/20 via-transparent to-church-dark/90"></div>
         </div>
 
-        <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-24 relative z-10 w-full pt-48 md:pt-56 pb-20">
+        <div className="max-w-[1440px] mx-auto px-6 md:px-12 lg:px-24 relative z-10 w-full pt-48 md:pt-56 pb-20">
           <div className="max-w-3xl">
             <ScrollReveal direction="right">
               <span className="text-church-vibrant text-[10px] font-semibold tracking-[0.5em] uppercase mb-6 block">
@@ -212,7 +212,21 @@ export default function Home() {
                 {heroSubtitle}
               </p>
               <div className="flex flex-wrap gap-6">
-                <Link to="/cultos" className="btn-minimal bg-church-vibrant text-church-blue border-none">
+                {hasLiveStream && (
+                  <button 
+                    onClick={() => {
+                      const liveSection = document.getElementById('ao-vivo');
+                      if (liveSection) {
+                        liveSection.scrollIntoView({ behavior: 'smooth' });
+                      }
+                    }}
+                    className="btn-minimal bg-red-600 text-white border-none hover:bg-red-700 hover:-translate-y-1 hover:shadow-lg hover:shadow-red-600/30 transition-all duration-300 flex items-center gap-3"
+                  >
+                    <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+                    AO VIVO AGORA
+                  </button>
+                )}
+                <Link to="/cultos" className="btn-minimal bg-church-purple text-white border-none hover:bg-church-purple-deep hover:-translate-y-1 hover:shadow-lg hover:shadow-church-purple/30 transition-all duration-300">
                   Nossos Cultos
                 </Link>
                 <a 
@@ -220,7 +234,7 @@ export default function Home() {
                   onClick={handleHowToGetThere}
                   target="_blank" 
                   rel="noopener noreferrer" 
-                  className="btn-minimal text-pearl border-pearl/30"
+                  className="btn-minimal text-pearl border-pearl/30 hover:bg-white/10 hover:-translate-y-1 transition-all duration-300"
                 >
                   Como Chegar
                 </a>
@@ -236,7 +250,7 @@ export default function Home() {
         <section className="pt-8 pb-12 px-6 md:px-12 lg:px-20 bg-pearl relative overflow-hidden">
           <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-church-vibrant/20 to-transparent"></div>
           
-          <div className="max-w-7xl mx-auto">
+          <div className="max-w-[1440px] mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 lg:gap-16">
               
               {/* Left Side: News */}
@@ -281,33 +295,33 @@ export default function Home() {
                             to={`/noticias/${combinedUpdatesData[0].id}`} 
                             className="group block"
                           >
-                            <div className="relative aspect-[16/10] rounded-[2.5rem] overflow-hidden shadow-2xl mb-8">
+                            <div className="relative aspect-[16/10] rounded-[2.5rem] overflow-hidden shadow-2xl mb-8 group-hover:shadow-3xl group-hover:shadow-church-blue/20 transition-shadow duration-500">
                               <img 
                                 src={combinedUpdatesData[0].imageUrl} 
                                 alt={combinedUpdatesData[0].title} 
-                                className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+                                className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105 group-hover:rotate-1"
                                 referrerPolicy="no-referrer"
                               />
                               <div className="absolute top-6 left-6">
-                                <span className="px-4 py-2 bg-white/90 backdrop-blur-md text-church-blue text-[10px] font-bold tracking-widest uppercase rounded-full shadow-sm">
+                                <span className="px-4 py-2 bg-white/90 backdrop-blur-md text-church-blue text-[10px] font-bold tracking-widest uppercase rounded-full shadow-sm group-hover:bg-church-vibrant group-hover:text-white transition-colors duration-300">
                                   Destaque
                                 </span>
                               </div>
                             </div>
                             <div className="space-y-4">
-                              <div className="flex items-center gap-3">
+                              <div className="flex items-center gap-3 transform group-hover:translate-x-2 transition-transform duration-300">
                                 <span className="text-church-vibrant text-[10px] font-bold tracking-widest uppercase">{combinedUpdatesData[0].date}</span>
                                 <div className="w-1 h-1 rounded-full bg-church-blue/20"></div>
                                 <span className="text-church-muted/60 text-[10px] font-bold tracking-widest uppercase">Notícia</span>
                               </div>
-                              <h3 className="text-3xl md:text-4xl text-church-blue font-serif italic leading-tight group-hover:text-church-vibrant transition-colors duration-300">
+                              <h3 className="text-3xl md:text-4xl text-church-blue font-serif italic leading-tight group-hover:text-church-vibrant transition-colors duration-300 transform group-hover:translate-x-2 delay-75">
                                 {combinedUpdatesData[0].title}
                               </h3>
-                              <p className="text-church-muted font-light leading-relaxed line-clamp-3 text-lg">
+                              <p className="text-church-muted font-light leading-relaxed line-clamp-3 text-lg transform group-hover:translate-x-2 transition-transform duration-300 delay-100">
                                 {combinedUpdatesData[0].description}
                               </p>
-                              <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-church-blue group-hover:text-church-vibrant transition-colors">
-                                Ler Notícia Completa <ArrowRight size={14} />
+                              <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-church-blue group-hover:text-church-vibrant transition-colors transform group-hover:translate-x-2 delay-150">
+                                Ler Notícia Completa <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
                               </div>
                             </div>
                           </Link>
@@ -322,11 +336,11 @@ export default function Home() {
                               to={`/noticias/${news.id}`} 
                               className="group flex gap-6 items-start"
                             >
-                              <div className="w-28 h-28 md:w-36 md:h-36 flex-shrink-0 rounded-3xl overflow-hidden shadow-lg">
+                              <div className="w-28 h-28 md:w-36 md:h-36 flex-shrink-0 rounded-3xl overflow-hidden shadow-lg group-hover:shadow-xl group-hover:shadow-church-blue/20 transition-shadow duration-500">
                                 <img 
                                   src={news.imageUrl} 
                                   alt={news.title} 
-                                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 group-hover:rotate-2"
                                   referrerPolicy="no-referrer"
                                 />
                               </div>
@@ -386,34 +400,34 @@ export default function Home() {
                               <span className="text-[9px] text-church-muted/60 uppercase tracking-widest">{update.date}</span>
                             </div>
 
-                            <h3 className="text-lg text-church-blue font-serif italic mb-3 leading-tight group-hover:text-church-vibrant transition-colors">
+                            <h3 className="text-lg text-church-blue font-serif italic mb-3 leading-tight group-hover:text-church-vibrant transition-colors transform group-hover:translate-x-1 duration-300">
                               {update.title}
                             </h3>
                             
-                            <p className="text-sm text-church-muted font-light leading-relaxed mb-2 line-clamp-2 italic">
+                            <p className="text-sm text-church-muted font-light leading-relaxed mb-2 line-clamp-2 italic transform group-hover:translate-x-1 transition-transform duration-300 delay-75">
                               {update.type === 'pastoral' ? `"${update.description}"` : update.description}
                             </p>
 
-                            <div>
+                            <div className="transform group-hover:translate-x-1 transition-transform duration-300 delay-100">
                               {update.type === 'event' ? (
                                 <div className="text-[9px] font-bold uppercase tracking-widest text-church-blue group-hover:text-church-vibrant transition-colors flex items-center gap-2">
-                                  Ver Detalhes <ArrowRight size={12} />
+                                  Ver Detalhes <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform" />
                                 </div>
                               ) : update.type === 'pastoral' ? (
                                 <div className="text-[9px] font-bold uppercase tracking-widest text-church-blue group-hover:text-church-vibrant transition-colors flex items-center gap-2">
-                                  Ler Mensagem <Quote size={12} />
+                                  Ler Mensagem <Quote size={12} className="group-hover:scale-110 transition-transform" />
                                 </div>
                               ) : update.type === 'ebd' ? (
                                 <div className="text-[9px] font-bold uppercase tracking-widest text-church-blue group-hover:text-church-vibrant transition-colors flex items-center gap-2">
-                                  Ler Lição <BookOpen size={12} />
+                                  Ler Lição <BookOpen size={12} className="group-hover:scale-110 transition-transform" />
                                 </div>
                               ) : update.type === 'missionary' ? (
                                 <div className="text-[9px] font-bold uppercase tracking-widest text-church-blue group-hover:text-church-vibrant transition-colors flex items-center gap-2">
-                                  Ver Missões <ArrowRight size={12} />
+                                  Ver Missões <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform" />
                                 </div>
                               ) : (
                                 <div className="text-[9px] font-bold uppercase tracking-widest text-church-blue group-hover:text-church-vibrant transition-colors flex items-center gap-2">
-                                  Ler mais <ArrowRight size={12} />
+                                  Ler mais <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform" />
                                 </div>
                               )}
                             </div>
@@ -457,7 +471,7 @@ export default function Home() {
       {/* Events Banner Section - Cinematic Editorial Version */}
       {loadingEvents ? (
         <section className="relative min-h-[600px] md:min-h-[700px] flex flex-col items-center justify-center overflow-hidden bg-church-blue py-16 md:py-24">
-          <div className="max-w-7xl mx-auto px-6 relative z-10 w-full">
+          <div className="max-w-[1440px] mx-auto px-6 relative z-10 w-full">
             <div className="text-center mb-10 md:mb-16 space-y-4">
               <Skeleton className="h-4 w-32 mx-auto" />
               <Skeleton className="h-16 w-3/4 mx-auto" />
@@ -487,7 +501,7 @@ export default function Home() {
             </motion.div>
           </AnimatePresence>
 
-          <div className="max-w-7xl mx-auto px-6 relative z-10 w-full">
+          <div className="max-w-[1440px] mx-auto px-6 relative z-10 w-full">
             <ScrollReveal className="text-center mb-10 md:mb-16">
               <span className="text-church-vibrant text-[10px] font-bold tracking-[0.6em] uppercase mb-3 md:mb-4 block">
                 Não Perca
@@ -564,7 +578,7 @@ export default function Home() {
                           <div className="pt-6">
                             <button 
                               onClick={() => setSelectedEvent(event)}
-                              className="group relative inline-flex items-center justify-center px-10 py-4 font-bold text-church-blue transition-all duration-300 bg-church-vibrant rounded-2xl hover:bg-white hover:shadow-[0_0_40px_rgba(255,255,255,0.2)] hover:-translate-y-1 w-full sm:w-auto"
+                              className="group relative inline-flex items-center justify-center px-10 py-4 font-bold text-church-blue transition-all duration-300 bg-church-vibrant rounded-2xl hover:bg-white hover:shadow-[0_0_40px_rgba(255,255,255,0.3)] hover:-translate-y-1 w-full sm:w-auto"
                             >
                               Ver Detalhes da Programação
                               <ArrowRight size={18} className="ml-2 group-hover:translate-x-1 transition-transform" />
@@ -587,7 +601,7 @@ export default function Home() {
                     className="group flex items-center gap-3 text-white/40 hover:text-church-vibrant transition-all"
                   >
                     <div className="w-10 h-10 md:w-12 md:h-12 rounded-full border border-white/10 flex items-center justify-center group-hover:border-church-vibrant/30 group-hover:bg-church-vibrant/5 transition-all">
-                      <ChevronLeft size={18} md:size={20} strokeWidth={1.5} />
+                      <ChevronLeft size={18} md:size={20} strokeWidth={1.5} className="group-hover:-translate-x-1 transition-transform" />
                     </div>
                     <span className="text-[9px] md:text-[10px] font-bold uppercase tracking-widest hidden sm:block">Anterior</span>
                   </button>
@@ -608,7 +622,7 @@ export default function Home() {
                   >
                     <span className="text-[9px] md:text-[10px] font-bold uppercase tracking-widest hidden sm:block">Próximo</span>
                     <div className="w-10 h-10 md:w-12 md:h-12 rounded-full border border-white/10 flex items-center justify-center group-hover:border-church-vibrant/30 group-hover:bg-church-vibrant/5 transition-all">
-                      <ChevronRight size={18} md:size={20} strokeWidth={1.5} />
+                      <ChevronRight size={18} md:size={20} strokeWidth={1.5} className="group-hover:translate-x-1 transition-transform" />
                     </div>
                   </button>
                 </div>
@@ -644,7 +658,7 @@ export default function Home() {
           <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay"></div>
         </div>
 
-        <div className="max-w-7xl mx-auto relative z-10">
+        <div className="max-w-[1440px] mx-auto relative z-10">
           <div className={`flex flex-col ${hasLiveStream ? 'lg:flex-row' : 'items-center text-center'} items-center gap-12 lg:gap-16`}>
             <div className={`${hasLiveStream ? 'lg:w-1/2' : 'max-w-3xl'} space-y-6`}>
               {loadingSite ? (
@@ -712,7 +726,7 @@ export default function Home() {
             </div>
 
             {hasLiveStream && (
-              <ScrollReveal direction="left" delay={0.5} className="lg:w-1/2 w-full relative perspective-1000">
+              <ScrollReveal id="ao-vivo" direction="left" delay={0.5} className="lg:w-1/2 w-full relative perspective-1000">
                 {/* Decorative glow behind video */}
                 <div className="absolute -inset-4 bg-gradient-to-tr from-red-600/30 to-church-blue/30 blur-3xl rounded-[4rem] opacity-50 animate-pulse"></div>
                 
@@ -754,7 +768,7 @@ export default function Home() {
             >
               <button 
                 onClick={() => setSelectedEvent(null)}
-                className="absolute top-8 right-8 z-10 bg-pearl/80 backdrop-blur-sm p-3 rounded-full text-church-blue hover:bg-church-vibrant hover:text-pearl transition-all shadow-sm"
+                className="absolute top-8 right-8 z-10 bg-pearl/80 backdrop-blur-sm p-3 rounded-full text-church-blue hover:bg-church-vibrant hover:text-pearl transition-all shadow-sm hover:rotate-90 duration-300"
               >
                 <X size={24} strokeWidth={1.5} />
               </button>

@@ -5,10 +5,19 @@
   --color-pearl-dark: #F1F5F9;
   --color-church-blue: #0F172A;
   --color-church-blue-light: #1E293B;
-  --color-church-vibrant: #D4AF37;
+  --color-church-vibrant: #D97706;
   --color-church-silver: #E2E8F0;
   --color-church-text: #1E293B;
   --color-church-muted: #64748B;
+  
+  /* New Royal Theme Colors */
+  --color-church-purple: #4F46E5;
+  --color-church-purple-deep: #312E81;
+  --color-church-gold: #D97706;
+  --color-church-gold-light: #F59E0B;
+  --color-church-dark: #0F172A;
+  --color-church-dark-deep: #020617;
+  
   --font-serif: "Cormorant Garamond", serif;
   --font-sans: "Inter", sans-serif;
   --animate-marquee: marquee 30s linear infinite;
