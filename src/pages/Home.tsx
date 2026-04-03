@@ -647,7 +647,7 @@ export default function Home() {
       )}
 
       {/* Live Stream Section */}
-      <section className="section-padding bg-[#050B14] text-pearl relative overflow-hidden min-h-[60vh] flex items-center">
+      <section id="ao-vivo" className="section-padding bg-[#050B14] text-pearl relative overflow-hidden min-h-[60vh] flex items-center scroll-mt-24">
         {/* Cinematic Background Elements */}
         <div className="absolute inset-0 z-0 pointer-events-none">
           {loadingSite ? (
@@ -740,7 +740,7 @@ export default function Home() {
             </div>
 
             {hasLiveStream && (
-              <ScrollReveal id="ao-vivo" direction="left" delay={0.5} className="lg:w-1/2 w-full relative perspective-1000">
+              <ScrollReveal direction="left" delay={0.5} className="lg:w-1/2 w-full relative perspective-1000">
                 {/* Decorative glow behind video */}
                 <div className="absolute -inset-4 bg-gradient-to-tr from-red-600/30 to-church-blue/30 blur-3xl rounded-[4rem] opacity-50 animate-pulse"></div>
                 
