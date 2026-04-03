@@ -304,7 +304,7 @@ export default function Missoes() {
                 </div>
                 <div>
                   <h4 className="text-pearl font-serif italic text-lg">Dados Bancários</h4>
-                  <p className="text-pearl/40 text-[9px] uppercase tracking-widest font-bold"></p>
+                  <p className="text-pearl/40 text-[9px] uppercase tracking-widest font-bold">Ofertas e Dízimos</p>
                 </div>
               </div>
 

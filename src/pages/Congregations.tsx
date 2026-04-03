@@ -49,7 +49,7 @@ export default function Congregations() {
                   transition={{ duration: 0.8, delay: idx * 0.1 }}
                   className="bg-white rounded-[2rem] shadow-lg border border-church-vibrant/5 overflow-hidden hover:shadow-2xl hover:shadow-church-blue/10 transition-all duration-500 group"
                 >
-                  <div className="h-48 w-full relative overflow-hidden">
+                  <div className="h-44 w-full relative overflow-hidden">
                     {cong.imageUrl ? (
                       <img 
                         src={cong.imageUrl} 
@@ -64,7 +64,7 @@ export default function Congregations() {
                     )}
                     <div className="absolute inset-0 bg-gradient-to-t from-church-blue/60 to-transparent opacity-80 group-hover:opacity-100 transition-opacity duration-500"></div>
                   </div>
-                  <div className="p-6">
+                  <div className="p-5">
                     <h3 className="text-lg text-church-blue mb-4 font-serif italic group-hover:text-church-vibrant transition-colors duration-300">{cong.name}</h3>
                     <div className="w-8 group-hover:w-16 h-px bg-church-vibrant/30 transition-all duration-500 mb-6"></div>
                     <ul className="space-y-4">

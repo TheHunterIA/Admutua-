@@ -59,28 +59,28 @@ export default function Services() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.8, delay: idx * 0.1 }}
-                    className="bg-white p-6 rounded-[2rem] shadow-lg border border-church-vibrant/5 flex flex-col items-start gap-4 hover:shadow-xl hover:shadow-church-blue/10 hover:-translate-y-1 transition-all duration-500 group h-full relative min-h-[180px]"
+                    className="bg-white p-5 rounded-[1.5rem] shadow-lg border border-church-vibrant/5 flex flex-col items-start gap-3 hover:shadow-xl hover:shadow-church-blue/10 hover:-translate-y-1 transition-all duration-500 group h-full relative min-h-[160px]"
                   >
                     {service.isLiveStream && (
-                      <div className="absolute top-6 right-6 transform group-hover:scale-110 transition-transform duration-300">
-                        <img src="/botao-de-reproducao-do-youtube-com-renderizacao-3d.png" alt="YouTube Live" className="w-8 h-8 object-contain" title="Com transmissão ao vivo" />
+                      <div className="absolute top-5 right-5 transform group-hover:scale-110 transition-transform duration-300">
+                        <img src="/botao-de-reproducao-do-youtube-com-renderizacao-3d.png" alt="YouTube Live" className="w-7 h-7 object-contain" title="Com transmissão ao vivo" />
                       </div>
                     )}
-                    <div className="space-y-4 w-full pr-8">
+                    <div className="space-y-3 w-full pr-7">
                       <h3 className="text-xl text-church-blue font-serif italic group-hover:text-church-vibrant transition-colors duration-300">{service.name}</h3>
                       
                       <div className="flex items-center gap-3 text-church-vibrant font-medium tracking-wide">
-                        <div className="w-10 h-10 bg-church-blue/5 rounded-xl flex items-center justify-center text-church-vibrant group-hover:bg-church-vibrant group-hover:text-pearl group-hover:rotate-6 transition-all duration-500 shrink-0">
-                          <Calendar size={20} strokeWidth={1.5} />
+                        <div className="w-9 h-9 bg-church-blue/5 rounded-lg flex items-center justify-center text-church-vibrant group-hover:bg-church-vibrant group-hover:text-pearl group-hover:rotate-6 transition-all duration-500 shrink-0">
+                          <Calendar size={18} strokeWidth={1.5} />
                         </div>
                         <div className="flex flex-col gap-0.5 transform group-hover:translate-x-1 transition-transform duration-300">
                           <span className="text-base leading-none group-hover:text-church-blue transition-colors duration-300">{service.day}</span>
-                          <span className="text-xs opacity-80 flex items-center gap-1 leading-none group-hover:text-church-blue/80 transition-colors duration-300"><Clock size={12} className="group-hover:animate-pulse" /> às {service.time}</span>
+                          <span className="text-xs opacity-80 flex items-center gap-1 leading-none group-hover:text-church-blue/80 transition-colors duration-300 mt-1"><Clock size={12} className="group-hover:animate-pulse" /> às {service.time}</span>
                         </div>
                       </div>
 
                       {service.description && (
-                        <p className="text-xs text-church-muted font-light leading-relaxed transform group-hover:translate-x-1 transition-transform duration-300 delay-75 line-clamp-3">
+                        <p className="text-xs text-church-muted font-light leading-relaxed transform group-hover:translate-x-1 transition-transform duration-300 delay-75 line-clamp-2">
                           {service.description}
                         </p>
                       )}

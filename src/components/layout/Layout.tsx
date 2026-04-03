@@ -18,6 +18,7 @@ const navLinks = [
   },
   { name: 'Missões', href: '/missoes' },
   { name: 'EBD', href: '/ebd' },
+  { name: 'Congregações', href: '/congregacoes' },
   { name: 'Contato', href: '/contato' },
 ];
 

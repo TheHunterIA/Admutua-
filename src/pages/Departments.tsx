@@ -48,7 +48,7 @@ export default function Departments() {
                   transition={{ duration: 0.8, delay: idx * 0.05 }}
                   className="bg-white rounded-[2rem] shadow-lg border border-church-vibrant/5 overflow-hidden hover:shadow-xl hover:shadow-church-blue/10 hover:-translate-y-1 transition-all duration-500 group flex flex-col"
                 >
-                  <div className="h-40 w-full relative overflow-hidden">
+                  <div className="h-36 w-full relative overflow-hidden">
                     {dept.imageUrl ? (
                       <img 
                         src={dept.imageUrl} 
