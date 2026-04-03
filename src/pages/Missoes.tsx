@@ -114,7 +114,7 @@ export default function Missoes() {
                   className="relative aspect-square rounded-xl overflow-hidden shadow-xl border-4 border-pearl group-hover/card:border-white transition-all duration-500 cursor-zoom-in"
                   onClick={() => setSelectedImage(m.imageUrl || '/placeholder-avatar.png')}
                 >
-                  <img src={m.imageUrl || '/placeholder-avatar.png'} alt={m.name} className="w-full h-full object-cover group-hover/card:scale-110 group-hover/card:rotate-1 transition-transform duration-1000" referrerPolicy="no-referrer" />
+                  <img src={m.imageUrl || '/placeholder-avatar.png'} alt={m.name} className="w-full h-full object-cover object-top group-hover/card:scale-110 group-hover/card:rotate-1 transition-transform duration-1000" referrerPolicy="no-referrer" />
                   <div className="absolute inset-0 bg-gradient-to-t from-church-blue/40 via-transparent to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-700"></div>
                 </div>
               </div>
